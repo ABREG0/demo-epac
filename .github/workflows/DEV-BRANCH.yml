@@ -8,9 +8,9 @@ env:
 on:  
   push:    
     branches:      
-      - 'DEV-BRANCH/**'    
-    paths:      
-      - 'Definitions/**'
+      - 'DEV-BRANCH'    
+    # paths:      
+    #   - 'Definitions/**'
   workflow_dispatch:
 
 jobs:
