@@ -3,7 +3,7 @@
     "nodeName": "/Identity/",
     "scope": {
         "tenant1": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/cesart100"
+            "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
         ]
     },
     "children": [
