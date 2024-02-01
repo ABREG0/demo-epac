@@ -4,7 +4,7 @@ env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
   definitionsRootFolder: Definitions
   planFolder: Output
-
+ 
 on:  
   push:    
     branches:      
