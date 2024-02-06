@@ -5,8 +5,8 @@
         "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
             "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
         ],
-        "cesart200": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/cesart200"
+        "epac-prod-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+            "/providers/Microsoft.Management/managementGroups/epac-prod-gh"
         ]
     },
     "children": [
