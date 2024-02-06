@@ -4,11 +4,11 @@ env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
   definitionsRootFolder: Definitions
   planFolder: Output
-
+ 
 on:  
   push:    
     branches:      
-      - 'DEV-BRANCH/**'    
+      - 'DEV-BRANCH'    
     paths:      
       - 'Definitions/**'
   workflow_dispatch:
