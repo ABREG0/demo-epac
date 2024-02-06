@@ -1,4 +1,4 @@
-name: PR-Merge - EPAC-TENANT Workflow
+name: PR-Merge - EPAC-PROD-GH Workflow
 
 env:
   pacEnvironment: epac-prod-gh # Change this to a PAC environment name
