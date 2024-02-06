@@ -87,7 +87,7 @@ jobs:
     name: Deploy Policy Plan
     runs-on: ubuntu-latest
     environment:
-      name: TENANT-DEPLOY-POLICY
+      name: epac-prod-gh
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -128,7 +128,7 @@ jobs:
     name: Deploy Policy Roles
     runs-on: ubuntu-latest
     environment: 
-      name: TENANT-DEPLOY-ROLES
+      name: epac-prod-gh
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
