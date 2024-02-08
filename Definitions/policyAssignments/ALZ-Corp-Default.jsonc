@@ -4,10 +4,10 @@
     "scope": {
         "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
             "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
-        ],
-        "epac-prod-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/epac-prod-gh"
         ]
+        // "epac-prod-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+        //     "/providers/Microsoft.Management/managementGroups/epac-prod-gh"
+        // ]
     },
     "children": [
         {
