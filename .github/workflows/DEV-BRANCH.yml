@@ -9,7 +9,7 @@ on:
   push:    
     branches:      
       - 'DEV-BRANCH'    
-    paths:      
+    paths:
       - 'Definitions/**'
   workflow_dispatch:
 
