@@ -9,7 +9,7 @@ on:
   push:    
     branches:      
       - 'DEV-BRANCH'    
-    paths:
+    paths:      
       - 'Definitions/**'
   workflow_dispatch:
 
@@ -60,6 +60,7 @@ jobs:
         run: |
           if (Test-Path -Path "Output/plans-${{ env.pacEnvironment }}/policy-plan.json") {
             Get-Content "Output/plans-${{ env.pacEnvironment }}/policy-plan.json" | ConvertFrom-Json | ConvertTo-Json -Depth 10
+            echo "::set-env name=CREATED_PLAN::true"
           } else {
             Write-Output "Policy-Plan file does not exist"
           }
@@ -83,6 +84,7 @@ jobs:
 
 
   deployPolicy:
+    if: env.CREATED_PLAN != 'true'
     needs: build
     name: Deploy Policy Plan
     runs-on: ubuntu-latest
