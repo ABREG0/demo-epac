@@ -64,9 +64,10 @@ jobs:
         run: |
           if (Test-Path -Path "Output/plans-${{ env.pacEnvironment }}/policy-plan.json") {
             Get-Content "Output/plans-${{ env.pacEnvironment }}/policy-plan.json" | ConvertFrom-Json | ConvertTo-Json -Depth 10
-            echo "CREATED_POL_PLAN=true" >> $env:GITHUB_OUTPUT"
+            echo "CREATED_POL_PLAN=true" >> $env:GITHUB_OUTPUT
           } else {
             Write-Output "Policy-Plan file does not exist"
+            echo "CREATED_POL_PLAN=false" >> $env:GITHUB_OUTPUT
           }
         shell: pwsh
 
