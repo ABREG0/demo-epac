@@ -84,7 +84,7 @@ jobs:
 
 
   deployPolicy:
-    if: ${{ env.CREATED_PLAN == 'true' }}
+    if: ${{ CREATED_PLAN == 'true' }}
     needs: build
     name: Deploy Policy Plan
     runs-on: ubuntu-latest
