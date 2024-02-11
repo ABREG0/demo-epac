@@ -17,6 +17,10 @@ jobs:
   build:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
+      # output2: ${{ steps.step2.outputs.test }}
     environment:
       name: epac-prod-gh
     steps:
@@ -60,8 +64,10 @@ jobs:
         run: |
           if (Test-Path -Path "Output/plans-${{ env.pacEnvironment }}/policy-plan.json") {
             Get-Content "Output/plans-${{ env.pacEnvironment }}/policy-plan.json" | ConvertFrom-Json | ConvertTo-Json -Depth 10
+            echo "CREATED_POL_PLAN=true" >> $env:GITHUB_OUTPUT
           } else {
             Write-Output "Policy-Plan file does not exist"
+            echo "CREATED_POL_PLAN=false" >> $env:GITHUB_OUTPUT
           }
         shell: pwsh
 
@@ -83,6 +89,7 @@ jobs:
 
 
   deployPolicy:
+    if: ${{ needs.build.outputs.CREATED_POL_PLAN == 'true' }}
     needs: build
     name: Deploy Policy Plan
     runs-on: ubuntu-latest
