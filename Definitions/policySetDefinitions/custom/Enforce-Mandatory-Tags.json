@@ -47,7 +47,7 @@
       "policyDefinitions": [
         {
           "policyDefinitionReferenceId": "EnforceRGTags",
-          "policyDefinitionName ": "EnforceRGTags",
+          "policyDefinitionId ": "EnforceRGTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceRGTags-Owner')]"
@@ -60,7 +60,7 @@
         },
         {
           "policyDefinitionReferenceId": "EnforceMandatoryTags",
-          "policyDefinitionName": "EnforceMandatoryTags",
+          "policyDefinitionId": "Enforce-MandatoryTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
