@@ -10,9 +10,9 @@
 
         "children": [
             {
-                "nodeName": "custom-Enforce-Tags",
+                "nodeName": "custom-Enforce-Mandatory-Tags",
                 "assignment": {
-                    "name": "Enforce-RG-Tags",
+                    "name": "custom-Enforce-Mandatory-Tags",
                     "description": "Enforce Mandatory Tags on Resource Groups",
                     "displayName": "Resource groups must have mandatory tagging applied"
                 },
@@ -20,8 +20,8 @@
                 "parameters": {
                 } ,
                 "definitionEntry": {
-                    "displayName": "Enforce RG Tags",
-                    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-RG-Tags"
+                    "displayName": "Enforce Mandatory Tags",
+                    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-Mandatory-Tags"
                 },
                 "enforcementMode": "DoNotEnforce",
                 "nonComplianceMessages": [
