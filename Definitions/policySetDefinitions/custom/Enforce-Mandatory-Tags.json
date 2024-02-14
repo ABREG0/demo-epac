@@ -61,7 +61,7 @@
         },
         {
           "policyDefinitionReferenceId": "EnforceMandatoryTags",
-          "policyDefinitionName": "Enforce-MandatoryTags",
+          "policyDefinitionName": "EnforceMandatoryTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
