@@ -1,11 +1,34 @@
 {
     "nodeName": "/Tags/",
     "parameters": {
-      "excludedRG": [
-        "synapseworkspace-managedrg-*",
-        "databricks-rg-*",
-        "managed*"
-      ]
+      "EnforceRGTags-Owner": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Owner",
+            "description": "Specifies the Owner of the Resource Group"
+          }
+      },
+      "EnforceRGTags-Department": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Department",
+            "description": "Specifies the Department that the Resource Group belongs to"
+          }
+      },
+      "EnforceResourceTags-Owner": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Owner",
+            "description": "Specifies the Owner of the resource"
+          }
+      },
+      "EnforceResourceTags-Department": {
+          "type": "String",
+          "metadata": {
+            "displayName": "Department",
+            "description": "Specifies the Department that the resource belongs to"
+          }
+      }
     },
     "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
     "scope": {
