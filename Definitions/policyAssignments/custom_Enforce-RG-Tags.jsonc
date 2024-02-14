@@ -11,22 +11,27 @@
         "children": [
             {
                 "nodeName": "custom-Enforce-Mandatory-Tags",
-                "assignment": {
-                    "name": "custom-Enforce-Mandatory-Tags",
-                    "description": "Enforce Mandatory Tags on Resource Groups",
-                    "displayName": "Resource groups must have mandatory tagging applied"
-                },
-                "notScopes": [],
-                "parameters": {
-                } ,
-                "definitionEntry": {
-                    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-Mandatory-Tags"
-                },
-                "enforcementMode": "DoNotEnforce",
-                "nonComplianceMessages": [
-                {
-                    "message": "Mandatory tags must be provided."
-                }
+                "children":[
+                        {
+                            "nodeName": "Enforce-Mandatory-Tags",
+                            "assignment": {
+                            "name": "custom-Enforce-Mandatory-Tags",
+                            "description": "Enforce Mandatory Tags on Resource Groups",
+                            "displayName": "Resource groups must have mandatory tagging applied"
+                        },
+                        "notScopes": [],
+                        "parameters": {
+                        } ,
+                        "definitionEntry": {
+                            "policyId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-Mandatory-Tags"
+                        },
+                        "enforcementMode": "DoNotEnforce",
+                        "nonComplianceMessages": [
+                        {
+                            "message": "Mandatory tags must be provided."
+                        }
+                        ]
+                    }    
                 ]
             }
         ]
