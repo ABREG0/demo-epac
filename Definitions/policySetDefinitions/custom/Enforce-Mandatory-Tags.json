@@ -46,8 +46,7 @@
       },
       "policyDefinitions": [
         {
-          "policyDefinitionReferenceId": "Resource groups must have mandatory tagging applied",
-          "policyDefinitionName ": "EnforceRGTags",
+          "policyDefinitionName ": "Enforce-RG-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceRGTags-Owner')]"
@@ -59,8 +58,7 @@
           "groupNames": []
         },
         {
-          "policyDefinitionReferenceId": "Resources must have mandatory tagging applied",
-          "policyDefinitionName": "EnforceResourceTags",
+          "policyDefinitionName": "Enforce-Resource-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
