@@ -14,24 +14,17 @@
             // comment to trigger run
         ]
     },
-    "definitionEntryList": [
-                      {
-                      "policyName": "Enforce-Resource-Tags",
-                      "displayName": "Require Tag on Resource Group with dynamic notScope",
-                      "assignment": {
-                          "name": "Enforce-Resource-Tags",
-                          "displayName": "Require Tag on Resource Group - ",
-                          "description": "Require Tag for Resource Groups when any resource group (not listed in in excludedRg) is created or updated - "
-                      }
-                  },
-                  {
-                      "policyName": "Enforce-RG-Tags",
-                      "displayName": "Inherit Tag from Resource Group with dynamic notScope",
-                      "assignment": {
-                          "name": "Enforce-RG-Tags",
-                          "displayName": "Inherit Tag from Resource Group - ",
-                          "description": "Modify Tag to comply with governance goal of enforcing Tags by inheriting Tags from RG - "
-                      }
-                  }
-    ]
+    "definitionEntry": {
+        "displayName": "Enforce Tags for resource groups and resource",
+        "policySetName": "Enforce-Mandatory-Tags"
+    
+    },
+    "assignment": {
+        "name": "Enforce-Mandatory-Tags",
+        "displayName": "Enforce Mandatory Tags",
+        "description": "Require Tag for Resource Groups when any resource group (not listed in in excludedRg) is created or updated"
+    },
+    "metadata": {},
+    "enforcementMode": "Default"
+    
   }
