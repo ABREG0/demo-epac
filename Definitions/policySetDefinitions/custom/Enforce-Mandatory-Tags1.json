@@ -1,0 +1,65 @@
+{
+    
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-set-definition-schema.json",
+    
+    "name": "Newly created GUID",
+    "properties": {
+      "displayName": "Your Initiative Display Name",
+      "description": "Initiative Description",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Category Name"
+      },
+      "policyDefinitionGroups": [
+        {
+          "name": "Azure_Security_Benchmark_v2.0_NS-1",
+          "additionalMetadataId": "/providers/Microsoft.PolicyInsights/policyMetadata/Azure_Security_Benchmark_v2.0_NS-1"
+        }
+      ],
+      "parameters": {
+        "Parameter for policy one": {
+          "type": "Array",
+          "defaultValue": []
+        },
+        "Parameter for policy two": {
+          "type": "string",
+          "defaultValue": []
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "Reference to policy number one",
+          "policyDefinitionName": "Name of Policy Number One",
+          "parameters": {
+            "Parameter for policy one": {
+              "value": "[parameters('Parameter for policy one')]"
+            }
+          }
+        },
+        {
+          "policyDefinitionReferenceId": "Reference to policy number two",
+          "policyDefinitionName": "Name of Policy Number Two",
+          "parameters": {
+            "Parameter for policy two": {
+              "value": "[parameters('Parameter for policy two')]"
+            }
+          },
+          "groupNames": [
+              "Azure_Security_Benchmark_v2.0_NS-1"
+          ]
+        },
+        {
+          "policyDefinitionReferenceId": "Reference to policy number two",
+          "policyDefinitionId": "id of a builtin Policy",
+          "parameters": {
+            "Parameter for policy two": {
+              "value": "[parameters('Parameter for policy two')]"
+            }
+          },
+          "groupNames": [
+              "Azure_Security_Benchmark_v2.0_NS-1"
+          ]
+        }
+      ]
+    }
+  }

@@ -1,7 +1,8 @@
 {
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-set-definition-schema.json",
+  
     "name": "Enforce-Mandatory-Tags",
     "properties": {
-      "policyType": "Custom",
       "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
       "description": "Contains the core tagging policies applicable to the org",
       "metadata": {
@@ -47,7 +48,7 @@
       "policyDefinitions": [
         {
           "policyDefinitionReferenceId": "EnforceRGTags",
-          "policyDefinitionId ": "EnforceRGTags",
+          "policyDefinitionName": "EnforceRGTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceRGTags-Owner')]"
@@ -60,7 +61,7 @@
         },
         {
           "policyDefinitionReferenceId": "EnforceMandatoryTags",
-          "policyDefinitionId": "Enforce-MandatoryTags",
+          "policyDefinitionName": "Enforce-MandatoryTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
@@ -72,6 +73,6 @@
           "groupNames": []
         }
       ],
-      "policyDefinitionGroups": null
+      "policyDefinitionGroups":[]
     }
   }
