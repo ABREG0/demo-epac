@@ -45,10 +45,22 @@
         }
       },
       "policyDefinitions": [
-
         {
-          "policyDefinitionReferenceId": "EnforceResourceTags",
-          "policyDefinitionName": "Enforce-Resource-Tags",
+          "policyDefinitionReferenceId": "EnforceRGTags",
+          "policyDefinitionName ": "EnforceRGTags",
+          "parameters": {
+            "Owner": {
+              "value": "[parameters('EnforceRGTags-Owner')]"
+            },
+            "Department": {
+              "value": "[parameters('EnforceRGTags-Department')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "EnforceMandatoryTags",
+          "policyDefinitionName": "EnforceMandatoryTags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"

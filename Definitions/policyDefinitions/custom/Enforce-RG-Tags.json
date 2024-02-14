@@ -1,5 +1,5 @@
 {
-    "name": "Enforce-RG-Tags",
+    "name": "EnforceRGTags",
     "properties": {
     "displayName": "Resource groups must have mandatory tagging applied",
     "policyType": "Custom",
