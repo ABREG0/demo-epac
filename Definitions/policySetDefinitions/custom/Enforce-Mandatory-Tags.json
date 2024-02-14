@@ -60,8 +60,8 @@
           "groupNames": []
         },
         {
-          "policyDefinitionReferenceId": "Enforce Mandatory Tags",
-          "policyDefinitionName": "Enforce-Mandatory-Tags",
+          "policyDefinitionReferenceId": "Enforce Resource Tags",
+          "policyDefinitionName": "Enforce-Resource-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
