@@ -1,5 +1,5 @@
 {
-    "name": "EnforceMandatoryTags",
+    "name": "Enforce-Mandatory-Tags",
     "properties": {
     "displayName": "Resources must have mandatory tagging applied",
     "policyType": "Custom",
