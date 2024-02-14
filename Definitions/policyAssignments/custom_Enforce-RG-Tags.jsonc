@@ -20,7 +20,6 @@
                 "parameters": {
                 } ,
                 "definitionEntry": {
-                    "displayName": "Enforce Mandatory Tags",
                     "policyId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-Mandatory-Tags"
                 },
                 "enforcementMode": "DoNotEnforce",
