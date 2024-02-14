@@ -1,53 +1,38 @@
+
+    
 {
-    "nodeName": "/Tags/",
-    "parameters": {
-      "EnforceRGTags-Owner": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Owner",
-            "description": "Specifies the Owner of the Resource Group"
-          }
-      },
-      "EnforceRGTags-Department": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Department",
-            "description": "Specifies the Department that the Resource Group belongs to"
-          }
-      },
-      "EnforceResourceTags-Owner": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Owner",
-            "description": "Specifies the Owner of the resource"
-          }
-      },
-      "EnforceResourceTags-Department": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Department",
-            "description": "Specifies the Department that the resource belongs to"
-          }
-      }
-    },
     "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+    "nodeName": "/Tags/",
     "scope": {
-        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
-            // comment to trigger run
+        "epac-dev-gh": [
+        "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
         ]
     },
     "definitionEntry": {
-        "displayName": "Enforce Tags for resource groups and resource",
-        "policySetName": "Enforce-Mandatory-Tags"
-    
+        "policySetName": "Enforce-Mandatory-Tags",
+        "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
+        "nonComplianceMessages": [
+        {
+            "policyDefinitionReferenceId": null,
+            "message": "You must have required tags"
+        }
+        ]
     },
     "assignment": {
-        "name": "Enforce-Mandatory-Tags",
-        "displayName": "Enforce Mandatory Tags",
-        "description": "Require Tag for Resource Groups when any resource group (not listed in in excludedRg) is created or updated"
+        "name": "860e46f1da85446694237bc9",
+        "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
+        "description": ""
     },
-    "metadata": {},
-    "enforcementMode": "Default"
-    
-  }
+    "metadata": {
+        "assignedBy": "System Administrator",
+        "parameterScopes": {}
+    },
+    "parameters": {
+        "enforceRGTags-Owner": "onwer-1",
+        "enforceResourceTags-Owner": "owner-1",
+        "enforceResourceTags-Department": "department-1",
+        "enforceRGTags-Department": "department-1"
+    },
+    "overrides": [],
+    "resourceSelectors": []
+}
