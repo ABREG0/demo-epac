@@ -47,7 +47,7 @@
       "policyDefinitions": [
         {
           "policyDefinitionReferenceId": "Resource groups must have mandatory tagging applied",
-          "policyDefinitionName": "Enforce-RG-Tags",
+          "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-RG-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceRGTags-Owner')]"
@@ -60,7 +60,7 @@
         },
         {
           "policyDefinitionReferenceId": "Resources must have mandatory tagging applied",
-          "policyDefinitionName": "Enforce-Resource-Tags",
+          "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/Enforce-Resource-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
