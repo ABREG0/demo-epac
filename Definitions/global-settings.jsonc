@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/global-settings-schema.json",
-    "pacOwnerId": "im-sh-002", // Generate a guid using New-Guid and place it here
+    "pacOwnerId": "im-sh-003", // Generate a guid using New-Guid and place it here
     "managedIdentityLocations": {
         "*": "westus3" // Update the default location for managed identities
     },
