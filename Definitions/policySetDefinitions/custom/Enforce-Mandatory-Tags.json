@@ -47,8 +47,8 @@
       },
       "policyDefinitions": [
         {
-          "policyDefinitionReferenceId": "EnforceRGTags",
-          "policyDefinitionName": "EnforceRGTags",
+          "policyDefinitionReferenceId": "Enforce RG Tags",
+          "policyDefinitionName": "Enforce-RG-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceRGTags-Owner')]"
@@ -60,8 +60,8 @@
           "groupNames": []
         },
         {
-          "policyDefinitionReferenceId": "EnforceMandatoryTags",
-          "policyDefinitionName": "EnforceMandatoryTags",
+          "policyDefinitionReferenceId": "Enforce Resource Tags",
+          "policyDefinitionName": "Enforce-Resource-Tags",
           "parameters": {
             "Owner": {
               "value": "[parameters('EnforceResourceTags-Owner')]"
