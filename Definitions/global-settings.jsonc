@@ -6,7 +6,8 @@
     },
     "globalNotScopes": {
         "*": [
-            "/resourceGroupPatterns/excluded-rg*"
+            "/resourceGroupPatterns/excluded-rg*",
+            "/resourceGroupPatterns/excluded-rg2*"
         ]
     },
     "pacEnvironments": [
