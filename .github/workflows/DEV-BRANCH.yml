@@ -35,11 +35,9 @@ jobs:
           Install-Module EnterprisePolicyAsCode -Force
 
       - name: Azure Login
-        uses: Azure/login@v2
+        uses: Azure/login@v1
         with:
-          clientId: ${{ secrets.CLIENT_ID }}
-          clientSecret: ${{ secrets.CLIENT_SECRET }}
-          tenantId: ${{ secrets.TENANT_ID }}
+          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","tenantId":"${{ secrets.TENANT_ID }}"}'
           enable-AzPSSession: true
           allow-no-subscriptions: true
 
