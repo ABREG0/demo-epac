@@ -1,0 +1,38 @@
+
+    
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+    "nodeName": "/Tags/",
+    "scope": {
+        "epac-dev-gh": [
+        "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+        ]
+    },
+    "definitionEntry": {
+        "policySetName": "Enforce-Mandatory-Tags",
+        "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
+        "nonComplianceMessages": [
+        {
+            "policyDefinitionReferenceId": null,
+            "message": "You must have required tags"
+        }
+        ]
+    },
+    "assignment": {
+        "name": "860e46f1da85446694237bc9",
+        "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
+        "description": ""
+    },
+    "metadata": {
+        "assignedBy": "System Administrator",
+        "parameterScopes": {}
+    },
+    "parameters": {
+        "enforceRGTags-Owner": "onwer-1",
+        "enforceResourceTags-Owner": "owner-1",
+        "enforceResourceTags-Department": "department-1",
+        "enforceRGTags-Department": "department-1"
+    },
+    "overrides": [],
+    "resourceSelectors": []
+}
