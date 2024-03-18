@@ -34,12 +34,14 @@ jobs:
           Install-Module Az.Resources -Force -AllowClobber
           Install-Module EnterprisePolicyAsCode -Force
 
-      - name: Azure Login
+      - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
-          allow-no-subscriptions: true
+          # allow-no-subscriptions: true
 
       - name: Build Deployment Plan
         uses: azure/powershell@v1
@@ -117,12 +119,14 @@ jobs:
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           Install-Module EnterprisePolicyAsCode -Force
 
-      - name: Azure Login
+      - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
-          allow-no-subscriptions: true
+          # allow-no-subscriptions: true
 
       - name: Deploy Policy Plan
         uses: azure/powershell@v1
@@ -158,12 +162,14 @@ jobs:
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           Install-Module EnterprisePolicyAsCode -Force
 
-      - name: Azure Login
+      - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
-          allow-no-subscriptions: true
+          # allow-no-subscriptions: true
 
       - name: Deploy Role Plan
         uses: azure/powershell@v1
