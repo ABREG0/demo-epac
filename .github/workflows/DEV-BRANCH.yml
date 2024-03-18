@@ -17,6 +17,8 @@ jobs:
   build:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     # Map a step output to a job output
     outputs:
       CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
@@ -96,6 +98,8 @@ jobs:
     needs: build
     name: Deploy Policy Plan
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     environment:
       name: epac-dev-gh
     steps:
@@ -139,6 +143,8 @@ jobs:
     needs: deployPolicy
     name: Deploy Policy Roles
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     environment:
       name: epac-dev-gh
     steps:
