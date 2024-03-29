@@ -1,0 +1,379 @@
+
+RoleAssignmentName : abf730cb-8d4b-4666-a598-717a5968364f
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/L2-MG/providers/Microsoft.Authorization/roleAssignments/abf730cb-8d4b-4666-a598-717a5968364f
+Scope              : /providers/Microsoft.Management/managementGroups/L2-MG
+DisplayName        : System Administrator
+SignInName         : admin@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : c1e18991-d3d7-4638-aa8f-e1969c1a9edd
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : d1d86b8d-cfc8-4388-a409-e7e5f1c23885
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/L2-MG/providers/Microsoft.Authorization/roleAssignments/d1d86b8d-cfc8-4388-a409-e7e5f1c23885
+Scope              : /providers/Microsoft.Management/managementGroups/L2-MG
+DisplayName        : MS-PIM
+SignInName         : 
+RoleDefinitionName : User Access Administrator
+RoleDefinitionId   : 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+ObjectId           : d988aa85-c6c9-4637-b43f-f59f0c83ef3e
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : ae09e65d-3fd4-4470-b8fc-0ec49a6d3992
+RoleAssignmentId   : /providers/Microsoft.Authorization/roleAssignments/ae09e65d-3fd4-4470-b8fc-0ec49a6d3992
+Scope              : /
+DisplayName        : System Admin (DO NOT DELETE)
+SignInName         : SystemAdmin@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : User Access Administrator
+RoleDefinitionId   : 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+ObjectId           : e65eb4f0-756f-43ef-a0a8-c1e323c648f3
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 3e267d5d-a552-4462-9d02-5da183d6601f
+RoleAssignmentId   : /providers/Microsoft.Authorization/roleAssignments/3e267d5d-a552-4462-9d02-5da183d6601f
+Scope              : /
+DisplayName        : System Admin (DO NOT DELETE)
+SignInName         : SystemAdmin@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : e65eb4f0-756f-43ef-a0a8-c1e323c648f3
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 79ce2d1e-bb80-4edb-ad6c-8e66767d9f4b
+RoleAssignmentId   : /providers/Microsoft.Authorization/roleAssignments/79ce2d1e-bb80-4edb-ad6c-8e66767d9f4b
+Scope              : /
+DisplayName        : Microsoft Demos
+SignInName         : 
+RoleDefinitionName : User Access Administrator
+RoleDefinitionId   : 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+ObjectId           : a1746c2a-19a6-4d48-807e-87113306dd83
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : fba68890-7700-44bb-af6e-dd875cf13ef4
+RoleAssignmentId   : /providers/Microsoft.Authorization/roleAssignments/fba68890-7700-44bb-af6e-dd875cf13ef4
+Scope              : /
+DisplayName        : System Administrator
+SignInName         : admin@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : User Access Administrator
+RoleDefinitionId   : 18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+ObjectId           : c1e18991-d3d7-4638-aa8f-e1969c1a9edd
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : cceabc66-08b5-4b8f-a5e6-a27fcef108ae
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/export-example/providers/Microsoft.Authorization/roleAssignments/cceabc66-08b5-4b8f-a5e6-a27fcef108ae
+Scope              : /providers/Microsoft.Management/managementGroups/export-example
+DisplayName        : System Administrator
+SignInName         : admin@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : c1e18991-d3d7-4638-aa8f-e1969c1a9edd
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 2920ad4e-2b9e-442f-b81e-efb462799f51
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/2920ad4e-2b9e-442f-b81e-efb462799f51
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : CDX-SecurityScanner
+SignInName         : 
+RoleDefinitionName : Reader
+RoleDefinitionId   : acdd72a7-3385-48ef-bd42-f606fba81ae7
+ObjectId           : 554b43d6-3865-4f53-bb23-8c4e4303d55e
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 48ba64d3-c10e-4bdc-ab37-a2ee1c7281c5
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/48ba64d3-c10e-4bdc-ab37-a2ee1c7281c5
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : Microsoft Demos
+SignInName         : 
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : a1746c2a-19a6-4d48-807e-87113306dd83
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 7382d31d-fe59-4c57-ad42-b26fabd69783
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/7382d31d-fe59-4c57-ad42-b26fabd69783
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : MCAPSGov-AutomationApp
+SignInName         : 
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 3e48b4bd-7c3e-4d33-8c4c-9b915d3ef70f
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 4127ef98-7a3f-5ea3-8dab-9597d624072c
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130/providers/Microsoft.Authorization/roleAssignments/4127ef98-7a3f-5ea3-8dab-9597d624072c
+Scope              : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130
+DisplayName        : 
+SignInName         : 
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 5b0e2778-f737-496e-ba25-637006362f9b
+ObjectType         : Unknown
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : ac37f944-4c33-45e8-917c-58b05fdf9bdd
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/ac37f944-4c33-45e8-917c-58b05fdf9bdd
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : Cesar Abrego
+SignInName         : cabrego_microsoft.com#EXT#@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : d0d08e91-c458-4235-a74f-90f81533b5df
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 31c0253a-72d9-47ab-93cd-243d47a80087
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/31c0253a-72d9-47ab-93cd-243d47a80087
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : El Salvo
+SignInName         : elsalvos_live.com#EXT#@MngEnv100410.onmicrosoft.com
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 110cb93f-b8ca-4a7b-a14a-dbe1d488c0a6
+ObjectType         : User
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 910d7a99-63cb-4479-a580-5419a146a1bb
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/910d7a99-63cb-4479-a580-5419a146a1bb
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : service-connection
+SignInName         : 
+RoleDefinitionName : Management Group Contributor
+RoleDefinitionId   : 5d58bcaf-24a5-4b20-bdb6-eed9f69fbe4c
+ObjectId           : 1c90172c-c136-4dc3-8a77-757a802b06d3
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : d7a6541f-96a4-4955-8d90-a141e05f4874
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/d7a6541f-96a4-4955-8d90-a141e05f4874
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-SECURITY
+SignInName         : 
+RoleDefinitionName : Management Group Contributor
+RoleDefinitionId   : 5d58bcaf-24a5-4b20-bdb6-eed9f69fbe4c
+ObjectId           : d1bc37b0-3f56-42f3-8f57-54281485a8a9
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 6e468a2c-c76a-49b1-a38f-2ccc0ad76138
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/6e468a2c-c76a-49b1-a38f-2ccc0ad76138
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-SECURITY
+SignInName         : 
+RoleDefinitionName : Role Based Access Control Administrator
+RoleDefinitionId   : f58310d9-a9f6-439a-9e8d-f62e7b41a168
+ObjectId           : d1bc37b0-3f56-42f3-8f57-54281485a8a9
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : f40e1cb6-8aa2-4674-8914-dc8837151faa
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/f40e1cb6-8aa2-4674-8914-dc8837151faa
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-REQUESTS
+SignInName         : 
+RoleDefinitionName : Reader
+RoleDefinitionId   : acdd72a7-3385-48ef-bd42-f606fba81ae7
+ObjectId           : ad2576fe-dc28-426a-9d2c-cafb1a5516b8
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : c67cceb4-2f48-45e5-beab-3eb67a2652d6
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/c67cceb4-2f48-45e5-beab-3eb67a2652d6
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-NETWORK
+SignInName         : 
+RoleDefinitionName : Classic Network Contributor
+RoleDefinitionId   : b34d265f-36f7-4a0d-a4d4-e158ca92e90f
+ObjectId           : 7a8af923-70be-4f0c-87e1-71548c2f7657
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 09785e12-4075-4342-aca0-f069c6480e8c
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/09785e12-4075-4342-aca0-f069c6480e8c
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-POST-CONFIG
+SignInName         : 
+RoleDefinitionName : Monitoring Contributor
+RoleDefinitionId   : 749f88d5-cbae-40b8-bcfc-e573ddc772fa
+ObjectId           : e7ca6843-6349-4186-96a1-a08294cf26c8
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : bfc03840-e57f-421e-8114-fa79460dedf8
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/bfc03840-e57f-421e-8114-fa79460dedf8
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-POST-CONFIG
+SignInName         : 
+RoleDefinitionName : Cost Management Contributor
+RoleDefinitionId   : 434105ed-43f6-45c7-a02f-909b2ba83430
+ObjectId           : e7ca6843-6349-4186-96a1-a08294cf26c8
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : de631fa7-c66d-413d-9ae0-5afbf80f6c7b
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/de631fa7-c66d-413d-9ae0-5afbf80f6c7b
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-SECURITY
+SignInName         : 
+RoleDefinitionName : Contributor
+RoleDefinitionId   : b24988ac-6180-42a0-ab88-20f7382dd24c
+ObjectId           : d1bc37b0-3f56-42f3-8f57-54281485a8a9
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : b8c39947-77d2-4c4f-9b92-45622de5969c
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/b8c39947-77d2-4c4f-9b92-45622de5969c
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-REQUESTS
+SignInName         : 
+RoleDefinitionName : Storage Blob Data Contributor
+RoleDefinitionId   : ba92f5b4-2d11-453d-a403-e96b0029c9fe
+ObjectId           : ad2576fe-dc28-426a-9d2c-cafb1a5516b8
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : cc98c6e1-4b0b-437f-9946-c982cdfa5751
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/cc98c6e1-4b0b-437f-9946-c982cdfa5751
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-SECURITY
+SignInName         : 
+RoleDefinitionName : Storage Blob Data Contributor
+RoleDefinitionId   : ba92f5b4-2d11-453d-a403-e96b0029c9fe
+ObjectId           : d1bc37b0-3f56-42f3-8f57-54281485a8a9
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : fc01fa94-dd49-4ff0-8dfc-1ca3a12a6705
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/fc01fa94-dd49-4ff0-8dfc-1ca3a12a6705
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-POST-CONFIG
+SignInName         : 
+RoleDefinitionName : Storage Blob Data Contributor
+RoleDefinitionId   : ba92f5b4-2d11-453d-a403-e96b0029c9fe
+ObjectId           : e7ca6843-6349-4186-96a1-a08294cf26c8
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : f8e18aa2-5ddc-4ece-b78d-4fd9151dde87
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130/providers/Microsoft.Authorization/roleAssignments/f8e18aa2-5ddc-4ece-b78d-4fd9151dde87
+Scope              : /providers/Microsoft.Management/managementGroups/b4d1f2b8-7fc4-478e-9cd7-bb62ed356130
+DisplayName        : ALZ-SUBSCRIPTION-NETWORK
+SignInName         : 
+RoleDefinitionName : Storage Blob Data Contributor
+RoleDefinitionId   : ba92f5b4-2d11-453d-a403-e96b0029c9fe
+ObjectId           : 7a8af923-70be-4f0c-87e1-71548c2f7657
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : a5a4d025-d828-5e4e-8aef-a1480c5d7230
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130/providers/Microsoft.Authorization/roleAssignments/a5a4d025-d828-5e4e-8aef-a1480c5d7230
+Scope              : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130
+DisplayName        : 
+SignInName         : 
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 44f01dcb-ecff-483f-a9dc-4807ccc43f82
+ObjectType         : Unknown
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
+RoleAssignmentName : 9d55168a-d4b0-5566-9b64-0cd2c9a42869
+RoleAssignmentId   : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130/providers/Microsoft.Authorization/roleAssignments/9d55168a-d4b0-5566-9b64-0cd2c9a42869
+Scope              : /providers/Microsoft.Management/managementGroups/B4D1F2B8-7FC4-478E-9CD7-BB62ED356130
+DisplayName        : MCAPSGovDeployPolicies
+SignInName         : 
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 759ada95-d29f-43bd-a6bc-28f205b1f0ab
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+Description        : 
+ConditionVersion   : 
+Condition          : 
+
