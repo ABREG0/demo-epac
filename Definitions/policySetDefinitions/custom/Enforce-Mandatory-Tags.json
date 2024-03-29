@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-set-definition-schema.json",
+  
+    "name": "Enforce-Mandatory-Tags",
+    "properties": {
+      "displayName": "Ensure mandatory tagging is applied to both Resources and Resource Groups",
+      "description": "Contains the core tagging policies applicable to the org",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "General",
+        "source": "https://github.com/Azure/Enterprise-Scale/",
+        "alzCloudEnvironments": [
+          "AzureCloud",
+          "AzureChinaCloud",
+          "AzureUSGovernment"
+        ]
+      },
+      "parameters": {
+        "EnforceRGTags-Owner": {
+            "type": "String",
+            "metadata": {
+              "displayName": "Owner",
+              "description": "Specifies the Owner of the Resource Group"
+            }
+        },
+        "EnforceRGTags-Department": {
+            "type": "String",
+            "metadata": {
+              "displayName": "Department",
+              "description": "Specifies the Department that the Resource Group belongs to"
+            }
+        },
+        "EnforceResourceTags-Owner": {
+            "type": "String",
+            "metadata": {
+              "displayName": "Owner",
+              "description": "Specifies the Owner of the resource"
+            }
+        },
+        "EnforceResourceTags-Department": {
+            "type": "String",
+            "metadata": {
+              "displayName": "Department",
+              "description": "Specifies the Department that the resource belongs to"
+            }
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "Enforce RG Tags",
+          "policyDefinitionName": "Enforce-RG-Tags",
+          "parameters": {
+            "Owner": {
+              "value": "[parameters('EnforceRGTags-Owner')]"
+            },
+            "Department": {
+              "value": "[parameters('EnforceRGTags-Department')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "Enforce Resource Tags",
+          "policyDefinitionName": "Enforce-Resource-Tags",
+          "parameters": {
+            "Owner": {
+              "value": "[parameters('EnforceResourceTags-Owner')]"
+            },
+            "Department": {
+              "value": "[parameters('EnforceResourceTags-Department')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups":[]
+    }
+  }

@@ -1,7 +1,7 @@
 # Enterprise Azure Policy as Code
-
+new line
 ## Breaking changes in V6.0 and v7.0
-
+another line
 Substantial feature enhancements required [breaking changes in v6.0 and to a lesser extend in v7.0](Docs/breaking-changes.md).
 
 ## Az PowerShell Module 9.2.x issue
