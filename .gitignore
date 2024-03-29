@@ -1,2 +1,7 @@
 Output/
 site/
+Scripts/**
+def1/**
+.old/get-azRoleAssignments.ps1
+.old/roles.txt
+.old/roles2.txt
