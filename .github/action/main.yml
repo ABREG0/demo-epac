@@ -1,4 +1,4 @@
-name: dev-branch001
+name: main
 
 env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
