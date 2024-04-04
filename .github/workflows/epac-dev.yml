@@ -23,7 +23,7 @@ jobs:
       CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
       
     environment:
-      name: envepac-dev-gh
+      name: epac-dev-gh
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -31,9 +31,9 @@ jobs:
       - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
           # allow-no-subscriptions: true
 
