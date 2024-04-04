@@ -9,6 +9,7 @@ on:
   push:    
     branches:      
       - 'test-env-vars'
+
   workflow_dispatch:
 
 jobs:
