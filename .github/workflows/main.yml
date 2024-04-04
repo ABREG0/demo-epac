@@ -32,9 +32,11 @@ jobs:
           echo "client id from env: [$CLIENT_ID] test"
           echo "client id env: [${{ env.CLIENT_ID }}] test"
           echo "client id vars: [${{ vars.CLIENT_ID }}] test"
+          echo "client id REPOSITORY_VAR: [$REPOSITORY_VAR] test"
 
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          REPOSITORY_VAR: ${{ vars.CLIENT_ID }}
 
       - name: OIDC Azure Login
         uses: Azure/login@v1
