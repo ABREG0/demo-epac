@@ -1,4 +1,4 @@
-name: epacDevGh
+name: epac-dev
 
 env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
