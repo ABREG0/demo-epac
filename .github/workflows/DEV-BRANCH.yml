@@ -1,4 +1,4 @@
-name: devepac
+name: DEV-BRANCH-Change - EPAC-SANDBOX Workflow
 
 env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
@@ -8,7 +8,9 @@ env:
 on:  
   push:    
     branches:      
-      - 'test-env-vars'
+      - 'DEV-BRANCH'    
+    paths:      
+      - 'Definitions/**'
   workflow_dispatch:
 
 jobs:
@@ -17,25 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    
     # Map a step output to a job output
     outputs:
       CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
-      
+      # output2: ${{ steps.step2.outputs.test }}
     environment:
-      name: envepac-dev-gh
+      name: epac-dev-gh
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
-
-      - name: OIDC Azure Login
-        uses: Azure/login@v1
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          enable-AzPSSession: true
-          # allow-no-subscriptions: true
 
       - shell: pwsh
         name: Install Required Modules
@@ -43,6 +35,15 @@ jobs:
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
           Install-Module EnterprisePolicyAsCode -Force
+
+      - name: OIDC Azure Login
+        uses: Azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          enable-AzPSSession: true
+          # allow-no-subscriptions: true
 
       - name: Build Deployment Plan
         uses: azure/powershell@v1
@@ -90,6 +91,7 @@ jobs:
         with:
           name: deploymentPlan
           path: Output
+
 
   deployPolicy:
     if: ${{ needs.build.outputs.CREATED_POL_PLAN == 'true' }}
