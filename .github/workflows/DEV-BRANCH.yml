@@ -1,4 +1,4 @@
-name: DEV-BRANCH-Change
+vname: DEV-BRANCH-Change
 
 env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
@@ -24,7 +24,7 @@ jobs:
       CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
       # output2: ${{ steps.step2.outputs.test }}
     environment:
-      name: epac-dev-gh
+      name: envepac-dev-gh
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
