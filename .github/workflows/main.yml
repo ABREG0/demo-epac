@@ -16,6 +16,7 @@ jobs:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
     permissions:
+      # content: write
       id-token: write
     # Map a step output to a job output
     outputs:
@@ -26,14 +27,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
-
-      - shell: pwsh
-        name: Install Required Modules
-        run: |
-          Install-Module Az.ResourceGraph -Force -AllowClobber
-          Install-Module Az.Resources -Force -AllowClobber
-          Install-Module EnterprisePolicyAsCode -Force
-
       - name: show variables value
         run: |
           echo "client id: [$CLIENT_ID] test"
@@ -50,6 +43,13 @@ jobs:
           # allow-no-subscriptions: true
         env:
           CLIENT_ID: ${{ vars.CLIENT_ID }}
+
+      - shell: pwsh
+        name: Install Required Modules
+        run: |
+          Install-Module Az.ResourceGraph -Force -AllowClobber
+          Install-Module Az.Resources -Force -AllowClobber
+          Install-Module EnterprisePolicyAsCode -Force
 
       - name: Build Deployment Plan
         uses: azure/powershell@v1
