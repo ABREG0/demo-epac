@@ -16,7 +16,6 @@ jobs:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       id-token: write
     # Map a step output to a job output
     outputs:
