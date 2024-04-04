@@ -8,9 +8,7 @@ env:
 on:  
   push:    
     branches:      
-      - 'DEV-BRANCH'    
-    paths:      
-      - 'Definitions/**'
+      - 'test-env-vars'
   workflow_dispatch:
 
 jobs:
