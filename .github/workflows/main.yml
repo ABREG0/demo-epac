@@ -16,7 +16,7 @@ jobs:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
     permissions:
-      # content: write
+      contents: write
       id-token: write
     # Map a step output to a job output
     outputs:
@@ -29,9 +29,12 @@ jobs:
         uses: actions/checkout@v3.3.0
       - name: show variables value
         run: |
-          echo "client id: [$CLIENT_ID] test"
+          echo "client id from env: [$CLIENT_ID] test"
+          echo "client id env: [${{ env.CLIENT_ID }}] test"
+          echo "client id vars: [${{ vars.CLIENT_ID }}] test"
+
         env:
-          CLIENT_ID: ${{ vars.CLIENT_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
 
       - name: OIDC Azure Login
         uses: Azure/login@v1
