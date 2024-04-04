@@ -1,4 +1,4 @@
-name: epacdev
+name: devepac
 
 env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
@@ -9,7 +9,6 @@ on:
   push:    
     branches:      
       - 'test-env-vars'
-
   workflow_dispatch:
 
 jobs:
@@ -22,19 +21,19 @@ jobs:
     # Map a step output to a job output
     outputs:
       CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
-      
+      # output2: ${{ steps.step2.outputs.test }}
     environment:
-      name: epac-dev-gh
+      name: envepac-dev-gh
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3.3.0
 
       - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
           enable-AzPSSession: true
           # allow-no-subscriptions: true
 
@@ -92,7 +91,6 @@ jobs:
           name: deploymentPlan
           path: Output
 
-
   deployPolicy:
     if: ${{ needs.build.outputs.CREATED_POL_PLAN == 'true' }}
     needs: build
@@ -104,7 +102,7 @@ jobs:
       name: epac-dev-gh
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3.3.0
 
       - name: Download Artifact
         uses: actions/download-artifact@v3
@@ -123,24 +121,14 @@ jobs:
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           Install-Module EnterprisePolicyAsCode -Force
 
-      - name: show variables value
-        run: |
-          echo "client id: [${{ env.CLIENT_ID }}]"
-        env:
-          CLIENT_ID: ${{ env.CLIENT_ID }}
-
       - name: OIDC Azure Login
         uses: Azure/login@v1
         with:
-          client-id: $clientId
-          subscription-id: $subscriptionId
-          tenant-id: $tenantId
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
           # allow-no-subscriptions: true
-        env:
-          clientId: ${{ secrets.CLIENT_ID }}
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          tenantId: ${{ secrets.TENANT_ID }}
 
       - name: Deploy Policy Plan
         uses: azure/powershell@v1
@@ -159,7 +147,7 @@ jobs:
       name: epac-dev-gh
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3.3.0
 
       - name: Download Artifact
         uses: actions/download-artifact@v3
