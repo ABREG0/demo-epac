@@ -2,7 +2,7 @@
 on:
   workflow_call:
     inputs:
-      tf-planPath:
+      terraformPath:
         required: true
         type: string
       targetEnvironment:
@@ -54,9 +54,9 @@ jobs:
 
     # Install the latest version of tf-plan CLI and configure the tf-plan CLI configuration file with a tf-plan Cloud user API token
     - name: Setup tf-plan
-      uses:  hashicorp/setup-tf-plan@v3
+      uses:  hashicorp/setup-terraform@v3
       with:
-        tf-plan_version: "1.5.7"
+        terraform_version: "1.7.5"
 
     - name: tf-plan init
       # env:

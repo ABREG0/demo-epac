@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/plan.yml
     with:
       terraformPath: ./terraform # .github/labeler.yml
-      targetEnvironment : epac-dev-gh
+      targetEnvironment : dev-apply
     secrets: inherit
 
   tfapply:
@@ -27,5 +27,5 @@ jobs:
     uses:  ./.github/workflows/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
     with:
       terraformPath: ./terraform # .github/labeler.yml
-      targetEnvironment: epac-prod-gh
+      targetEnvironment: dev-apply
     secrets: inherit
