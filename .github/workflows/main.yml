@@ -1,0 +1,28 @@
+name: deploy policies
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tf-plan:
+    permissions:
+        id-token: write
+        contents: read
+        pull-requests: write
+    uses: ./.github/actions/plan.yml
+    with:
+      terraformPath: ./terraform # .github/labeler.yml
+    secrets: inherit
+
+  tf-apply:
+    permissions:
+        id-token: write
+        contents: read
+        pull-requests: write
+    uses:  ./.github/actions/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
+    with:
+      terraformPath: ./terraform # .github/labeler.yml
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
