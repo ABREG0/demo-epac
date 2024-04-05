@@ -5,6 +5,9 @@ on:
       terraformPath:
         required: true
         type: string
+      targetEnvironment:
+        required: true
+        type: string
     # secrets:
     #   envPAT:
     #     required: true
@@ -13,7 +16,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ targetEnvironment }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:

@@ -1,28 +1,30 @@
 name: deploy policies
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:    
+    branches:      
+      - 'test-env-vars'
+  workflow_dispatch:
 
 jobs:
   tf-plan:
     permissions:
         id-token: write
         contents: read
-        pull-requests: write
+        # pull-requests: write
     uses: ./.github/actions/plan.yml
     with:
-      terraformPath: ./terraform # .github/labeler.yml
+      terraformPath: "./terraform" # .github/labeler.yml
+      targetEnvironment : "dev-plan"
     secrets: inherit
 
   tf-apply:
     permissions:
         id-token: write
         contents: read
-        pull-requests: write
+        # pull-requests: write
     uses:  ./.github/actions/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
     with:
-      terraformPath: ./terraform # .github/labeler.yml
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      terraformPath: "./terraform" # .github/labeler.yml
+      targetEnvironment: "dev-apply"
+    secrets: inherit
