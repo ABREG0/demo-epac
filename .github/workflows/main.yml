@@ -7,25 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  tfplan:
+  plan:
     permissions:
         id-token: write
         contents: read
-        # pull-requests: write
-    uses: ./.github/workflows/plan.yml
+    uses: './.github/workflows/plan.yml'
     with:
-      terraformPath: ./terraform # .github/labeler.yml
+      terraformPath: ./terraform
       targetEnvironment : dev-apply
-    secrets: inherit
-
-  tfapply:
-    needs: [tfplan]
-    permissions:
-        id-token: write
-        contents: read
-        # pull-requests: write
-    uses:  ./.github/workflows/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
-    with:
-      terraformPath: ./terraform # .github/labeler.yml
-      targetEnvironment: dev-apply
     secrets: inherit
