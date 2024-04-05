@@ -12,7 +12,7 @@ jobs:
         id-token: write
         contents: read
         # pull-requests: write
-    uses: ./.github/workflows/plan.yml
+    uses: ./.github/workflows/plan.yml 
     with:
       terraformPath: ./terraform # .github/labeler.yml
       targetEnvironment : dev-apply
