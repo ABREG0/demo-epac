@@ -13,8 +13,8 @@ on:
     #     required: true
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  tf-apply:
+    name: 'tf-apply'
     runs-on: ubuntu-latest
     environment: ${{ inputs.targetEnvironment }}
 
