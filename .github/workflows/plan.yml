@@ -22,7 +22,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        #working-directory: './tf-test'
+        #working-directory: './terraform'
         
     steps:
     # Authentication
@@ -59,48 +59,48 @@ jobs:
         tf-plan_version: "1.5.7"
 
     - name: tf-plan init
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
+      # env:
+      #   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
-        cd tf-test
-        tf-plan init 
+        cd dev-test
+        tf-plan init  --backend-config="dev.hcl"
         # -input=false \
         # -backend-config="resource_group_name=rg-tf-plan-001" \
         # -backend-config="storage_account_name=$TF_STORAGE_ACCOUNT" \
         # -backend-config="container_name=tfstate" \
         # -backend-config="key=$ENVIRONMENT.tf-plan.tfstate"
-      #working-directory: '${{ github.workspace }}/tf-test'
+      #working-directory: '${{ github.workspace }}/terraform'
 
     - name: tf-plan plan
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
+      # env:
+      #   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
-        cd tf-test
+        cd dev-test
         tf-plan plan
-      #working-directory: '${{ github.workspace }}/tf-test'
+      #working-directory: '${{ github.workspace }}/terraform'
 
     - name: Apply tf-plan
-      env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
+      # env:
+      #   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
         tf-plan apply \
         -input=false \
         -auto-approve \
         # -var="environment=$ENVIRONMENT"
-      working-directory: '${{ github.workspace }}/tf-test'
+      working-directory: '${{ github.workspace }}/terraform'
       
     # Initialize a new or existing tf-plan working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: tf-plan Init
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
         tf-plan init
-      working-directory: '${{ github.workspace }}/tf-test'
+      working-directory: '${{ github.workspace }}/terraform'
 
     # Checks that all tf-plan configuration files adhere to a canonical format
     - name: tf-plan Format
@@ -114,7 +114,7 @@ jobs:
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
         tf-plan plan
-      working-directory: '${{ github.workspace }}/tf-test'
+      working-directory: '${{ github.workspace }}/terraform'
 
       # On push to master, build or change infrastructure according to tf-plan configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "tf-plan Cloud". 
@@ -122,10 +122,10 @@ jobs:
 
     - name: tf-plan Apply
       env:
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
+        # AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        # #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: |
         export ARM_CLIENT_SECRET=$(echo $AZURE_CREDENTIALS | jq -r .clientSecret)
         tf-plan apply -auto-approve
-      working-directory: '${{ github.workspace }}/tf-test'
+      working-directory: '${{ github.workspace }}/terraform'
