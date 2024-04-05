@@ -12,7 +12,7 @@ jobs:
         id-token: write
         contents: read
         # pull-requests: write
-    uses: ./.github/actions/plan.yml
+    uses: ./.github/workflows/plan.yml
     with:
       terraformPath: ./terraform # .github/labeler.yml
       targetEnvironment : dev-plan
@@ -23,7 +23,7 @@ jobs:
         id-token: write
         contents: read
         # pull-requests: write
-    uses:  ./.github/actions/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
+    uses:  ./.github/workflows/apply.yml # octo-org/example-repo/.github/workflows/workflow-B.yml@main
     with:
       terraformPath: ./terraform # .github/labeler.yml
       targetEnvironment: dev-apply
