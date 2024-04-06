@@ -48,12 +48,12 @@ jobs:
     - name: terraform init
       run: |
         cd dev-test
-        terraform init --backend-config="../dev.hcl"
-        # -input=false \
-        # -backend-config="resource_group_name=rg-tf-plan-001" \
-        # -backend-config="storage_account_name=$TF_STORAGE_ACCOUNT" \
-        # -backend-config="container_name=tfstate" \
-        # -backend-config="key=$ENVIRONMENT.tf-plan.tfstate"
+        terraform init -input=false \
+        -backend-config="resource_group_name=hub-tier0" \
+        -backend-config="storage_account_name=mywestus3sattt" \
+        -backend-config="container_name=terraform" \
+        -backend-config="key=dev.tfstate"
+        # --backend-config="../dev.hcl"
       working-directory: '${{ github.workspace }}/terraform'
       env:
         ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
