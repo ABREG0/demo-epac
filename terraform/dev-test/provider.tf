@@ -36,7 +36,7 @@ module "ampls" {
   name = "ampls-001"
   resource_group_name = azurerm_resource_group.rg_ampls.name
 
-  depends_on = [ module.vnet_wus2, module.vnet_wus3, module.dns_wus2, module.dns_wus3 ]
+  # depends_on = [ module.vnet_wus2, module.vnet_wus3, module.dns_wus2, module.dns_wus3 ]
 }
 resource "time_sleep" "wait_60_seconds" {
   depends_on = [azurerm_resource_group.rg_ampls, azurerm_resource_group.this_wus2, azurerm_resource_group.this_wus3]
