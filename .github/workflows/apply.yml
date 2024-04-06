@@ -52,20 +52,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Install the latest version of tf-plan CLI and configure the tf-plan CLI configuration file with a tf-plan Cloud user API token
+    # Install the latest version of terraform CLI and configure the terraform CLI configuration file with a terraform Cloud user API token
     - name: Setup tf-plan
       uses:  hashicorp/setup-terraform@v3
       with:
         terraform_version: "1.7.5"
 
-    - name: tf-plan init
+    - name: terraform init
       # env:
       #   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
 
         cd dev-test
-        tf-plan init  --backend-config="dev.hcl"
+        terraform init  --backend-config="dev.hcl"
         # -input=false \
         # -backend-config="resource_group_name=rg-tf-plan-001" \
         # -backend-config="storage_account_name=$TF_STORAGE_ACCOUNT" \
@@ -73,14 +73,14 @@ jobs:
         # -backend-config="key=$ENVIRONMENT.tf-plan.tfstate"
       working-directory: '${{ github.workspace }}/terraform'
 
-    - name: tf-plan plan
+    - name: terraform plan
       # env:
       #   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
       #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
 
         cd dev-test
-        tf-plan plan
+        terraform plan
       #working-directory: '${{ github.workspace }}/terraform'
 
     - name: Apply tf-plan
@@ -89,40 +89,40 @@ jobs:
       #   #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
 
-        tf-plan apply \
+        terraform apply \
         -input=false \
         -auto-approve \
         # -var="environment=$ENVIRONMENT"
       working-directory: '${{ github.workspace }}/terraform'
       
-    # Initialize a new or existing tf-plan working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: tf-plan Init
+    # Initialize a new or existing terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: terraform Init
       run: |
 
-        tf-plan init
+        terraform init
       working-directory: '${{ github.workspace }}/terraform'
 
-    # Checks that all tf-plan configuration files adhere to a canonical format
-    - name: tf-plan Format
-      run: tf-plan fmt #-check
+    # Checks that all terraform configuration files adhere to a canonical format
+    - name: terraform Format
+      run: terraform fmt #-check
 
     # Generates an execution plan for tf-plan
-    - name: tf-plan Plan
+    - name: terraform Plan
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         #TF_STORAGE_ACCOUNT: ${{ secrets.TF_STORAGE_ACCOUNT }}
       run: |
 
-        tf-plan plan
+        terraform plan
       working-directory: '${{ github.workspace }}/terraform'
 
-      # On push to master, build or change infrastructure according to tf-plan configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "tf-plan Cloud". 
+      # On push to master, build or change infrastructure according to terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "terraform Cloud". 
       #See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
 
-    - name: tf-plan Apply
+    - name: terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: |
 
-        tf-plan apply -auto-approve
+        terraform apply -auto-approve
       working-directory: '${{ github.workspace }}/terraform'
