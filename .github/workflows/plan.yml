@@ -57,17 +57,6 @@ jobs:
       uses:  hashicorp/setup-terraform@v3
       with:
         terraform_version: "1.7.5"
-      
-    - name: Test example
-      shell: bash
-      run: |
-        set -e
-        # az login --identity --username $MSI_ID > /dev/null
-        export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
-        
-        export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
-
-        export ARM_CLIENT_ID=$(az identity list | jq -r --arg MSI_ID "$MSI_ID" '.[] | select(.principalId == $MSI_ID) | .clientId')
 
     - name: terraform init
       run: |
@@ -79,10 +68,10 @@ jobs:
         # -backend-config="container_name=tfstate" \
         # -backend-config="key=$ENVIRONMENT.tf-plan.tfstate"
       working-directory: '${{ github.workspace }}/terraform'
-      # env:
-      #   ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      #   ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
-      #   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      env:
+        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
 
     - name: terraform plan
       run: |
