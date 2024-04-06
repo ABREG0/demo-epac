@@ -57,6 +57,13 @@ jobs:
       uses:  hashicorp/setup-terraform@v3
       with:
         terraform_version: "1.7.5"
+      
+    - name: Export Azure Login Credentials
+      run: |
+        echo "ARM_CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV
+        # echo "ARM_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> $GITHUB_ENV
+        echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+        echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
 
     - name: terraform init
       run: |
@@ -68,10 +75,10 @@ jobs:
         # -backend-config="container_name=tfstate" \
         # -backend-config="key=$ENVIRONMENT.tf-plan.tfstate"
       working-directory: '${{ github.workspace }}/terraform'
-      env:
-        ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      # env:
+      #   ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #   ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
+      #   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
 
     - name: terraform plan
       run: |
