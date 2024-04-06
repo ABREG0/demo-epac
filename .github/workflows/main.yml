@@ -19,6 +19,7 @@ jobs:
     secrets: inherit
 
   call-apply:
+    needs: [call-plan]
     permissions:
       id-token: write
       contents: read
