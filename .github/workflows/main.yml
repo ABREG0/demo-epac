@@ -7,19 +7,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-plan:
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
-    uses: ./.github/workflows/plan.yml
-    with:
-      terraformPath: ./terraform
-      targetEnvironment: dev-plan
-    secrets: inherit
+  # call-plan:
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #     pull-requests: write
+  #   uses: ./.github/workflows/plan.yml
+  #   with:
+  #     terraformPath: ./terraform
+  #     targetEnvironment: dev-plan
+  #   secrets: inherit
 
-  call-apply:
-    needs: [call-plan]
+  run-terraform-deployment:
+    name: terraform deployment
+    # needs: [call-plan]
     permissions:
       id-token: write
       contents: read
