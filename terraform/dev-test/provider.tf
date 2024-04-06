@@ -1,5 +1,10 @@
 terraform {
   backend "azurerm" {
+    resource_group_name  = "hub-tier0"
+    storage_account_name = "mywestus3sattt"
+    container_name       = "terraform"
+    key                  = "dev.tfstate"
+    use_oidc = true
   }
   //   required_providers {
   //     azurerm = {
@@ -11,6 +16,7 @@ terraform {
 
 provider "azurerm" {
   features {}
+  
 }
 
 locals {
