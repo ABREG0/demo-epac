@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "rg_ampls" {
   location = "westus3"
 }
 module "ampls" {
-  source = "./modules/azureMonitorPrivateLinkscope"
+  source = "../modules/azureMonitorPrivateLinkscope"
   name = "ampls-001"
   resource_group_name = azurerm_resource_group.rg_ampls.name
 
