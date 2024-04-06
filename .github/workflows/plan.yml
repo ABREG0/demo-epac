@@ -58,12 +58,16 @@ jobs:
       with:
         terraform_version: "1.7.5"
       
-    - name: Export Azure Login Credentials
+    - name: Test example
+      shell: bash
       run: |
-        echo "ARM_CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV
-        # echo "ARM_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> $GITHUB_ENV
-        echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-        echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+        set -e
+        az login --identity --username $MSI_ID > /dev/null
+        export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
+        
+        export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
+
+        export ARM_CLIENT_ID=$(az identity list | jq -r --arg MSI_ID "$MSI_ID" '.[] | select(.principalId == $MSI_ID) | .clientId')
 
     - name: terraform init
       run: |
