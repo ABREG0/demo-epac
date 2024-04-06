@@ -65,7 +65,7 @@ jobs:
       run: |
 
         cd dev-test
-        terraform init  --backend-config="dev.hcl"
+        terraform init  --backend-config="../dev.hcl"
         # -input=false \
         # -backend-config="resource_group_name=rg-tf-plan-001" \
         # -backend-config="storage_account_name=$TF_STORAGE_ACCOUNT" \
