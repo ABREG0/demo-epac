@@ -13,8 +13,8 @@ on:
     #     required: true
 
 jobs:
-  tfplan:
-    name: 'tfplan'
+  tfapply:
+    name: 'tfapply'
     runs-on: ubuntu-latest
     environment: ${{ inputs.targetEnvironment }}
 
