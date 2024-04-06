@@ -13,6 +13,17 @@ on:
     #     required: true
 
 jobs:
+  CallplanRunner:
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    uses: ./.github/workflows/plan.yml
+    with:
+      terraformPath: ./terraform
+      targetEnvironment: dev-plan
+    secrets: inherit
+
   tfapply:
     name: 'tfapply'
     runs-on: ubuntu-latest
