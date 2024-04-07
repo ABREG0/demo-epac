@@ -3,7 +3,7 @@ name: deploy policies
 on:
   push:    
     branches:      
-      - 'test-env-vars'
+      - 'tf-testing'
   workflow_dispatch:
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
       terraformPath: ./terraform
       targetEnvironment: dev-apply
     secrets: inherit
-    
+
   # call-plan:
   #   permissions:
   #     id-token: write
