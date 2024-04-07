@@ -14,7 +14,7 @@ on:
 
 jobs:
   tfplan:
-    name: 'tfplan'
+    name: terraform plan job
     runs-on: ubuntu-latest
     environment: ${{ inputs.targetEnvironment }}
     outputs:
@@ -30,6 +30,7 @@ jobs:
     steps:
       # Authentication
       - name: OIDC Azure Login
+        id: oidc_logi 
         uses: Azure/login@v1
         with:
           client-id: ${{ secrets.CLIENT_ID }}
@@ -40,15 +41,18 @@ jobs:
 
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
+        id: checkout
         uses: actions/checkout@v4
 
       # Install the latest version of terraform CLI and configure the terraform CLI configuration file with a terraform Cloud user API token
-      - name: Setup tf-plan
+      - name: Setup terraforum
+        id: setup_tf
         uses:  hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.7.5"
 
       - name: terraform init
+        id: tfinit
         run: |
           cd dev-test
           terraform init -input=false \
@@ -83,39 +87,38 @@ jobs:
           name: tf-plan
           path: ${{ github.workspace }}/terraform/dev-test/out.tfplan
 
-      - name: Download the plan
-        id: download_plan
-        uses: actions/download-artifact@v3
-        with:
-          name: tf-plan
-          path: ${{ github.workspace }}/terraform/dev-test
+      # - name: Download the plan
+      #   id: download_plan
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: tf-plan
+      #     path: ${{ github.workspace }}/terraform/dev-test
       
+      # - name: Apply
+      #   run: |
+      #     cd dev-test
+      #     terraform apply \
+      #     -input=false \
+      #     -auto-approve out.tfplan
+      #   working-directory: '${{ github.workspace }}/terraform'
+      #   env:
+      #     ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
+      #     ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      #     ARM_USE_OIDC: true
 
-      - name: Apply
-        run: |
-          cd dev-test
-          terraform apply \
-          -input=false \
-          -auto-approve out.tfplan
-        working-directory: '${{ github.workspace }}/terraform'
-        env:
-          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-          ARM_USE_OIDC: true
-
-      - name: destroy
-        run: |
-          cd dev-test
-          terraform destroy \
-          -input=false \
-          -auto-approve 
-        working-directory: '${{ github.workspace }}/terraform'
-        env:
-          ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-          ARM_USE_OIDC: true
+      # - name: destroy
+      #   run: |
+      #     cd dev-test
+      #     terraform destroy \
+      #     -input=false \
+      #     -auto-approve 
+      #   working-directory: '${{ github.workspace }}/terraform'
+      #   env:
+      #     ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     ARM_SUBSCRIPTION_ID : ${{ secrets.SUBSCRIPTION_ID }}
+      #     ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      #     ARM_USE_OIDC: true
 
     # # initialize a new or existing terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     # - name: terraform init
