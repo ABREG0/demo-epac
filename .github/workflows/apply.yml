@@ -27,6 +27,8 @@ jobs:
   tfapply:
     name: 'tfapply'
     runs-on: ubuntu-latest
+    needs: [CallplanRunner]
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
     environment: ${{ inputs.targetEnvironment }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
