@@ -96,7 +96,7 @@ jobs:
           cd dev-test
           terraform apply \
           -input=false \
-          -auto-approve out.tfplan
+          -auto-approve out.tfplan1
         working-directory: '${{ github.workspace }}/terraform'
         env:
           ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
