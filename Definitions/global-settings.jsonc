@@ -8,10 +8,18 @@
             "tenantId": "b4d1f2b8-7fc4-478e-9cd7-bb62ed356130", // Replace this with your tenant Id
             "deploymentRootScope": "/providers/Microsoft.Management/managementGroups/export-example", // Replace this with a management group that represents the functional root in your environment. 
             
+            "desiredState": {
+                "strategy": "full",
+                "keepDfcSecurityAssignments": false,
+                "includeResourceGroups": true
+            },
+            
             "managedIdentityLocations": "westus3", // Update the default location for managed identities
             "globalNotScopes":  [
-                    "/resourceGroupPatterns/excluded-rg*",
-                    "/resourceGroupPatterns/excluded-rg2*"
+                "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
+                "/subscriptions/*/resourceGroups/managed-rg-*",
+                "/providers/Microsoft.Management/managementGroups/mg-personal-subscriptions",
+                "/providers/Microsoft.Management/managementGroups/mg-policy-as-code"
                 ]
         },
         {
@@ -28,8 +36,10 @@
             
             "managedIdentityLocations": "westus3", // Update the default location for managed identities
             "globalNotScopes":  [
-                    "/resourceGroupPatterns/excluded-rg*",
-                    "/resourceGroupPatterns/excluded-rg2*"
+                "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
+                "/subscriptions/*/resourceGroups/managed-rg-*",
+                "/providers/Microsoft.Management/managementGroups/mg-personal-subscriptions",
+                "/providers/Microsoft.Management/managementGroups/mg-policy-as-code"
                 ]
         },
         {
@@ -47,8 +57,10 @@
             
             "managedIdentityLocations": "westus3", // Update the default location for managed identities
             "globalNotScopes":  [
-                    "/resourceGroupPatterns/excluded-rg*",
-                    "/resourceGroupPatterns/excluded-rg2*"
+                "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
+                "/subscriptions/*/resourceGroups/managed-rg-*",
+                "/providers/Microsoft.Management/managementGroups/mg-personal-subscriptions",
+                "/providers/Microsoft.Management/managementGroups/mg-policy-as-code"
                 ]
         }
     ]
