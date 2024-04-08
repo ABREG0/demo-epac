@@ -1,15 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/global-settings-schema.json",
     "pacOwnerId": "im-sh-003", // Generate a guid using New-Guid and place it here
-    "managedIdentityLocations": {
-        "*": "westus3" // Update the default location for managed identities
-    },
-    "globalNotScopes": {
-        "*": [
-            "/resourceGroupPatterns/excluded-rg*",
-            "/resourceGroupPatterns/excluded-rg2*"
-        ]
-    },
     "pacEnvironments": [
         {
             "pacSelector": "export-example",
@@ -27,6 +18,15 @@
             "desiredState": {
                 "strategy": "full",
                 "includeResourceGroups": true
+            },
+            "managedIdentityLocations": {
+                "*": "westus3" // Update the default location for managed identities
+            },
+            "globalNotScopes": {
+                "*": [
+                    "/resourceGroupPatterns/excluded-rg*",
+                    "/resourceGroupPatterns/excluded-rg2*"
+                ]
             }
         },
         {
