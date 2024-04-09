@@ -10,11 +10,13 @@
             
             "desiredState": {
                 "strategy": "full",
-                "keepDfcSecurityAssignments": false,
-                "includeResourceGroups": true
+                "keepDfcSecurityAssignments": false
+                
             },
-            
-            "managedIdentityLocations": "westus3", // Update the default location for managed identities
+
+            "managedIdentityLocation": {
+                "*": "westus3"
+            }, // Update the default location for managed identities
             "globalNotScopes":  [
                 "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
                 "/subscriptions/*/resourceGroups/managed-rg-*",
@@ -30,11 +32,12 @@
             
             "desiredState": {
                 "strategy": "full",
-                "keepDfcSecurityAssignments": false,
-                "includeResourceGroups": true
+                "keepDfcSecurityAssignments": false
+                
             },
-            
-            "managedIdentityLocations": "westus3", // Update the default location for managed identities
+            "managedIdentityLocation": {
+                "*": "westus3"
+            }, // Update the default location for managed identities
             "globalNotScopes":  [
                 "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
                 "/subscriptions/*/resourceGroups/managed-rg-*",
@@ -51,11 +54,12 @@
             
             "desiredState": {
                 "strategy": "full",
-                "keepDfcSecurityAssignments": false,
-                "includeResourceGroups": true
+                "keepDfcSecurityAssignments": false
+                
             },
-            
-            "managedIdentityLocations": "westus3", // Update the default location for managed identities
+            "managedIdentityLocation": {
+                "*": "westus3"
+            },// Update the default location for managed identities
             "globalNotScopes":  [
                 "/subscriptions/*/resourceGroups/synapseworkspace-managedrg-*",
                 "/subscriptions/*/resourceGroups/managed-rg-*",
