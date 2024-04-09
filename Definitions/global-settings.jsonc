@@ -50,7 +50,7 @@
             "cloud": "AzureCloud",
             "tenantId": "b4d1f2b8-7fc4-478e-9cd7-bb62ed356130",
             "deploymentRootScope": "/providers/Microsoft.Management/managementGroups/epac-prod-gh",
-            "inheritedDefinitionsScopes": [], // optional for desired state coexistence scenarios
+            
             
             "desiredState": {
                 "strategy": "full",
