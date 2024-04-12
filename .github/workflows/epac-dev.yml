@@ -44,7 +44,7 @@ jobs:
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
           
-          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
@@ -130,7 +130,7 @@ jobs:
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           
-          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
@@ -184,7 +184,7 @@ jobs:
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           
-          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force

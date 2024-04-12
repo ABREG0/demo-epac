@@ -4,6 +4,8 @@ on:
   push:    
     branches:      
       - 'test-env-vars'
+    paths: 
+      - ./terraform/*
   workflow_dispatch:
 
 jobs:
