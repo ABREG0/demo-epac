@@ -29,14 +29,6 @@
                     },
                     "parameters": {
                         "effect": "Deny"
-                    },
-                    "scope": {
-                        "epac-dev": [
-                            "/providers/Microsoft.Management/managementGroups/mg-child1"
-                        ],
-                        "prod": [
-                            "/providers/Microsoft.Management/managementGroups/mg-prod"
-                        ]
                     }
                 },
                 {

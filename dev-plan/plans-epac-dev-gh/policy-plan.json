@@ -1,0 +1,585 @@
+{
+  "exemptions": {
+    "numberOfOrphans": 0,
+    "update": {},
+    "numberOfExpired": 0,
+    "numberUnchanged": 0,
+    "delete": {},
+    "new": {},
+    "numberOfChanges": 0,
+    "replace": {}
+  },
+  "pacOwnerId": "im-sh-003",
+  "policyDefinitions": {
+    "update": {},
+    "replace": {},
+    "delete": {},
+    "new": {},
+    "numberOfChanges": 0,
+    "numberUnchanged": 134
+  },
+  "assignments": {
+    "update": {
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL": {
+        "policyDefinitionId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policySetDefinitions/Enforce-EncryptTransit",
+        "description": "Choose either Deploy if not exist and append in combination with audit or Select Deny in the Policy effect. Deny polices shift left. Deploy if not exist and append enforce but can be changed, and because missing exsistense condition require then the combination of Audit.",
+        "identityRequired": true,
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "TLS and SSL must be enabled for on resources without encryption in transit."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4939a1f6-9ae0-4e48-a1e0-f2cbe897382d",
+              "roleDisplayName": "SQL Managed Instance Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c",
+              "roleDisplayName": "Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/17d1049b-9a84-46fb-8f53-869881c3d3ab",
+              "roleDisplayName": "Storage Account Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/6d8ee4ec-f05a-4a1d-8b00-a9b17e38b437",
+              "roleDisplayName": "SQL Server Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Enforce-TLS-SSL",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS-1": {
+        "parameters": {
+          "effect": "Deny"
+        },
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1c6e92c9-99f0-4e55-9cf2-0c234dc48f99",
+        "description": "Do not allow containers to run with privilege escalation to root in a Kubernetes cluster. This recommendation is part of CIS 5.2.5 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc.",
+        "identityRequired": false,
+        "displayName": "c1 Kubernetes clusters should not allow container privilege escalation",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Priv-Esc-AKS-1",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS-1",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS-1": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1a5b4dca-0b6f-4cf5-907c-56316bc1bf3d",
+        "description": "Use of HTTPS ensures authentication and protects data in transit from network layer eavesdropping attacks. This capability is currently generally available for Kubernetes Service (AKS), and in preview for AKS Engine and Azure Arc enabled Kubernetes. For more info, visit https://aka.ms/kubepolicydoc",
+        "identityRequired": false,
+        "displayName": "c1 Kubernetes clusters should be accessible only over HTTPS",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Enforce-AKS-HTTPS-1",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS-1",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS-1": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/95edb821-ddaf-4404-9732-666045e056b4",
+        "description": "Do not allow privileged containers creation in a Kubernetes cluster. This recommendation is part of CIS 5.2.1 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc.",
+        "identityRequired": false,
+        "displayName": "c1 Kubernetes cluster should not allow privileged containers",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Privileged-AKS-1",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS-1",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-1": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a8eff44f-8c92-45c3-a3fb-9880802d67a7",
+        "description": "Use Azure Policy Add-on to manage and report on the compliance state of your Azure Kubernetes Service (AKS) clusters. For more information, see https://aka.ms/akspolicydoc.",
+        "identityRequired": true,
+        "displayName": "c1 Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/ed7f3fbd-7b88-4dd4-9017-9adb7ce333f8",
+              "roleDisplayName": "Azure Kubernetes Service Contributor Role",
+              "scope": "/providers/Microsoft.Management/managementGroups/mg-child1"
+            },
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/18ed5180-3e48-46fd-8541-4ea054d57064",
+              "roleDisplayName": "Azure Kubernetes Service Policy Add-on Deployment",
+              "scope": "/providers/Microsoft.Management/managementGroups/mg-child1"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-AKS-Policy-1",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-1",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "notScopes": []
+      }
+    },
+    "replace": {},
+    "delete": {
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS": {
+        "name": "Deny-Priv-Esc-AKS",
+        "displayName": "Kubernetes clusters should not allow container privilege escalation",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/mg-child1"
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-child1": {
+        "name": "Deploy-AKS-Policy-child1",
+        "displayName": "Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-child1",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/mg-child1"
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS": {
+        "name": "Deny-Privileged-AKS",
+        "displayName": "Kubernetes cluster should not allow privileged containers",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/mg-child1"
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS": {
+        "name": "Enforce-AKS-HTTPS",
+        "displayName": "Kubernetes clusters should be accessible only over HTTPS",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/mg-child1"
+      },
+      "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy": {
+        "name": "Deploy-AKS-Policy",
+        "displayName": "Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "id": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/mg-child1"
+      }
+    },
+    "new": {
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-MgmtPorts-Internet": {
+        "policyDefinitionId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-MgmtPorts-From-Internet",
+        "description": "This policy denies any network security rule that allows management port access from the Internet",
+        "identityRequired": false,
+        "displayName": "Management port access from the Internet should be blocked",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Management port access from the Internet must be blocked."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-MgmtPorts-Internet",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-MgmtPorts-Internet",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-GR-KeyVault": {
+        "policyDefinitionId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policySetDefinitions/Enforce-Guardrails-KeyVault",
+        "description": "This initiative assignment enables recommended ALZ guardrails for Azure Key Vault.",
+        "identityRequired": false,
+        "displayName": "Enforce recommended guardrails for Azure Key Vault",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Recommended guardrails must be enforced for Azure Key Vault."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Enforce-GR-KeyVault",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-GR-KeyVault",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Storage-http": {
+        "parameters": {
+          "effect": "Deny"
+        },
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9",
+        "description": "Audit requirement of Secure transfer in your storage account. Secure transfer is an option that forces your storage account to accept requests only from secure connections (HTTPS). Use of HTTPS ensures authentication between the server and the service and protects data in transit from network layer attacks such as man-in-the-middle, eavesdropping, and session-hijacking",
+        "identityRequired": false,
+        "displayName": "Secure transfer to storage accounts should be enabled",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Secure transfer to storage accounts must be enabled."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Storage-http",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Storage-http",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1a5b4dca-0b6f-4cf5-907c-56316bc1bf3d",
+        "description": "Use of HTTPS ensures authentication and protects data in transit from network layer eavesdropping attacks. This capability is currently generally available for Kubernetes Service (AKS), and in preview for AKS Engine and Azure Arc enabled Kubernetes. For more info, visit https://aka.ms/kubepolicydoc",
+        "identityRequired": false,
+        "displayName": "Kubernetes clusters should be accessible only over HTTPS",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Enforce-AKS-HTTPS",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-AKS-HTTPS",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-TDE": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/86a912f6-9a06-4e26-b447-11b16ba8659f",
+        "description": "This policy ensures that Transparent Data Encryption is enabled on SQL Servers.",
+        "identityRequired": true,
+        "displayName": "Deploy TDE on SQL servers",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "TDE must be deployed on SQL servers."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/9b7fa17d-e63e-47b0-bb0a-15c516ac86ec",
+              "roleDisplayName": "SQL DB Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-SQL-TDE",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-TDE",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Subnet-Without-Nsg": {
+        "policyDefinitionId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-Subnet-Without-Nsg",
+        "description": "This policy denies the creation of a subnet without a Network Security Group to protect traffic across subnets.",
+        "identityRequired": false,
+        "displayName": "Subnets should have a Network Security Group",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Subnets must have a Network Security Group."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Subnet-Without-Nsg",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Subnet-Without-Nsg",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a8eff44f-8c92-45c3-a3fb-9880802d67a7",
+        "description": "Use Azure Policy Add-on to manage and report on the compliance state of your Azure Kubernetes Service (AKS) clusters. For more information, see https://aka.ms/akspolicydoc.",
+        "identityRequired": true,
+        "displayName": "Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/ed7f3fbd-7b88-4dd4-9017-9adb7ce333f8",
+              "roleDisplayName": "Azure Kubernetes Service Contributor Role",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/18ed5180-3e48-46fd-8541-4ea054d57064",
+              "roleDisplayName": "Azure Kubernetes Service Policy Add-on Deployment",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-AKS-Policy",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-IP-forwarding": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/88c0b9da-ce96-4b03-9635-f29a937e2900",
+        "description": "This policy denies the network interfaces which enabled IP forwarding. The setting of IP forwarding disables Azure's check of the source and destination for a network interface. This should be reviewed by the network security team.",
+        "identityRequired": false,
+        "displayName": "Network interfaces should disable IP forwarding",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Network interfaces must disable IP forwarding."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-IP-forwarding",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-IP-forwarding",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enable-DDoS-VNET": {
+        "parameters": {
+          "ddosPlan": "null"
+        },
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/94de2ad3-e0c1-4caf-ad78-5d47bbc83d3d",
+        "description": "Protect your virtual networks against volumetric and protocol attacks with Azure DDoS Network Protection. For more information, visit https://aka.ms/ddosprotectiondocs.",
+        "identityRequired": true,
+        "displayName": "Virtual networks should be protected by Azure DDoS Network Protection",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Virtual networks must be protected by Azure DDoS Network Protection."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7",
+              "roleDisplayName": "Network Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Enable-DDoS-VNET",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enable-DDoS-VNET",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/95edb821-ddaf-4404-9732-666045e056b4",
+        "description": "Do not allow privileged containers creation in a Kubernetes cluster. This recommendation is part of CIS 5.2.1 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc.",
+        "identityRequired": false,
+        "displayName": "Kubernetes cluster should not allow privileged containers",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Privileged-AKS",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Privileged-AKS",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AzSqlDb-Auditing": {
+        "parameters": {
+          "logAnalyticsWorkspaceId": ""
+        },
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/25da7dfb-0666-4a15-a8f5-402127efd8bb",
+        "description": "To ensure the operations performed against your SQL assets are captured, SQL servers should have auditing enabled. If auditing is not enabled, this policy will configure auditing events to flow to the specified Log Analytics workspace.",
+        "identityRequired": true,
+        "displayName": "Configure SQL servers to have auditing enabled to Log Analytics workspace",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "SQL servers must have auditing enabled to Log Analytics workspace."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/92aaf0da-9dab-42b6-94a3-d43ce8d16293",
+              "roleDisplayName": "Log Analytics Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/056cd41c-7e88-42e1-933e-88ba6a50c9c3",
+              "roleDisplayName": "SQL Security Manager",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-AzSqlDb-Auditing",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AzSqlDb-Auditing",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-Threat": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/36d49e87-48c4-4f2e-beed-ba4ed02b71f5",
+        "description": "This policy ensures that Threat Detection is enabled on SQL Servers.",
+        "identityRequired": true,
+        "displayName": "Deploy Threat Detection on SQL servers",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Threat Detection must be deployed on SQL servers."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/056cd41c-7e88-42e1-933e-88ba6a50c9c3",
+              "roleDisplayName": "SQL Security Manager",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-SQL-Threat",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-Threat",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS": {
+        "parameters": {
+          "effect": "Deny"
+        },
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1c6e92c9-99f0-4e55-9cf2-0c234dc48f99",
+        "description": "Do not allow containers to run with privilege escalation to root in a Kubernetes cluster. This recommendation is part of CIS 5.2.5 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc.",
+        "identityRequired": false,
+        "displayName": "Kubernetes clusters should not allow container privilege escalation",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Deny-Priv-Esc-AKS",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deny-Priv-Esc-AKS",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Audit-AppGW-WAF": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/564feb30-bf6a-4854-b4bb-0d2d2d1e6c66",
+        "description": "Deploy Azure Web Application Firewall (WAF) in front of public facing web applications for additional inspection of incoming traffic. Web Application Firewall (WAF) provides centralized protection of your web applications from common exploits and vulnerabilities such as SQL injections, Cross-Site Scripting, local and remote file executions. You can also restrict access to your web applications by countries, IP address ranges, and other http(s) parameters via custom rules.",
+        "identityRequired": false,
+        "displayName": "Web Application Firewall (WAF) should be enabled for Application Gateway",
+        "identity": {
+          "type": "None"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Web Application Firewall (WAF) must be enabled for Application Gateway."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003"
+        },
+        "name": "Audit-AppGW-WAF",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Audit-AppGW-WAF",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-VM-Backup": {
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/98d0b9f8-fd90-49c9-88e2-d3baf3b0dd86",
+        "description": "Enforce backup for all virtual machines by deploying a recovery services vault in the same location and resource group as the virtual machine. Doing this is useful when different application teams in your organization are allocated separate resource groups and need to manage their own backups and restores. You can optionally exclude virtual machines containing a specified tag to control the scope of assignment. See https://aka.ms/AzureVMAppCentricBackupExcludeTag.",
+        "identityRequired": true,
+        "displayName": "Configure backup on virtual machines without a given tag to a new recovery services vault with a default policy",
+        "identity": {
+          "type": "SystemAssigned"
+        },
+        "enforcementMode": "Default",
+        "nonComplianceMessages": [
+          {
+            "message": "Backup on virtual machines without a given tag must be configured to a new recovery services vault with a default policy."
+          }
+        ],
+        "metadata": {
+          "pacOwnerId": "im-sh-003",
+          "roles": [
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c",
+              "roleDisplayName": "Virtual Machine Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            },
+            {
+              "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/5e467623-bb1f-42f4-a55d-6e525e11384b",
+              "roleDisplayName": "Backup Contributor",
+              "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+            }
+          ]
+        },
+        "managedIdentityLocation": "westus3",
+        "name": "Deploy-VM-Backup",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-VM-Backup",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "notScopes": []
+      }
+    },
+    "numberOfChanges": 25,
+    "numberUnchanged": 8
+  },
+  "policySetDefinitions": {
+    "update": {},
+    "replace": {},
+    "delete": {},
+    "new": {},
+    "numberOfChanges": 0,
+    "numberUnchanged": 16
+  },
+  "createdOn": "2024-04-12 22:09:01Z"
+}

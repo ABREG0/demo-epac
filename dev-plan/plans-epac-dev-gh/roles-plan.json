@@ -1,0 +1,226 @@
+{
+  "pacOwnerId": "im-sh-003",
+  "roleAssignments": {
+    "numberOfChanges": 24,
+    "removed": [],
+    "added": [
+      {
+        "displayName": "Configure Azure PaaS services to use private DNS zones",
+        "scope": "/subscriptions/d200e3b2-c0dc-4076-bd30-4ccccf05ffeb",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-Private-DNS-Zones",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Unknown",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7"
+      },
+      {
+        "displayName": "Configure Azure PaaS services to use private DNS zones",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-Private-DNS-Zones",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Contributor",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+      },
+      {
+        "displayName": "Configure Azure PaaS services to use private DNS zones",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-Private-DNS-Zones",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Private DNS Zone Contributor",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/b12aa53e-6015-4669-85d0-8515ebb3ae7f"
+      },
+      {
+        "displayName": "Configure Azure PaaS services to use private DNS zones",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-Private-DNS-Zones",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Network Contributor",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7"
+      },
+      {
+        "displayName": "Enforce ALZ Decommissioned Guardrails",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-ALZ-Decomm",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Virtual Machine Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c"
+      },
+      {
+        "displayName": "c1 Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-1",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Azure Kubernetes Service Contributor Role",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/ed7f3fbd-7b88-4dd4-9017-9adb7ce333f8"
+      },
+      {
+        "displayName": "c1 Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "scope": "/providers/Microsoft.Management/managementGroups/mg-child1",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/mg-child1/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy-1",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Azure Kubernetes Service Policy Add-on Deployment",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/18ed5180-3e48-46fd-8541-4ea054d57064"
+      },
+      {
+        "displayName": "Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Azure Kubernetes Service Contributor Role",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/ed7f3fbd-7b88-4dd4-9017-9adb7ce333f8"
+      },
+      {
+        "displayName": "Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Azure Kubernetes Service Policy Add-on Deployment",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AKS-Policy",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/18ed5180-3e48-46fd-8541-4ea054d57064"
+      },
+      {
+        "displayName": "Virtual networks should be protected by Azure DDoS Network Protection",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Network Contributor",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enable-DDoS-VNET",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7"
+      },
+      {
+        "displayName": "Configure SQL servers to have auditing enabled to Log Analytics workspace",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Log Analytics Contributor",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AzSqlDb-Auditing",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/92aaf0da-9dab-42b6-94a3-d43ce8d16293"
+      },
+      {
+        "displayName": "Configure SQL servers to have auditing enabled to Log Analytics workspace",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Security Manager",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-AzSqlDb-Auditing",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/056cd41c-7e88-42e1-933e-88ba6a50c9c3"
+      },
+      {
+        "displayName": "Configure backup on virtual machines without a given tag to a new recovery services vault with a default policy",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Virtual Machine Contributor",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-VM-Backup",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/9980e02c-c2be-4d73-94e8-173b1dc7cf3c"
+      },
+      {
+        "displayName": "Configure backup on virtual machines without a given tag to a new recovery services vault with a default policy",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Backup Contributor",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-VM-Backup",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/Microsoft.Authorization/roleDefinitions/5e467623-bb1f-42f4-a55d-6e525e11384b"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Managed Instance Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4939a1f6-9ae0-4e48-a1e0-f2cbe897382d"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Storage Account Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/17d1049b-9a84-46fb-8f53-869881c3d3ab"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Server Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/6d8ee4ec-f05a-4a1d-8b00-a9b17e38b437"
+      },
+      {
+        "displayName": "Deploy Threat Detection on SQL servers",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Security Manager",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-Threat",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/056cd41c-7e88-42e1-933e-88ba6a50c9c3"
+      },
+      {
+        "displayName": "Deploy TDE on SQL servers",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL DB Contributor",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Deploy-SQL-TDE",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/9b7fa17d-e63e-47b0-bb0a-15c516ac86ec"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Managed Instance Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/4939a1f6-9ae0-4e48-a1e0-f2cbe897382d"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "Storage Account Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/17d1049b-9a84-46fb-8f53-869881c3d3ab"
+      },
+      {
+        "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+        "scope": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "principalId": null,
+        "assignmentId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyAssignments/Enforce-TLS-SSL",
+        "objectType": "ServicePrincipal",
+        "roleDisplayName": "SQL Server Contributor",
+        "roleDefinitionId": "/providers/microsoft.authorization/roleDefinitions/6d8ee4ec-f05a-4a1d-8b00-a9b17e38b437"
+      }
+    ]
+  },
+  "createdOn": "2024-04-12 22:09:01Z"
+}

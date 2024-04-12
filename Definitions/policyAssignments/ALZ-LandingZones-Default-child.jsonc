@@ -1,0 +1,82 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+    "nodeName": "/LandingZones/",
+    "parameters": {
+        "logAnalyticsWorkspaceId": "" // Replace with your central Log Analytics workspace ID
+    },
+
+            "children": [
+                {
+                    "nodeName": "PrivilegeEscalation",
+                    "assignment": {
+                        "name": "Deny-Priv-Esc-AKS-1",
+                        "displayName": "c1 Kubernetes clusters should not allow container privilege escalation",
+                        "description": "Do not allow containers to run with privilege escalation to root in a Kubernetes cluster. This recommendation is part of CIS 5.2.5 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc."
+                    },
+                    "definitionEntry": {
+                        "policyId": "/providers/Microsoft.Authorization/policyDefinitions/1c6e92c9-99f0-4e55-9cf2-0c234dc48f99",
+                        "displayName": "AKS Privilege Escalation"
+                    },
+                    "parameters": {
+                        "effect": "Deny"
+                    },
+                    "scope": {
+                        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+                            "/providers/Microsoft.Management/managementGroups/mg-child1"
+                        ]
+                    }
+                },
+                {
+                    "nodeName": "PrivilegeEscalation",
+                    "assignment": {
+                        "name": "Deny-Privileged-AKS-1",
+                        "displayName": "c1 Kubernetes cluster should not allow privileged containers",
+                        "description": "Do not allow privileged containers creation in a Kubernetes cluster. This recommendation is part of CIS 5.2.1 which is intended to improve the security of your Kubernetes environments. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For more information, see https://aka.ms/kubepolicydoc."
+                    },
+                    "definitionEntry": {
+                        "policyId": "/providers/Microsoft.Authorization/policyDefinitions/95edb821-ddaf-4404-9732-666045e056b4",
+                        "displayName": "AKS Privilege Containers"
+                    },
+                    "scope": {
+                        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+                            "/providers/Microsoft.Management/managementGroups/mg-child1"
+                        ]
+                    }
+                },
+                {
+                    "nodeName": "Security",
+                    "assignment": {
+                        "name": "Enforce-AKS-HTTPS-1",
+                        "displayName": "c1 Kubernetes clusters should be accessible only over HTTPS",
+                        "description": "Use of HTTPS ensures authentication and protects data in transit from network layer eavesdropping attacks. This capability is currently generally available for Kubernetes Service (AKS), and in preview for AKS Engine and Azure Arc enabled Kubernetes. For more info, visit https://aka.ms/kubepolicydoc"
+                    },
+                    "definitionEntry": {
+                        "policyId": "/providers/Microsoft.Authorization/policyDefinitions/1a5b4dca-0b6f-4cf5-907c-56316bc1bf3d",
+                        "displayName": "AKS HTTPS Access"
+                    },
+                    "scope": {
+                        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+                            "/providers/Microsoft.Management/managementGroups/mg-child1"
+                        ]
+                    }
+                },
+                {
+                    "nodeName": "Security",
+                    "assignment": {
+                        "name": "Deploy-AKS-Policy-1",
+                        "displayName": "c1 Deploy Azure Policy Add-on to Azure Kubernetes Service clusters",
+                        "description": "Use Azure Policy Add-on to manage and report on the compliance state of your Azure Kubernetes Service (AKS) clusters. For more information, see https://aka.ms/akspolicydoc."
+                    },
+                    "definitionEntry": {
+                        "policyId": "/providers/Microsoft.Authorization/policyDefinitions/a8eff44f-8c92-45c3-a3fb-9880802d67a7",
+                        "displayName": "Deploy AKS Policy"
+                    },
+                    "scope": {
+                        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
+                            "/providers/Microsoft.Management/managementGroups/mg-child1"
+                        ]
+                    }
+                }
+            ]
+
+}
