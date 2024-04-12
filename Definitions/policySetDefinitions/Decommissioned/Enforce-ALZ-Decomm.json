@@ -1,4 +1,5 @@
 {
+  "name": "Enforce-ALZ-Decomm",
   "properties": {
     "policyType": "Custom",
     "displayName": "Enforce policies in the Decommissioned Landing Zone",
@@ -43,6 +44,5 @@
       }
     ],
     "policyDefinitionGroups": null
-  },
-  "name": "Enforce-ALZ-Decomm"
+  }
 }

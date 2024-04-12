@@ -1,4 +1,5 @@
 {
+  "name": "Deploy-Nsg-FlowLogs-to-LA",
   "properties": {
     "policyType": "Custom",
     "mode": "Indexed",
@@ -227,6 +228,5 @@
         }
       }
     }
-  },
-  "name": "Deploy-Nsg-FlowLogs-to-LA"
+  }
 }

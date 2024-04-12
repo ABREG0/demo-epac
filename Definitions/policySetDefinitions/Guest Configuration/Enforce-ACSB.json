@@ -1,4 +1,5 @@
 {
+  "name": "Enforce-ACSB",
   "properties": {
     "policyType": "Custom",
     "displayName": "Enforce Azure Compute Security Benchmark compliance auditing",
@@ -84,6 +85,5 @@
       }
     ],
     "policyDefinitionGroups": null
-  },
-  "name": "Enforce-ACSB"
+  }
 }

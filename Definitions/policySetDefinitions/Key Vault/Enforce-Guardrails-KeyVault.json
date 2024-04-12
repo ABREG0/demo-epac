@@ -1,4 +1,5 @@
 {
+  "name": "Enforce-Guardrails-KeyVault",
   "properties": {
     "policyType": "Custom",
     "displayName": "Enforce recommended guardrails for Azure Key Vault",
@@ -249,6 +250,5 @@
       }
     ],
     "policyDefinitionGroups": null
-  },
-  "name": "Enforce-Guardrails-KeyVault"
+  }
 }

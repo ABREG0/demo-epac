@@ -1,4 +1,5 @@
 {
+  "name": "Deny-StorageAccount-CustomDomain",
   "properties": {
     "policyType": "Custom",
     "mode": "All",
@@ -54,6 +55,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Deny-StorageAccount-CustomDomain"
+  }
 }

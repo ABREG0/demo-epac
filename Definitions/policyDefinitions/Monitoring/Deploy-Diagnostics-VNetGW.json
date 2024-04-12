@@ -1,4 +1,5 @@
 {
+  "name": "Deploy-Diagnostics-VNetGW",
   "properties": {
     "policyType": "Custom",
     "mode": "Indexed",
@@ -197,6 +198,5 @@
         }
       }
     }
-  },
-  "name": "Deploy-Diagnostics-VNetGW"
+  }
 }

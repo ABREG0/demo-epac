@@ -1,4 +1,5 @@
 {
+  "name": "Deploy-Diagnostics-APIMgmt",
   "properties": {
     "policyType": "Custom",
     "mode": "Indexed",
@@ -204,6 +205,5 @@
         }
       }
     }
-  },
-  "name": "Deploy-Diagnostics-APIMgmt"
+  }
 }

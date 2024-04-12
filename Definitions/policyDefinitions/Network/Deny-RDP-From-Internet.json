@@ -1,4 +1,5 @@
 {
+  "name": "Deny-RDP-From-Internet",
   "properties": {
     "policyType": "Custom",
     "mode": "All",
@@ -118,6 +119,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Deny-RDP-From-Internet"
+  }
 }

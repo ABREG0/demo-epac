@@ -1,4 +1,5 @@
 {
+  "name": "Deny-FileServices-InsecureKerberos",
   "properties": {
     "policyType": "Custom",
     "mode": "All",
@@ -58,6 +59,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Deny-FileServices-InsecureKerberos"
+  }
 }

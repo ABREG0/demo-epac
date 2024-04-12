@@ -1,4 +1,5 @@
 {
+  "name": "DenyAction-DiagnosticLogs",
   "properties": {
     "policyType": "Custom",
     "mode": "Indexed",
@@ -30,6 +31,5 @@
         }
       }
     }
-  },
-  "name": "DenyAction-DiagnosticLogs"
+  }
 }

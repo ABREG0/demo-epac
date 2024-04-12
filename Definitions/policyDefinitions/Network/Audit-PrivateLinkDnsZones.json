@@ -1,4 +1,5 @@
 {
+  "name": "Audit-PrivateLinkDnsZones",
   "properties": {
     "policyType": "Custom",
     "mode": "Indexed",
@@ -119,6 +120,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Audit-PrivateLinkDnsZones"
+  }
 }

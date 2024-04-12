@@ -1,4 +1,5 @@
 {
+  "name": "Audit-ServerFarms-UnusedResourcesCostOptimization",
   "properties": {
     "policyType": "Custom",
     "displayName": "Unused App Service plans driving cost should be avoided",
@@ -49,6 +50,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Audit-ServerFarms-UnusedResourcesCostOptimization"
+  }
 }

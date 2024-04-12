@@ -1,11 +1,12 @@
 {
+  "name": "Deny-MgmtPorts-From-Internet",
   "properties": {
     "policyType": "Custom",
     "mode": "All",
     "displayName": "Management port access from the Internet should be blocked",
-    "description": "This policy denies any network security rule that allows management port access from the Internet",
+    "description": "This policy denies any network security rule that allows management port access from the Internet, by default blocking SSH/RDP ports.",
     "metadata": {
-      "version": "2.1.0",
+      "version": "2.1.1",
       "category": "Network",
       "source": "https://github.com/Azure/Enterprise-Scale/",
       "replacesPolicy": "Deny-RDP-From-Internet",
@@ -247,6 +248,5 @@
         "effect": "[parameters('effect')]"
       }
     }
-  },
-  "name": "Deny-MgmtPorts-From-Internet"
+  }
 }
