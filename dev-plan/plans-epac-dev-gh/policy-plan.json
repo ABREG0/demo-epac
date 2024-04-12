@@ -1,0 +1,336 @@
+{
+  "policyDefinitions": {
+    "numberOfChanges": 6,
+    "update": {
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceFunctionApp-http": {
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Web/sites"
+              },
+              {
+                "field": "kind",
+                "like": "functionapp*"
+              },
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "equals": "false"
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]"
+          }
+        },
+        "mode": "Indexed",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "metadata": {
+          "version": "1.0.0",
+          "category": "App Service",
+          "source": "https://github.com/Azure/Enterprise-Scale/",
+          "alzCloudEnvironments": [
+            "AzureCloud",
+            "AzureChinaCloud",
+            "AzureUSGovernment"
+          ],
+          "pacOwnerId": "im-sh-003"
+        },
+        "displayName": "Function App should only be accessible over HTTPS",
+        "parameters": {
+          "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+              "Audit",
+              "Disabled",
+              "Deny"
+            ],
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            }
+          }
+        },
+        "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks.",
+        "name": "Deny-AppServiceFunctionApp-http",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceFunctionApp-http"
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceApiApp-http": {
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Web/sites"
+              },
+              {
+                "field": "kind",
+                "like": "*api"
+              },
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "equals": "false"
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]"
+          }
+        },
+        "mode": "Indexed",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "metadata": {
+          "version": "1.0.0",
+          "category": "App Service",
+          "source": "https://github.com/Azure/Enterprise-Scale/",
+          "alzCloudEnvironments": [
+            "AzureCloud",
+            "AzureChinaCloud",
+            "AzureUSGovernment"
+          ],
+          "pacOwnerId": "im-sh-003"
+        },
+        "displayName": "API App should only be accessible over HTTPS",
+        "parameters": {
+          "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+              "Audit",
+              "Disabled",
+              "Deny"
+            ],
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            }
+          }
+        },
+        "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks.",
+        "name": "Deny-AppServiceApiApp-http",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceApiApp-http"
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Append-AppService-latestTLS": {
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "Microsoft.Web/sites/config/minTlsVersion",
+                "exists": "true"
+              },
+              {
+                "field": "Microsoft.Web/sites/config/minTlsVersion",
+                "notEquals": "[parameters('minTlsVersion')]"
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]",
+            "details": [
+              {
+                "field": "Microsoft.Web/sites/config/minTlsVersion",
+                "value": "[parameters('minTlsVersion')]"
+              }
+            ]
+          }
+        },
+        "mode": "All",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "metadata": {
+          "version": "1.1.0",
+          "category": "App Service",
+          "source": "https://github.com/Azure/Enterprise-Scale/",
+          "alzCloudEnvironments": [
+            "AzureCloud",
+            "AzureChinaCloud",
+            "AzureUSGovernment"
+          ],
+          "pacOwnerId": "im-sh-003"
+        },
+        "displayName": "AppService append sites with minimum TLS version to enforce.",
+        "parameters": {
+          "effect": {
+            "type": "String",
+            "defaultValue": "Append",
+            "allowedValues": [
+              "Append",
+              "Disabled"
+            ],
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            }
+          },
+          "minTlsVersion": {
+            "type": "String",
+            "defaultValue": "1.2",
+            "allowedValues": [
+              "1.2",
+              "1.0",
+              "1.1"
+            ],
+            "metadata": {
+              "displayName": "Select version minimum TLS Web App config",
+              "description": "Select version  minimum TLS version for a  Web App config to enforce"
+            }
+          }
+        },
+        "description": "Append the AppService sites object to ensure that min Tls version is set to required minimum TLS version. Please note Append does not enforce compliance use then deny.",
+        "name": "Append-AppService-latestTLS",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Append-AppService-latestTLS"
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceWebApp-http": {
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Web/sites"
+              },
+              {
+                "field": "kind",
+                "like": "app*"
+              },
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "equals": "false"
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]"
+          }
+        },
+        "mode": "Indexed",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "metadata": {
+          "version": "1.0.0",
+          "category": "App Service",
+          "source": "https://github.com/Azure/Enterprise-Scale/",
+          "alzCloudEnvironments": [
+            "AzureCloud",
+            "AzureChinaCloud",
+            "AzureUSGovernment"
+          ],
+          "pacOwnerId": "im-sh-003"
+        },
+        "displayName": "Web Application should only be accessible over HTTPS",
+        "parameters": {
+          "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+              "Audit",
+              "Disabled",
+              "Deny"
+            ],
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            }
+          }
+        },
+        "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks.",
+        "name": "Deny-AppServiceWebApp-http",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceWebApp-http"
+      },
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Append-AppService-httpsonly": {
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Web/sites"
+              },
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "notequals": true
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]",
+            "details": [
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "value": true
+              }
+            ]
+          }
+        },
+        "mode": "All",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "metadata": {
+          "version": "1.0.0",
+          "category": "App Service",
+          "source": "https://github.com/Azure/Enterprise-Scale/",
+          "alzCloudEnvironments": [
+            "AzureCloud",
+            "AzureChinaCloud",
+            "AzureUSGovernment"
+          ],
+          "pacOwnerId": "im-sh-003"
+        },
+        "displayName": "AppService append enable https only setting to enforce https setting.",
+        "parameters": {
+          "effect": {
+            "type": "String",
+            "defaultValue": "Append",
+            "allowedValues": [
+              "Append",
+              "Disabled"
+            ],
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Enable or disable the execution of the policy"
+            }
+          }
+        },
+        "description": "Appends the AppService sites object to ensure that  HTTPS only is enabled for  server/service authentication and protects data in transit from network layer eavesdropping attacks. Please note Append does not enforce compliance use then deny.",
+        "name": "Append-AppService-httpsonly",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/Append-AppService-httpsonly"
+      }
+    },
+    "replace": {},
+    "delete": {
+      "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/09fd5f43-7938-43f2-9750-f2bbea0bb9b3": {
+        "name": "09fd5f43-7938-43f2-9750-f2bbea0bb9b3",
+        "scopeId": "/providers/Microsoft.Management/managementGroups/epac-dev-gh",
+        "DisplayName": "Deploy ERGw ExpressRouteCpuUtil Alert",
+        "id": "/providers/Microsoft.Management/managementGroups/epac-dev-gh/providers/Microsoft.Authorization/policyDefinitions/09fd5f43-7938-43f2-9750-f2bbea0bb9b3"
+      }
+    },
+    "new": {},
+    "numberUnchanged": 0
+  },
+  "policySetDefinitions": {
+    "numberOfChanges": 0,
+    "update": {},
+    "replace": {},
+    "delete": {},
+    "new": {},
+    "numberUnchanged": 0
+  },
+  "pacOwnerId": "im-sh-003",
+  "exemptions": {
+    "delete": {},
+    "new": {},
+    "replace": {},
+    "update": {},
+    "numberOfChanges": 0,
+    "numberOfOrphans": 0,
+    "numberOfExpired": 0,
+    "numberUnchanged": 0
+  },
+  "createdOn": "2024-04-11 22:34:29Z",
+  "assignments": {
+    "numberOfChanges": 0,
+    "update": {},
+    "replace": {},
+    "delete": {},
+    "new": {},
+    "numberUnchanged": 0
+  }
+}
