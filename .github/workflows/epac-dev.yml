@@ -4,6 +4,7 @@ env:
   pacEnvironment: epac-dev-gh # Change this to a PAC environment name
   definitionsRootFolder: Definitions
   planFolder: Output
+  epac_pinned_version: '9.1.5' # set latest or specific version
  
 on:  
   push:    
@@ -42,7 +43,16 @@ jobs:
         run: |
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
-          Install-Module EnterprisePolicyAsCode -Force
+          
+          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+
+            write-output "No Pin version specified, using latest released version"
+            Install-Module EnterprisePolicyAsCode -AllowClobber -Force
+          }else{
+
+            write-output "Pinned version will be used $($env:pacEnvironment)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+          }
 
       - name: Build Deployment Plan
         uses: azure/powershell@v1
@@ -119,7 +129,16 @@ jobs:
         run: |
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
-          Install-Module EnterprisePolicyAsCode -Force
+          
+          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+
+            write-output "No Pin version specified, using latest released version"
+            Install-Module EnterprisePolicyAsCode -AllowClobber -Force
+          }else{
+
+            write-output "Pinned version will be used $($env:pacEnvironment)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+          }
 
       - name: OIDC Azure Login
         uses: Azure/login@v1
@@ -164,7 +183,16 @@ jobs:
         run: |
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
-          Install-Module EnterprisePolicyAsCode -Force
+          
+          if($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest'){
+
+            write-output "No Pin version specified, using latest released version"
+            Install-Module EnterprisePolicyAsCode -AllowClobber -Force
+          }else{
+
+            write-output "Pinned version will be used $($env:pacEnvironment)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+          }
 
       - name: OIDC Azure Login
         uses: Azure/login@v1

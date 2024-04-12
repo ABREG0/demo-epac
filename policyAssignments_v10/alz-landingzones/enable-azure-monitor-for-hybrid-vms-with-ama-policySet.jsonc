@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policySetId": "/providers/Microsoft.Authorization/policySetDefinitions/2b00397d-c309-49c4-aa5a-f0b2c5bc6321",
+    "displayName": "Enable Azure Monitor for Hybrid VMs with AMA",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Azure Monitor must be enabled for Hybrid Virtual Machines."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deploy-vmHybr-Monitoring",
+    "displayName": "Enable Azure Monitor for Hybrid Virtual Machines",
+    "description": "Enable Azure Monitor for Hybrid Virtual Machines in the specified scope (Management group, Subscription or resource group)."
+  },
+  "parameters": {
+    "enableProcessesAndDependencies": true,
+    "dcrResourceId": ""
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz-landingzones"
+    ]
+  }
+}

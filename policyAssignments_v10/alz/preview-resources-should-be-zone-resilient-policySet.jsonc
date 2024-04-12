@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policySetId": "/providers/Microsoft.Authorization/policySetDefinitions/130fb88f-0fc9-4678-bfe1-31022d71c7d5",
+    "displayName": "[Preview]: Resources should be Zone Resilient",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Resources must be Zone Resilient."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Audit-ZoneResiliency",
+    "displayName": "Resources should be Zone Resilient",
+    "description": "Resources should be Zone Resilient."
+  },
+  "parameters": {
+    "effect": "Audit",
+    "allow": "Both"
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz"
+    ]
+  }
+}

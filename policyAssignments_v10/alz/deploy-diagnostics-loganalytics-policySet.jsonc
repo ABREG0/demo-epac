@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policySetName": "Deploy-Diagnostics-LogAnalytics",
+    "displayName": "Deploy Diagnostic Settings to Azure Services",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Diagnostic settings must be deployed to Azure services."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deploy-Resource-Diag",
+    "displayName": "Deploy Diagnostic Settings to Azure Services",
+    "description": "This policy set deploys the configurations of application Azure resources to forward diagnostic logs and metrics to an Azure Log Analytics workspace. See the list of policies of the services that are included"
+  },
+  "parameters": {
+    "logAnalytics": ""
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz"
+    ]
+  }
+}
