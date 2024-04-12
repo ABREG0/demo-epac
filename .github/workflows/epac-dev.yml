@@ -44,14 +44,14 @@ jobs:
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
           
-          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
+          if(($null -eq $env:epac_pinned_version) -or ($env:epac_pinned_version -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
-            write-output "Pinned version will be used $($env:pacEnvironment)"
-            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+            write-output "Pinned version will be used $($env:epac_pinned_version)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion $env:epac_pinned_version -AllowClobber -Force
           }
 
       - name: Build Deployment Plan
@@ -130,14 +130,14 @@ jobs:
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           
-          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
+          if(($null -eq $env:epac_pinned_version) -or ($env:epac_pinned_version -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
-            write-output "Pinned version will be used $($env:pacEnvironment)"
-            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+            write-output "Pinned version will be used $($env:epac_pinned_version)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion $env:epac_pinned_version -AllowClobber -Force
           }
 
       - name: OIDC Azure Login
