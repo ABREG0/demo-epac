@@ -1,0 +1,57 @@
+name: devepac
+
+env:
+  pacEnvironment: epac-dev-gh # Change this to a PAC environment name
+  definitionsRootFolder: Definitions
+  planFolder: Output
+  epac_pinned_version: '9.1.5' # set latest or specific version
+ 
+on:  
+  push:    
+    branches:      
+      - 'test-env-vars'
+  workflow_dispatch:
+
+jobs:
+    epac-build:
+        name: epac build
+        permissions:
+          id-token: write
+          contents: read
+          pull-requests: write
+        uses: ./.github/workflows/job-epac-build.yml
+        with:
+            definitionsRootFolder: $env:definitionsRootFolder
+            pacEnvironment: pacEnvironment
+            planFolder: $env:planFolder
+            epac_pinned_version: $env:epac_pinned_version
+        secrets: inherit
+    epac-deployPolicy:
+        name: epac deploy policy
+        needs: [epac-build]
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        uses: ./.github/workflows/job-epac-build.yml
+        with:
+            definitionsRootFolder: $env:definitionsRootFolder
+            pacEnvironment: pacEnvironment
+            planFolder: $env:planFolder
+            epac_pinned_version: $env:epac_pinned_version
+        secrets: inherit
+    epac-deployRoles:
+        name: epac deploy roles
+        needs: [epac-build, epac-deployPolicy]
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        uses: ./.github/workflows/job-epac-deployRoles.yml
+        with:
+            definitionsRootFolder: $env:definitionsRootFolder
+            pacEnvironment: pacEnvironment
+            planFolder: $env:planFolder
+            epac_pinned_version: $env:epac_pinned_version
+        secrets: inherit
+    

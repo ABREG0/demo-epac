@@ -1,0 +1,70 @@
+
+on:
+  workflow_call:
+    inputs:
+        definitionsRootFolder:
+            required: true
+            type: string
+        pacEnvironment:
+            required: true
+            type: string
+        planFolder:
+            required: true
+            type: string
+        epac_pinned_version:
+            required: true
+            type: string
+
+jobs:
+  deployRoles:
+    name: Deploy Policy Roles
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    environment:
+      name: ${{ inputs.pacEnvironment }}/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: deploymentPlan
+
+      - name: Copy Artifact directory to Output Folder
+        shell: pwsh
+        run: |
+          Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "$env:planFolder\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
+
+      - shell: pwsh
+        name: Install Required Modules
+        run: |
+          Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
+          Install-Module Az.Resources -Force -Verbose -AllowClobber
+          
+          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
+
+            write-output "No Pin version specified, using latest released version"
+            Install-Module EnterprisePolicyAsCode -AllowClobber -Force
+          }else{
+
+            write-output "Pinned version will be used $($env:pacEnvironment)"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
+          }
+
+      - name: OIDC Azure Login
+        uses: Azure/login@v1
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          enable-AzPSSession: true
+          # allow-no-subscriptions: true
+
+      - name: Deploy Role Plan
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Deploy-RolesPlan -definitionsRootFolder $env:definitionsRootFolder -inputFolder $env:planFolder -pacEnvironment $env:pacEnvironment
+          azPSVersion: "latest"
