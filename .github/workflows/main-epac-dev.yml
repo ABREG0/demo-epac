@@ -13,45 +13,61 @@ on:
   workflow_dispatch:
 
 jobs:
+    print:
+        runs-on: ubuntu-latest
+        outputs:
+          definitionsRootFolder: ${{ steps.printStep.outputs.definitionsRootFolder }}
+          pacEnvironment: ${{ steps.printStep.outputs.pacEnvironment }}
+          planFolder: ${{ steps.printStep.outputs.planFolder }}   
+          epac_pinned_version: ${{ steps.printStep.outputs.epac_pinned_version }}   
+        steps:
+          - name: Print inputs passed to the reusable workflow
+            id: printStep
+            run: |
+              echo "definitionsRootFolder=$definitionsRootFolder" >> $GITHUB_OUTPUT
+              echo "pacEnvironment=$pacEnvironment" >> $GITHUB_OUTPUT
+              echo "planFolder=$planFolder" >> $GITHUB_OUTPUT
+              echo "epac_pinned_version=$epac_pinned_version" >> $GITHUB_OUTPUT
     epac-build:
         name: epac build
+        needs: [print]
         permissions:
           id-token: write
           contents: read
           pull-requests: write
         uses: ./.github/workflows/job-epac-build.yml
         with:
-            definitionsRootFolder: $env:definitionsRootFolder
-            pacEnvironment: pacEnvironment
-            planFolder: $env:planFolder
-            epac_pinned_version: $env:epac_pinned_version
+            definitionsRootFolder: ${{ needs.print.outputs.definitionsRootFolder }}
+            pacEnvironment: ${{ needs.print.outputs.pacEnvironment }}
+            planFolder: ${{ needs.print.outputs.planFolder }}
+            epac_pinned_version: ${{ needs.print.outputs.epac_pinned_version }}
         secrets: inherit
     epac-deployPolicy:
         name: epac deploy policy
-        needs: [epac-build]
+        needs: [epac-build, print]
         permissions:
             id-token: write
             contents: read
             pull-requests: write
         uses: ./.github/workflows/job-epac-build.yml
         with:
-            definitionsRootFolder: $env:definitionsRootFolder
-            pacEnvironment: pacEnvironment
-            planFolder: $env:planFolder
-            epac_pinned_version: $env:epac_pinned_version
+            definitionsRootFolder: ${{ needs.print.outputs.definitionsRootFolder }}
+            pacEnvironment: ${{ needs.print.outputs.pacEnvironment }}
+            planFolder: ${{ needs.print.outputs.planFolder }}
+            epac_pinned_version: ${{ needs.print.outputs.epac_pinned_version }}
         secrets: inherit
     epac-deployRoles:
         name: epac deploy roles
-        needs: [epac-build, epac-deployPolicy]
+        needs: [epac-build, epac-deployPolicy, print]
         permissions:
             id-token: write
             contents: read
             pull-requests: write
         uses: ./.github/workflows/job-epac-deployRoles.yml
         with:
-            definitionsRootFolder: $env:definitionsRootFolder
-            pacEnvironment: pacEnvironment
-            planFolder: $env:planFolder
-            epac_pinned_version: $env:epac_pinned_version
+            definitionsRootFolder: ${{ needs.print.outputs.definitionsRootFolder }}
+            pacEnvironment: ${{ needs.print.outputs.pacEnvironment }}
+            planFolder: ${{ needs.print.outputs.planFolder }}
+            epac_pinned_version: ${{ needs.print.outputs.epac_pinned_version }}
         secrets: inherit
     
