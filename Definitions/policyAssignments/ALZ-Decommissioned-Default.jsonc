@@ -2,8 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
     "nodeName": "/Decommissioned/",
     "scope": {
-        "epac-dev-gh": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
+        "tenant1": [ // Replace with your EPAC environment name and validate the management group listed below exists
+            "/providers/Microsoft.Management/managementGroups/decommissioned"
         ]
     },
     "children": [

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/88c0b9da-ce96-4b03-9635-f29a937e2900",
+    "displayName": "Network interfaces should disable IP forwarding",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Network interfaces must disable IP forwarding."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deny-IP-forwarding",
+    "displayName": "Network interfaces should disable IP forwarding",
+    "description": "This policy denies the network interfaces which enabled IP forwarding. The setting of IP forwarding disables Azure's check of the source and destination for a network interface. This should be reviewed by the network security team."
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz-landingzones"
+    ]
+  }
+}

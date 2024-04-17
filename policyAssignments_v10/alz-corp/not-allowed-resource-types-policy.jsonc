@@ -1,0 +1,149 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749",
+    "displayName": "Not allowed resource types"
+  },
+  "children": [
+    {
+      "nodeName": "/child-0",
+      "assignment": {
+        "name": "Deny-Public-IP",
+        "displayName": "Deny the creation of public IP",
+        "description": "This policy denies creation of Public IPs under the assigned scope."
+      },
+      "parameters": {
+        "effect": "Deny",
+        "listOfResourceTypesNotAllowed": [
+          "Microsoft.Network/publicIPAddresses"
+        ]
+      },
+      "scope": {
+        "alz": [
+          "/providers/Microsoft.Management/managementGroups/alz-identity"
+        ]
+      },
+      "nonComplianceMessages": [
+        {
+          "policyDefinitionReferenceId": null,
+          "message": "Public IPs must not be created under this scope."
+        }
+      ]
+    },
+    {
+      "nodeName": "/child-1",
+      "assignment": {
+        "name": "Deny-Classic-Resources",
+        "displayName": "Deny the deployment of classic resources",
+        "description": "Denies deployment of classic resource types under the assigned scope."
+      },
+      "parameters": {
+        "effect": "Deny",
+        "listOfResourceTypesNotAllowed": [
+          "Microsoft.ClassicCompute/capabilities",
+          "Microsoft.ClassicCompute/checkDomainNameAvailability",
+          "Microsoft.ClassicCompute/domainNames",
+          "Microsoft.ClassicCompute/domainNames/capabilities",
+          "Microsoft.ClassicCompute/domainNames/internalLoadBalancers",
+          "Microsoft.ClassicCompute/domainNames/serviceCertificates",
+          "Microsoft.ClassicCompute/domainNames/slots",
+          "Microsoft.ClassicCompute/domainNames/slots/roles",
+          "Microsoft.ClassicCompute/domainNames/slots/roles/metricDefinitions",
+          "Microsoft.ClassicCompute/domainNames/slots/roles/metrics",
+          "Microsoft.ClassicCompute/moveSubscriptionResources",
+          "Microsoft.ClassicCompute/operatingSystemFamilies",
+          "Microsoft.ClassicCompute/operatingSystems",
+          "Microsoft.ClassicCompute/operations",
+          "Microsoft.ClassicCompute/operationStatuses",
+          "Microsoft.ClassicCompute/quotas",
+          "Microsoft.ClassicCompute/resourceTypes",
+          "Microsoft.ClassicCompute/validateSubscriptionMoveAvailability",
+          "Microsoft.ClassicCompute/virtualMachines",
+          "Microsoft.ClassicCompute/virtualMachines/diagnosticSettings",
+          "Microsoft.ClassicCompute/virtualMachines/metricDefinitions",
+          "Microsoft.ClassicCompute/virtualMachines/metrics",
+          "Microsoft.ClassicInfrastructureMigrate/classicInfrastructureResources",
+          "Microsoft.ClassicNetwork/capabilities",
+          "Microsoft.ClassicNetwork/expressRouteCrossConnections",
+          "Microsoft.ClassicNetwork/expressRouteCrossConnections/peerings",
+          "Microsoft.ClassicNetwork/gatewaySupportedDevices",
+          "Microsoft.ClassicNetwork/networkSecurityGroups",
+          "Microsoft.ClassicNetwork/operations",
+          "Microsoft.ClassicNetwork/quotas",
+          "Microsoft.ClassicNetwork/reservedIps",
+          "Microsoft.ClassicNetwork/virtualNetworks",
+          "Microsoft.ClassicNetwork/virtualNetworks/remoteVirtualNetworkPeeringProxies",
+          "Microsoft.ClassicNetwork/virtualNetworks/virtualNetworkPeerings",
+          "Microsoft.ClassicStorage/capabilities",
+          "Microsoft.ClassicStorage/checkStorageAccountAvailability",
+          "Microsoft.ClassicStorage/disks",
+          "Microsoft.ClassicStorage/images",
+          "Microsoft.ClassicStorage/operations",
+          "Microsoft.ClassicStorage/osImages",
+          "Microsoft.ClassicStorage/osPlatformImages",
+          "Microsoft.ClassicStorage/publicImages",
+          "Microsoft.ClassicStorage/quotas",
+          "Microsoft.ClassicStorage/storageAccounts",
+          "Microsoft.ClassicStorage/storageAccounts/blobServices",
+          "Microsoft.ClassicStorage/storageAccounts/fileServices",
+          "Microsoft.ClassicStorage/storageAccounts/metricDefinitions",
+          "Microsoft.ClassicStorage/storageAccounts/metrics",
+          "Microsoft.ClassicStorage/storageAccounts/queueServices",
+          "Microsoft.ClassicStorage/storageAccounts/services",
+          "Microsoft.ClassicStorage/storageAccounts/services/diagnosticSettings",
+          "Microsoft.ClassicStorage/storageAccounts/services/metricDefinitions",
+          "Microsoft.ClassicStorage/storageAccounts/services/metrics",
+          "Microsoft.ClassicStorage/storageAccounts/tableServices",
+          "Microsoft.ClassicStorage/storageAccounts/vmImages",
+          "Microsoft.ClassicStorage/vmImages",
+          "Microsoft.ClassicSubscription/operations"
+        ]
+      },
+      "scope": {
+        "alz": [
+          "/providers/Microsoft.Management/managementGroups/alz"
+        ]
+      },
+      "nonComplianceMessages": [
+        {
+          "policyDefinitionReferenceId": null,
+          "message": "Classic resources must not be deployed."
+        }
+      ]
+    },
+    {
+      "nodeName": "/child-2",
+      "assignment": {
+        "name": "Deny-HybridNetworking",
+        "displayName": "Deny the deployment of vWAN/ER/VPN gateway resources",
+        "description": "Denies deployment of vWAN/ER/VPN gateway resources in the Corp landing zone."
+      },
+      "parameters": {
+        "effect": "Deny",
+        "listOfResourceTypesNotAllowed": [
+          "microsoft.network/expressroutecircuits",
+          "microsoft.network/expressroutegateways",
+          "microsoft.network/expressrouteports",
+          "microsoft.network/virtualwans",
+          "microsoft.network/virtualhubs",
+          "microsoft.network/vpngateways",
+          "microsoft.network/p2svpngateways",
+          "microsoft.network/vpnsites",
+          "microsoft.network/virtualnetworkgateways"
+        ]
+      },
+      "scope": {
+        "alz": [
+          "/providers/Microsoft.Management/managementGroups/alz-corp"
+        ]
+      },
+      "nonComplianceMessages": [
+        {
+          "policyDefinitionReferenceId": null,
+          "message": "vWAN/ER/VPN gateway resources must not be deployed in the Corp landing zone."
+        }
+      ]
+    }
+  ]
+}
