@@ -36,7 +36,7 @@ jobs:
       - name: Copy Artifact directory to Output Folder
         shell: pwsh
         run: |
-          Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "$env:planFolder\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
+          Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "${{ inputs.planFolder }}\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
 
       - shell: pwsh
         name: Install Required Modules
@@ -44,14 +44,14 @@ jobs:
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           
-          if(($null -eq $env:epac_pinned_version) -or ($env:epac_pinned_version -eq 'latest')){
+          if(($null -eq ${{ inputs.epac_pinned_version }}) -or (${{ inputs.epac_pinned_version }} -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
-            write-output "Pinned version will be used $($env:epac_pinned_version)"
-            Install-Module EnterprisePolicyAsCode -RequiredVersion $env:epac_pinned_version -AllowClobber -Force
+            write-output "Pinned version will be used $(${{ inputs.epac_pinned_version }})"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion ${{ inputs.epac_pinned_version }} -AllowClobber -Force
           }
 
       - name: OIDC Azure Login
@@ -67,5 +67,5 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Deploy-PolicyPlan -definitionsRootFolder $env:definitionsRootFolder -inputFolder $env:planFolder -pacEnvironment $env:pacEnvironment
+            Deploy-PolicyPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"

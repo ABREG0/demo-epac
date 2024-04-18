@@ -35,7 +35,7 @@ jobs:
       - name: Copy Artifact directory to Output Folder
         shell: pwsh
         run: |
-          Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "$env:planFolder\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
+          Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "${{ inputs.planFolder }}\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
 
       - shell: pwsh
         name: Install Required Modules
@@ -43,13 +43,13 @@ jobs:
           Install-Module Az.ResourceGraph -Force -Verbose -AllowClobber
           Install-Module Az.Resources -Force -Verbose -AllowClobber
           
-          if(($null -eq $env:pacEnvironment) -or ($env:pacEnvironment -eq 'latest')){
+          if(($null -eq ${{ inputs.pacEnvironment }}) -or (${{ inputs.pacEnvironment }} -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
-            write-output "Pinned version will be used $($env:pacEnvironment)"
+            write-output "Pinned version will be used $(${{ inputs.pacEnvironment }})"
             Install-Module EnterprisePolicyAsCode -RequiredVersion '9.1.5' -AllowClobber -Force
           }
 
@@ -66,5 +66,5 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Deploy-RolesPlan -definitionsRootFolder $env:definitionsRootFolder -inputFolder $env:planFolder -pacEnvironment $env:pacEnvironment
+            Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"

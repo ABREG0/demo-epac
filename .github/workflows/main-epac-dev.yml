@@ -27,6 +27,7 @@ jobs:
               echo "definitionsRootFolder=$definitionsRootFolder" >> $GITHUB_OUTPUT
               echo "pacEnvironment=$pacEnvironment" >> $GITHUB_OUTPUT
               echo "planFolder=$planFolder" >> $GITHUB_OUTPUT
+              echo "epac_pinned_version=$epac_pinned_version"
               echo "epac_pinned_version=$epac_pinned_version" >> $GITHUB_OUTPUT
     epac-build:
         name: epac build

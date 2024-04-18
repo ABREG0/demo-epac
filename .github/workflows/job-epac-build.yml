@@ -43,33 +43,34 @@ jobs:
       - shell: pwsh
         name: Install Required Modules
         run: |
+          echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
           
-          if(($null -eq $env:epac_pinned_version) -or ($env:epac_pinned_version -eq 'latest')){
+          if(($null -eq ${{ inputs.epac_pinned_version }}) -or (${{ inputs.epac_pinned_version }} -eq 'latest')){
 
             write-output "No Pin version specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
-            write-output "Pinned version will be used $($env:epac_pinned_version)"
-            Install-Module EnterprisePolicyAsCode -RequiredVersion $env:epac_pinned_version -AllowClobber -Force
+            write-output "Pinned version will be used $(${{ inputs.epac_pinned_version }})"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion ${{ inputs.epac_pinned_version }} -AllowClobber -Force
           }
 
       - name: Build Deployment Plan
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            Build-DeploymentPlans -definitionsRootFolder $env:definitionsRootFolder -outputFolder $env:planFolder -pacEnvironment $env:pacEnvironment
+            Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
             $epacInfoStream | Set-Content body.txt
           azPSVersion: "latest"
 
       - shell: pwsh
         name: Detect Plan
         run: |
-          if (Test-Path $env:planFolder) {
+          if (Test-Path ${{ inputs.planFolder }}) {
             echo "Deploy=true" >> $env:GITHUB_ENV
-            if (!(Get-ChildItem $env:planFolder -Recurse -Include policy-plan.json)){
+            if (!(Get-ChildItem ${{ inputs.planFolder }} -Recurse -Include policy-plan.json)){
               echo "RolesOnly=true" >> $env:GITHUB_ENV
             }
           }
