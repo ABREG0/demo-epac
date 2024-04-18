@@ -47,9 +47,9 @@ jobs:
           Install-Module Az.ResourceGraph -Force -AllowClobber
           Install-Module Az.Resources -Force -AllowClobber
           
-          if(($null -eq ${{ inputs.epac_pinned_version }}) -or (${{ inputs.epac_pinned_version }} -eq 'latest')){
+          if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
 
-            write-output "No Pin version specified, using latest released version"
+            write-output "No Pin version [${{ inputs.epac_pinned_version }}] specified, using latest released version"
             Install-Module EnterprisePolicyAsCode -AllowClobber -Force
           }else{
 
