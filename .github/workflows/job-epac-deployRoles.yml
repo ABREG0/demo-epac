@@ -16,8 +16,9 @@ on:
             type: string
 
 jobs:
-  deployRoles:
-    name: Deploy Policy Roles
+
+  epac-deployRoles:
+    name: Deploy Roles Plan
     runs-on: ubuntu-latest
     permissions:
       id-token: write
