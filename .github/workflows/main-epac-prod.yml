@@ -1,4 +1,4 @@
-name: prod-epac
+name: epac-prod-flow
 
 env:
   pacEnvironment: epac-prod-gh # Change this to a PAC environment name

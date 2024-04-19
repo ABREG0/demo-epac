@@ -70,10 +70,3 @@ jobs:
           inlineScript: |
             Deploy-PolicyPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"
-
-      # - name: Deploy Role Plan
-      #   uses: azure/powershell@v1
-      #   with:
-      #     inlineScript: |
-      #       Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
-      #     azPSVersion: "latest"
