@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/06a78e20-9358-41c9-923c-fb736d382a4d",
+    "displayName": "Audit VMs that do not use managed disks",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Virtual machines and virtual machine scales sets must use a managed disk."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deny-UnmanagedDisk",
+    "displayName": "Deny virtual machines and virtual machine scale sets that do not use managed disk",
+    "description": "Deny virtual machines that do not use managed disk. It checks the managed disk property on virtual machine OS Disk fields."
+  },
+  "overrides": [
+    {
+      "value": "Deny",
+      "kind": "policyEffect"
+    }
+  ],
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz"
+    ]
+  }
+}

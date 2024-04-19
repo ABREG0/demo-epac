@@ -1,0 +1,104 @@
+
+on:
+  workflow_call:
+    inputs:
+        definitionsRootFolder:
+            required: true
+            type: string
+        pacEnvironment:
+            required: true
+            type: string
+        planFolder:
+            required: true
+            type: string
+        epac_pinned_version:
+            required: true
+            type: string
+
+jobs:
+  epac-build:
+    name: Build Deployment Plan
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    # Map a step output to a job output
+    outputs:
+      CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
+    environment:
+      name: ${{ inputs.pacEnvironment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+
+      - name: OIDC Azure Login
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          enable-AzPSSession: true
+          # allow-no-subscriptions: true
+
+      - shell: pwsh
+        name: Install Required Modules
+        run: |
+          echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
+          Install-Module Az.ResourceGraph -Force -AllowClobber
+          Install-Module Az.Resources -Force -AllowClobber
+          
+          if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
+
+            write-output "No Pin version [${{ inputs.epac_pinned_version }}] specified, using latest released version"
+            Install-Module EnterprisePolicyAsCode -AllowClobber -Force
+          }else{
+
+            write-output "Pinned version will be used $(${{ inputs.epac_pinned_version }})"
+            Install-Module EnterprisePolicyAsCode -RequiredVersion ${{ inputs.epac_pinned_version }} -AllowClobber -Force
+          }
+
+      - name: Build Deployment Plan
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+            Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
+            $epacInfoStream | Set-Content body.txt
+          azPSVersion: "latest"
+
+      - shell: pwsh
+        name: Detect Plan
+        run: |
+          if (Test-Path ${{ inputs.planFolder }}) {
+            echo "Deploy=true" >> $env:GITHUB_ENV
+            if (!(Get-ChildItem ${{ inputs.planFolder }} -Recurse -Include policy-plan.json)){
+              echo "RolesOnly=true" >> $env:GITHUB_ENV
+            }
+          }
+
+      - name: Display Policy Plan File
+        id: checkPolicy
+        run: |
+          if (Test-Path -Path "Output/plans-${{ inputs.pacEnvironment }}/policy-plan.json") {
+            Get-Content "Output/plans-${{ inputs.pacEnvironment }}/policy-plan.json" | ConvertFrom-Json | ConvertTo-Json -Depth 10
+            echo "CREATED_POL_PLAN=true" >> $env:GITHUB_OUTPUT
+
+          } else {
+            Write-Output "Policy-Plan file does not exist"
+            echo "CREATED_POL_PLAN=false" >> $env:GITHUB_OUTPUT
+          }
+        shell: pwsh
+
+      - name: Display Roles Plan file
+        id: checkRole
+        run: |
+          if (Test-Path -Path "Output/plans-${{ inputs.pacEnvironment }}/roles-plan.json") {
+            Get-Content "Output/plans-${{ inputs.pacEnvironment }}/roles-plan.json" | ConvertFrom-Json | ConvertTo-Json -Depth 10
+          } else {
+            Write-Output "Roles-Plan file does not exist"
+          }
+        shell: pwsh
+
+      - name: Upload Deployment Plan as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deploymentPlan
+          path: Output

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policySetId": "/providers/Microsoft.Authorization/policySetDefinitions/9cb3cc7a-b39b-4b82-bc89-e5a5d9ff7b97",
+    "displayName": "Configure Azure Defender to be enabled on SQL Servers and SQL Managed Instances",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Azure Defender must be enabled on SQL Servers and SQL Managed Instances."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deploy-MDFC-SqlAtp",
+    "displayName": "Configure Azure Defender to be enabled on SQL Servers and SQL Managed Instances",
+    "description": "Enable Azure Defender on your SQL Servers and SQL Managed Instances to detect anomalous activities indicating unusual and potentially harmful attempts to access or exploit databases."
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz"
+    ]
+  }
+}

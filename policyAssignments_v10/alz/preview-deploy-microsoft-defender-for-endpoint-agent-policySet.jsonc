@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policySetId": "/providers/Microsoft.Authorization/policySetDefinitions/e20d08c5-6d64-656d-6465-ce9e37fd0ebc",
+    "displayName": "[Preview]: Deploy Microsoft Defender for Endpoint agent",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Microsoft Defender for Endpoint agent must be deployed on applicable images."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deploy-MDEndpoints",
+    "displayName": "[Preview]: Deploy Microsoft Defender for Endpoint agent",
+    "description": "Deploy Microsoft Defender for Endpoint agent on applicable images."
+  },
+  "parameters": {
+    "microsoftDefenderForEndpointLinuxArcAgentDeployEffect": "DeployIfNotExists",
+    "microsoftDefenderForEndpointWindowsVmAgentDeployEffect": "DeployIfNotExists",
+    "microsoftDefenderForEndpointWindowsArcAgentDeployEffect": "DeployIfNotExists",
+    "microsoftDefenderForEndpointLinuxVmAgentDeployEffect": "DeployIfNotExists"
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz"
+    ]
+  }
+}

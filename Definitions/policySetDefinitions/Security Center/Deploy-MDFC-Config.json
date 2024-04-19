@@ -4,7 +4,7 @@
     "displayName": "Deploy Microsoft Defender for Cloud configuration",
     "description": "Deploy Microsoft Defender for Cloud configuration",
     "metadata": {
-      "version": "6.0.1",
+      "version": "7.0.0",
       "category": "Security Center",
       "source": "https://github.com/Azure/Enterprise-Scale/",
       "alzCloudEnvironments": [
@@ -430,6 +430,12 @@
         },
         "groupNames": [],
         "policyDefinitionName": "ffb6f416-7bd2-4488-8828-56585fef2be9"
+      },
+      {
+        "policyDefinitionReferenceId": "migrateToMdeTvm",
+        "parameters": {},
+        "groupNames": [],
+        "policyDefinitionName": "766e621d-ba95-4e43-a6f2-e945db3d7888"
       }
     ],
     "policyDefinitionGroups": null

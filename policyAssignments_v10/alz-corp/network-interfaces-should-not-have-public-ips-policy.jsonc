@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-assignment-schema.json",
+  "nodeName": "/root",
+  "definitionEntry": {
+    "policyId": "/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114",
+    "displayName": "Network interfaces should not have public IPs",
+    "nonComplianceMessages": [
+      {
+        "policyDefinitionReferenceId": null,
+        "message": "Network interfaces must not have a public IP associated."
+      }
+    ]
+  },
+  "assignment": {
+    "name": "Deny-Public-IP-On-NIC",
+    "displayName": "Deny network interfaces having a public IP associated",
+    "description": "This policy denies network interfaces from having a public IP associated to it under the assigned scope."
+  },
+  "scope": {
+    "alz": [
+      "/providers/Microsoft.Management/managementGroups/alz-corp"
+    ]
+  }
+}

@@ -3,8 +3,7 @@
     "nodeName": "/Identity/",
     "scope": {
         "tenant1": [ // Replace with your EPAC environment name and validate the management group listed below exists
-            "/providers/Microsoft.Management/managementGroups/epac-dev-gh"
-            // comment to trigger run
+            "/providers/Microsoft.Management/managementGroups/identity"
         ]
     },
     "children": [
@@ -26,7 +25,7 @@
                         "listOfResourceTypesNotAllowed": [
                             "Microsoft.Network/publicIPAddresses"
                         ],
-                        "effect": "Audit"
+                        "effect": "Deny"
                     },
                     "nonComplianceMessages": [
                         {
