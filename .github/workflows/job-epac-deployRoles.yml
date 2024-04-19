@@ -63,7 +63,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
           # allow-no-subscriptions: true
-
+  
       - name: Deploy Role Plan
         uses: azure/powershell@v1
         with:

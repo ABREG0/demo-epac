@@ -50,7 +50,7 @@ jobs:
             id-token: write
             contents: read
             pull-requests: write
-        uses: ./.github/workflows/job-epac-build.yml
+        uses: ./.github/workflows/job-epac-deployPolicy.yml
         with:
             definitionsRootFolder: ${{ needs.preConfig.outputs.definitionsRootFolder }}
             pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
@@ -58,7 +58,7 @@ jobs:
             epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
         secrets: inherit
     epac-deployRoles:
-        name: epac deploy roles
+        name: epac deploy policy
         needs: [epac-build, preConfig]
         permissions:
             id-token: write
@@ -71,4 +71,4 @@ jobs:
             planFolder: ${{ needs.preConfig.outputs.planFolder }}
             epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
         secrets: inherit
-    
+  
