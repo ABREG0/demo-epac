@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v3.3.0
 
       - name: OIDC Azure Login
-        uses: Azure/login@v1
+        uses: Azure/login@v2
         with:
           client-id: ${{ secrets.CLIENT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
