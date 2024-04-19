@@ -23,7 +23,7 @@ jobs:
     permissions:
       id-token: write
     environment:
-      name: ${{ inputs.pacEnvironment }}/
+      name: ${{ inputs.pacEnvironment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -71,9 +71,9 @@ jobs:
             Deploy-PolicyPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"
 
-      - name: Deploy Role Plan
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-            Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
-          azPSVersion: "latest"
+      # - name: Deploy Role Plan
+      #   uses: azure/powershell@v1
+      #   with:
+      #     inlineScript: |
+      #       Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
+      #     azPSVersion: "latest"

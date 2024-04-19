@@ -15,7 +15,6 @@ on:
             required: true
             type: string
 
-
 jobs:
   epac-build:
     name: Build Deployment Plan
