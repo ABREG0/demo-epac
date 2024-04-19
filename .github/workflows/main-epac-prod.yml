@@ -1,7 +1,7 @@
-name: dev-epac
+name: prod-epac
 
 env:
-  pacEnvironment: epac-dev-gh # Change this to a PAC environment name
+  pacEnvironment: epac-prod-gh # Change this to a PAC environment name
   definitionsRootFolder: Definitions
   planFolder: Output
   epac_pinned_version: '9.1.5' # set latest or specific version
@@ -9,7 +9,7 @@ env:
 on:  
   push:    
     branches:      
-      - 'test-env-vars'
+      - 'master'
   workflow_dispatch:
 
 jobs:
