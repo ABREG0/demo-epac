@@ -26,7 +26,7 @@ jobs:
       name: ${{ inputs.pacEnvironment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@4 #v3.3.0
+        uses: actions/checkout@v4 #v3.3.0
 
       - name: Download Artifact
         uses: actions/download-artifact@v4
