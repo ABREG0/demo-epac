@@ -57,7 +57,7 @@ jobs:
           }
 
       - name: Build Deployment Plan
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
@@ -98,7 +98,7 @@ jobs:
         shell: pwsh
 
       - name: Upload Deployment Plan as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deploymentPlan
           path: Output

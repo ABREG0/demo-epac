@@ -26,10 +26,10 @@ jobs:
       name: ${{ inputs.pacEnvironment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@4 #v3.3.0
 
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: deploymentPlan
 
@@ -65,7 +65,7 @@ jobs:
           # allow-no-subscriptions: true
 
       - name: Deploy Policy Plan
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
             Deploy-PolicyPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
