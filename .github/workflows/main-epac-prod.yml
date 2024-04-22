@@ -59,7 +59,7 @@ jobs:
       secrets: inherit
   epac-deployRoles:
       name: epac deploy policy
-      needs: [epac-build, preConfig]
+      needs: [epac-deployPolicy, epac-build, preConfig]
       permissions:
           id-token: write
           contents: read
