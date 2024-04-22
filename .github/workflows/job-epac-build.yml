@@ -15,15 +15,19 @@ on:
             required: true
             type: string
 
+    outputs:
+      CREATED_POL_PLAN : 
+        value: ${{ jobs.epac-build.outputs.output_created_plan }}
+        description: "bool: outputs created plan"
 jobs:
   epac-build:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    # Map a step output to a job output
+      # Map a step output to a job output
     outputs:
-      CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
+        output_created_plan : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
     environment:
       name: ${{ inputs.pacEnvironment }}
     steps:
