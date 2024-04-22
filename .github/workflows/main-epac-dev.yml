@@ -44,6 +44,7 @@ jobs:
           epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
       secrets: inherit
   epac-deployPolicy:
+      if: ${{ needs.epac-build.outputs.CREATED_POL_PLAN == 'true' }}
       name: epac deploy policy
       needs: [epac-build, preConfig]
       permissions:
