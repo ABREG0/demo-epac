@@ -41,7 +41,7 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
-          # allow-no-subscriptions: true
+          allow-no-subscriptions: true
 
       - shell: pwsh
         name: Install Required Modules
