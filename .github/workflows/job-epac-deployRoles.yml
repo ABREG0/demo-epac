@@ -2,27 +2,27 @@
 on:
   workflow_call:
     inputs:
-        definitionsRootFolder:
-            required: true
-            type: string
-        pacEnvironment:
-            required: true
-            type: string
-        planFolder:
-            required: true
-            type: string
-        epac_pinned_version:
-            required: true
-            type: string
-        az_version:
-            required: true
-            type: string
-        azResources_version:
-            required: true
-            type: string
-        azResourceGraph_version:
-            required: true
-            type: string
+      definitionsRootFolder:
+          required: true
+          type: string
+      pacEnvironment:
+          required: true
+          type: string
+      planFolder:
+          required: true
+          type: string
+      epac_pinned_version:
+          required: true
+          type: string
+      az_version:
+          required: true
+          type: string
+      azResources_version:
+          required: true
+          type: string
+      azResourceGraph_version:
+          required: true
+          type: string
 
 jobs:
 
