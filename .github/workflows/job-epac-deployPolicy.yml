@@ -52,13 +52,13 @@ jobs:
         run: |
           echo "Installing Required modules `n"
           
-          echo "epac_pinned_version=[${{ inputs.az_version }}]"
+          echo "az_version=[${{ inputs.az_version }}]"
           Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
 
-          echo "epac_pinned_version=[${{ inputs.azResourceGraph_version }}]"
+          echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
           Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
 
-          echo "epac_pinned_version=[${{ inputs.azResources_version }}]"
+          echo "azResources_version=[${{ inputs.azResources_version }}]"
           Install-Module Az.Resources -RequiredVersion '${{ inputs.azResources_version }}' -Force -AllowClobber
           
           if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
