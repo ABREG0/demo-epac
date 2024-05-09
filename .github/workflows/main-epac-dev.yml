@@ -61,7 +61,7 @@ jobs:
           planFolder: ${{ needs.preConfig.outputs.planFolder }}
           epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
           az_version: ${{ needs.preConfig.outputs.az_version }}
-          azResources_version: ${{ needs.preConfig.outputs.az_version }}
+          azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
           azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
 
@@ -80,7 +80,7 @@ jobs:
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
         az_version: ${{ needs.preConfig.outputs.az_version }}
-        azResources_version: ${{ needs.preConfig.outputs.az_version }}
+        azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
         azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
 
@@ -98,6 +98,6 @@ jobs:
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
         az_version: ${{ needs.preConfig.outputs.az_version }}
-        azResources_version: ${{ needs.preConfig.outputs.az_version }}
+        azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
         azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit

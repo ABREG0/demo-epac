@@ -50,10 +50,16 @@ jobs:
       - shell: pwsh
         name: Install Required Modules
         run: |
-          echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
-          Install-Module Az -RequiredVersion ${{ inputs.az_version }} -Force -AllowClobber
-          Install-Module Az.ResourceGraph -RequiredVersion ${{ inputs.azResourceGraph_version }} -Force -AllowClobber
-          Install-Module Az.Resources -RequiredVersion ${{ inputs.azResources_version }} -Force -AllowClobber
+          echo "Installing Required modules `n"
+          
+          echo "epac_pinned_version=[${{ inputs.az_version }}]"
+          Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
+
+          echo "epac_pinned_version=[${{ inputs.azResourceGraph_version }}]"
+          Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
+
+          echo "epac_pinned_version=[${{ inputs.azResources_version }}]"
+          Install-Module Az.Resources -RequiredVersion '${{ inputs.azResources_version }}' -Force -AllowClobber
           
           if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
 
