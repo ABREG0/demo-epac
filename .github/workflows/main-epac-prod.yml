@@ -5,11 +5,16 @@ env:
   definitionsRootFolder: Definitions
   planFolder: Output
   epac_pinned_version: '9.1.5' # set latest or specific version
+  az_version: '11.4.0'
+  azResources_version: '6.16.1'
+  azResourceGraph_version: '0.13.0'
  
 on:  
   push:    
     branches:      
       - 'master'
+    paths:
+      - './Definitions'
   workflow_dispatch:
 
 jobs:
@@ -27,8 +32,19 @@ jobs:
             echo "definitionsRootFolder=$definitionsRootFolder" >> $GITHUB_OUTPUT
             echo "pacEnvironment=$pacEnvironment" >> $GITHUB_OUTPUT
             echo "planFolder=$planFolder" >> $GITHUB_OUTPUT
+
             echo "epac_pinned_version=$epac_pinned_version"
             echo "epac_pinned_version=$epac_pinned_version" >> $GITHUB_OUTPUT
+
+            echo "az_version=$az_version"
+            echo "az_version=$az_version" >> $GITHUB_OUTPUT
+
+            echo "azResources_version=$azResources_version"
+            echo "azResources_version=$azResources_version" >> $GITHUB_OUTPUT
+
+            echo "azResourceGraph_version=$azResourceGraph_version"
+            echo "azResourceGraph_version=$azResourceGraph_version" >> $GITHUB_OUTPUT
+
   epac-build:
       name: epac build
       needs: [preConfig]
@@ -42,7 +58,11 @@ jobs:
           pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
           planFolder: ${{ needs.preConfig.outputs.planFolder }}
           epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+          az_version: ${{ needs.preConfig.outputs.az_version }}
+          azResources_version: ${{ needs.preConfig.outputs.az_version }}
+          azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
+
   epac-deployPolicy:
       name: epac deploy policy
       needs: [epac-build, preConfig]
@@ -56,7 +76,11 @@ jobs:
         pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+        az_version: ${{ needs.preConfig.outputs.az_version }}
+        azResources_version: ${{ needs.preConfig.outputs.az_version }}
+        azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
+
   epac-deployRoles:
       name: epac deploy policy
       needs: [epac-deployPolicy, epac-build, preConfig]
@@ -70,4 +94,7 @@ jobs:
         pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+        az_version: ${{ needs.preConfig.outputs.az_version }}
+        azResources_version: ${{ needs.preConfig.outputs.az_version }}
+        azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit

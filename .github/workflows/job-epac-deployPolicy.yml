@@ -14,6 +14,15 @@ on:
         epac_pinned_version:
             required: true
             type: string
+        az_version:
+            required: true
+            type: string
+        azResources_version:
+            required: true
+            type: string
+        azResourceGraph_version:
+            required: true
+            type: string
 
 jobs:
 
@@ -42,8 +51,9 @@ jobs:
         name: Install Required Modules
         run: |
           echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
-          Install-Module Az.ResourceGraph -Force -AllowClobber
-          Install-Module Az.Resources -Force -AllowClobber
+          Install-Module Az -RequiredVersion ${{ inputs.az_version }} -Force -AllowClobber
+          Install-Module Az.ResourceGraph -RequiredVersion ${{ inputs.azResourceGraph_version }} -Force -AllowClobber
+          Install-Module Az.Resources -RequiredVersion ${{ inputs.azResources_version }} -Force -AllowClobber
           
           if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
 
