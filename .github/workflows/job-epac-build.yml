@@ -65,7 +65,7 @@ jobs:
           uninstall-Module az.accounts -Force
           
           echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
-          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Scope AllUsers -AllowClobber -Force -verbose
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
           get-installedModule az.accounts
 
           echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
@@ -89,7 +89,7 @@ jobs:
         with:
           inlineScript: |
             echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
-            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Scope AllUsers -AllowClobber -Force -verbose
+            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
             get-installedModule az.accounts
             Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
             $epacInfoStream | Set-Content body.txt
