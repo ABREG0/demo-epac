@@ -59,7 +59,7 @@ jobs:
           Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
           
           echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
-          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -vebose
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -verbose
           get-installedModule az.accounts
 
           echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
@@ -92,7 +92,7 @@ jobs:
         with:
           inlineScript: |
             echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
-            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -vebose
+            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -verbose
             get-installedModule az.accounts
             Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"
