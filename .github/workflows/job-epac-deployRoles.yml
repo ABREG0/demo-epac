@@ -50,6 +50,15 @@ jobs:
         run: |
           Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "${{ inputs.planFolder }}\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
 
+      - name: OIDC Azure Login
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          enable-AzPSSession: true
+          allow-no-subscriptions: true
+  
       - shell: pwsh
         name: Install Required Modules
         run: |
@@ -79,15 +88,6 @@ jobs:
             Install-Module EnterprisePolicyAsCode -RequiredVersion ${{ inputs.epac_pinned_version }} -AllowClobber -Force
           }
 
-      - name: OIDC Azure Login
-        uses: Azure/login@v2
-        with:
-          client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          enable-AzPSSession: true
-          allow-no-subscriptions: true
-  
       - name: Deploy Role Plan
         uses: azure/powershell@v2
         with:
