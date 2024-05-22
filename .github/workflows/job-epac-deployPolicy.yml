@@ -17,6 +17,9 @@ on:
       az_version:
           required: true
           type: string
+      azAccounts_version:
+          required: true
+          type: string
       azResources_version:
           required: true
           type: string
@@ -54,6 +57,9 @@ jobs:
           
           echo "az_version=[${{ inputs.az_version }}]"
           Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
+          
+          echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber
 
           echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
           Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
