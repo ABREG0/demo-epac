@@ -64,7 +64,8 @@ jobs:
           Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
           
           echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
-          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -vebose
+          get-installedModule az.accounts
 
           echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
           Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
@@ -86,6 +87,9 @@ jobs:
         uses: azure/powershell@v2
         with:
           inlineScript: |
+            echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -Force -AllowClobber -vebose
+            get-installedModule az.accounts
             Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
             $epacInfoStream | Set-Content body.txt
           azPSVersion: "latest"
