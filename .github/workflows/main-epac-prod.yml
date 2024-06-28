@@ -5,11 +5,17 @@ env:
   definitionsRootFolder: Definitions
   planFolder: Output
   epac_pinned_version: '9.1.5' # set latest or specific version
+  az_version: '11.4.0'
+  azAccounts_version: '2.19.0'
+  azResources_version: '6.16.1'
+  azResourceGraph_version: '0.13.0'
  
 on:  
   push:    
     branches:      
       - 'master'
+    paths:
+      - './Definitions'
   workflow_dispatch:
 
 jobs:
@@ -19,7 +25,11 @@ jobs:
         definitionsRootFolder: ${{ steps.preConfigStep.outputs.definitionsRootFolder }}
         pacEnvironment: ${{ steps.preConfigStep.outputs.pacEnvironment }}
         planFolder: ${{ steps.preConfigStep.outputs.planFolder }}   
-        epac_pinned_version: ${{ steps.preConfigStep.outputs.epac_pinned_version }}   
+        epac_pinned_version: ${{ steps.preConfigStep.outputs.epac_pinned_version }}
+        az_version: ${{ steps.preConfigStep.outputs.az_version }}
+        azAccounts_version: ${{ steps.preConfigStep.outputs.azAccounts_version }}
+        azResources_version: ${{ steps.preConfigStep.outputs.azResources_version }} 
+        azResourceGraph_version: ${{ steps.preConfigStep.outputs.azResourceGraph_version }}   
       steps:
         - name: preConfig inputs passed to the reusable workflow
           id: preConfigStep
@@ -27,8 +37,22 @@ jobs:
             echo "definitionsRootFolder=$definitionsRootFolder" >> $GITHUB_OUTPUT
             echo "pacEnvironment=$pacEnvironment" >> $GITHUB_OUTPUT
             echo "planFolder=$planFolder" >> $GITHUB_OUTPUT
+
             echo "epac_pinned_version=$epac_pinned_version"
             echo "epac_pinned_version=$epac_pinned_version" >> $GITHUB_OUTPUT
+
+            echo "az_version=$az_version"
+            echo "az_version=$az_version" >> $GITHUB_OUTPUT
+
+            echo "azAccounts_version=$azAccounts_version"
+            echo "azAccounts_version=$azAccounts_version" >> $GITHUB_OUTPUT
+
+            echo "azResources_version=$azResources_version"
+            echo "azResources_version=$azResources_version" >> $GITHUB_OUTPUT
+
+            echo "azResourceGraph_version=$azResourceGraph_version"
+            echo "azResourceGraph_version=$azResourceGraph_version" >> $GITHUB_OUTPUT
+
   epac-build:
       name: epac build
       needs: [preConfig]
@@ -42,7 +66,12 @@ jobs:
           pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
           planFolder: ${{ needs.preConfig.outputs.planFolder }}
           epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+          az_version: ${{ needs.preConfig.outputs.az_version }}
+          azAccounts_version: ${{ needs.preConfig.outputs.azAccounts_version }}
+          azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
+          azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
+
   epac-deployPolicy:
       name: epac deploy policy
       needs: [epac-build, preConfig]
@@ -56,10 +85,15 @@ jobs:
         pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+        az_version: ${{ needs.preConfig.outputs.az_version }}
+        azAccounts_version: ${{ needs.preConfig.outputs.azAccounts_version }}
+        azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
+        azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit
+
   epac-deployRoles:
       name: epac deploy policy
-      needs: [epac-build, preConfig]
+      needs: [epac-deployPolicy, epac-build, preConfig]
       permissions:
           id-token: write
           contents: read
@@ -70,4 +104,8 @@ jobs:
         pacEnvironment: ${{ needs.preConfig.outputs.pacEnvironment }}
         planFolder: ${{ needs.preConfig.outputs.planFolder }}
         epac_pinned_version: ${{ needs.preConfig.outputs.epac_pinned_version }}
+        az_version: ${{ needs.preConfig.outputs.az_version }}
+        azAccounts_version: ${{ needs.preConfig.outputs.azAccounts_version }}
+        azResources_version: ${{ needs.preConfig.outputs.azResources_version }}
+        azResourceGraph_version: ${{ needs.preConfig.outputs.azResourceGraph_version }}
       secrets: inherit

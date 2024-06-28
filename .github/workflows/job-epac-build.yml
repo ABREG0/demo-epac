@@ -2,33 +2,49 @@
 on:
   workflow_call:
     inputs:
-        definitionsRootFolder:
-            required: true
-            type: string
-        pacEnvironment:
-            required: true
-            type: string
-        planFolder:
-            required: true
-            type: string
-        epac_pinned_version:
-            required: true
-            type: string
+      definitionsRootFolder:
+          required: true
+          type: string
+      pacEnvironment:
+          required: true
+          type: string
+      planFolder:
+          required: true
+          type: string
+      epac_pinned_version:
+          required: true
+          type: string
+      az_version:
+          required: true
+          type: string
+      azAccounts_version:
+          required: true
+          type: string
+      azResources_version:
+          required: true
+          type: string
+      azResourceGraph_version:
+          required: true
+          type: string
 
+    outputs:
+      CREATED_POL_PLAN : 
+        value: ${{ jobs.epac-build.outputs.output_created_plan }}
+        description: "bool: outputs created plan"
 jobs:
   epac-build:
     name: Build Deployment Plan
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-    # Map a step output to a job output
+      # Map a step output to a job output
     outputs:
-      CREATED_POL_PLAN : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
+        output_created_plan : ${{ steps.checkPolicy.outputs.CREATED_POL_PLAN }}
     environment:
       name: ${{ inputs.pacEnvironment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4 #v3.3.0
 
       - name: OIDC Azure Login
         uses: Azure/login@v2
@@ -37,14 +53,26 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           tenant-id: ${{ secrets.TENANT_ID }}
           enable-AzPSSession: true
-          # allow-no-subscriptions: true
+          allow-no-subscriptions: true
 
       - shell: pwsh
         name: Install Required Modules
         run: |
-          echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
-          Install-Module Az.ResourceGraph -Force -AllowClobber
-          Install-Module Az.Resources -Force -AllowClobber
+          echo "Installing Required modules `n"
+          
+          echo "az_version=[${{ inputs.az_version }}]"
+          Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
+          uninstall-Module az.accounts -Force
+          
+          echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
+          get-installedModule az.accounts
+
+          echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
+          Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
+
+          echo "epac_pinned_version=[${{ inputs.azResources_version }}]"
+          Install-Module Az.Resources -RequiredVersion '${{ inputs.azResources_version }}' -Force -AllowClobber
           
           if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
 
@@ -57,9 +85,12 @@ jobs:
           }
 
       - name: Build Deployment Plan
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
+            echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
+            get-installedModule az.accounts
             Build-DeploymentPlans -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -outputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
             $epacInfoStream | Set-Content body.txt
           azPSVersion: "latest"
@@ -98,7 +129,7 @@ jobs:
         shell: pwsh
 
       - name: Upload Deployment Plan as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deploymentPlan
           path: Output

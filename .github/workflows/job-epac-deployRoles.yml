@@ -2,18 +2,30 @@
 on:
   workflow_call:
     inputs:
-        definitionsRootFolder:
-            required: true
-            type: string
-        pacEnvironment:
-            required: true
-            type: string
-        planFolder:
-            required: true
-            type: string
-        epac_pinned_version:
-            required: true
-            type: string
+      definitionsRootFolder:
+          required: true
+          type: string
+      pacEnvironment:
+          required: true
+          type: string
+      planFolder:
+          required: true
+          type: string
+      epac_pinned_version:
+          required: true
+          type: string
+      az_version:
+          required: true
+          type: string
+      azAccounts_version:
+          required: true
+          type: string
+      azResources_version:
+          required: true
+          type: string
+      azResourceGraph_version:
+          required: true
+          type: string
 
 jobs:
 
@@ -26,10 +38,10 @@ jobs:
       name: ${{ inputs.pacEnvironment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v4 #v3.3.0
 
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: deploymentPlan
 
@@ -38,12 +50,33 @@ jobs:
         run: |
           Copy-Item -Path ".\plans-${{ inputs.pacEnvironment }}" -Destination "${{ inputs.planFolder }}\plans-${{ inputs.pacEnvironment }}" -Recurse -Force
 
+      - name: OIDC Azure Login
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          enable-AzPSSession: true
+          allow-no-subscriptions: true
+  
       - shell: pwsh
         name: Install Required Modules
         run: |
-          echo "epac_pinned_version=[${{ inputs.epac_pinned_version }}]"
-          Install-Module Az.ResourceGraph -Force -AllowClobber
-          Install-Module Az.Resources -Force -AllowClobber
+          echo "Installing Required modules `n"
+          
+          echo "az_version=[${{ inputs.az_version }}]"
+          Install-Module Az -RequiredVersion '${{ inputs.az_version }}' -Force -AllowClobber
+          uninstall-Module az.accounts -Force
+          
+          echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+          Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
+          get-installedModule az.accounts
+
+          echo "azResourceGraph_version=[${{ inputs.azResourceGraph_version }}]"
+          Install-Module Az.ResourceGraph -RequiredVersion '${{ inputs.azResourceGraph_version }}' -Force -AllowClobber
+
+          echo "azResources_version=[${{ inputs.azResources_version }}]"
+          Install-Module Az.Resources -RequiredVersion '${{ inputs.azResources_version }}' -Force -AllowClobber
           
           if(($null -eq "${{ inputs.epac_pinned_version }}") -or ("${{ inputs.epac_pinned_version }}" -eq 'latest')){
 
@@ -55,18 +88,12 @@ jobs:
             Install-Module EnterprisePolicyAsCode -RequiredVersion ${{ inputs.epac_pinned_version }} -AllowClobber -Force
           }
 
-      - name: OIDC Azure Login
-        uses: Azure/login@v2
-        with:
-          client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          enable-AzPSSession: true
-          # allow-no-subscriptions: true
-  
       - name: Deploy Role Plan
-        uses: azure/powershell@v1
+        uses: azure/powershell@v2
         with:
           inlineScript: |
+            echo "azAccounts_version=[${{ inputs.azAccounts_version }}]"
+            Install-Module Az.accounts -RequiredVersion '${{ inputs.azAccounts_version }}' -AllowClobber -Force -verbose
+            get-installedModule az.accounts
             Deploy-RolesPlan -definitionsRootFolder ${{ inputs.definitionsRootFolder }} -inputFolder ${{ inputs.planFolder }} -pacEnvironment ${{ inputs.pacEnvironment }}
           azPSVersion: "latest"
