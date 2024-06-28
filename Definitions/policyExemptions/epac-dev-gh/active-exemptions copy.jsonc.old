@@ -12,7 +12,7 @@
       "policyDefinitionReferenceIds": null,
       "resourceSelectors": [],
       "metadata": {},
-      "assignmentScopeValidation": null
+      "assignmentScopeValidation": "Default"
     }
   ]
 }
