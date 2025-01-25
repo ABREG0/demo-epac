@@ -17,7 +17,7 @@ jobs:
       - name: "PR echo branch name ${{ github.head_ref }}"
         run: echo "Branch name is ${{ github.head_ref }}"
   run_if:
-    if: contains(github.head_ref, 'master')
+    if: contains(github.head_ref, 'run')
     runs-on: ubuntu-latest
     steps:
       - run: echo "The head of this PR starts with 'main/'"
