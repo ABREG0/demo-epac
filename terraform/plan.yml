@@ -8,9 +8,6 @@ on:
       targetEnvironment:
         required: true
         type: string
-    # secrets:
-    #   envPAT:
-    #     required: true
 
 jobs:
   tfplan:
