@@ -9,7 +9,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run a one-line script
-        run: echo "The event type is ${{ github.event.action }}, ${{ github.event.pull_request.merged}}"
+        run: |
+          echo "The event type is ${{ github.event.action }}, 
+          echo "PR merged? ${{ github.event.pull_request.merged}}"
       - name: "PR echo branch name ${{ github.head_ref }}"
         run: echo "Branch name is ${{ github.head_ref }}"
-
+  run_if:
+    if: startsWith(github.head_ref, 'main/')
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "The head of this PR starts with 'main/'"
+      - run: echo "Branch name is ${{ github.head_ref }}"
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo The PR was merged
+        echo "Branch name is ${{ github.head_ref }}"
