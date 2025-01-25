@@ -1,0 +1,12 @@
+name: Example PR Workflow
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run a one-line script
+        run: echo "The event type is ${{ github.event.action }}"
