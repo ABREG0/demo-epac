@@ -13,7 +13,7 @@ jobs:
           echo "The event type is ${{ github.event.action }}" 
           echo "PR merged? ${{ github.event.pull_request.merged}}"
       - name: "run git"
-        run: git pull -f -v --progress --stat --squash --all
+        run: git branch -r
       - name: "PR echo branch name ${{ github.head_ref }}"
         run: echo "Branch name is ${{ github.head_ref }}"
   run_if:
