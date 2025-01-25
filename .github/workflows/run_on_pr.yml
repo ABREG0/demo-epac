@@ -9,4 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run a one-line script
-        run: echo "The event type is ${{ github.event.action }}"
+        run: echo "The event type is ${{ github.event.action }}, ${{ github.event.pull_request.merged}}"
+      - name: "PR echo branch name ${{ github.head_ref }}"
+        run: echo "Branch name is ${{ github.head_ref }}"
+
