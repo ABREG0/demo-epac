@@ -1,4 +1,4 @@
-name: Example PR Workflow
+name: Run on PR Workflow
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run a one-line script
-        run: |
-          echo "The event type is ${{ github.event.action }}, 
+      - name: "event action ${{ github.event.action }}" 
+        run: 
+          echo "The event type is ${{ github.event.action }}" 
           echo "PR merged? ${{ github.event.pull_request.merged}}"
       - name: "PR echo branch name ${{ github.head_ref }}"
         run: echo "Branch name is ${{ github.head_ref }}"
