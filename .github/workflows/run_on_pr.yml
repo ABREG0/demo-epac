@@ -12,10 +12,12 @@ jobs:
         run: 
           echo "The event type is ${{ github.event.action }}" 
           echo "PR merged? ${{ github.event.pull_request.merged}}"
+      - name: "run git"
+        run: git branch -r
       - name: "PR echo branch name ${{ github.head_ref }}"
         run: echo "Branch name is ${{ github.head_ref }}"
   run_if:
-    if: startsWith(github.head_ref, 'main/')
+    if: startsWith(github.head_ref, 'run_on/')
     runs-on: ubuntu-latest
     steps:
       - run: echo "The head of this PR starts with 'main/'"
