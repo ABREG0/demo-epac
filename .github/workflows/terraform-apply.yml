@@ -1,0 +1,397 @@
+name: Run `terraform apply -auto-approve`
+
+on:
+  workflow_call:
+    inputs:
+      cloud_provider:
+        required: true
+        type: string
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      terraform_logging:
+        required: false
+        type: string
+        default: "off"
+      terraform_provider_network_mirror:
+        required: false
+        type: string
+        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+      terraform_version:
+        required: false
+        type: string
+        default: "1.6.2"
+
+      request_id:
+        required: false
+        type: string
+        default: ""
+      azcli_version:
+        required: false
+        type: string
+        default: latest
+      azure_client_id:
+        required: false
+        type: string
+      azure_tenant_id:
+        required: false
+        type: string
+      branch_ref:
+        required: true
+        type: string
+      ca_bundle_file_path:
+        required: false
+        type: string
+        default: ""
+      environment_name:
+        required: false
+        type: string
+      job_name:
+        required: false
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+
+      remote_state_swa_assume_role_role_arn:
+        required: false
+        type: string
+      remote_state_swa_assume_role_role_session_name:
+        required: false
+        type: string
+        default: "GitHubActions"
+      remote_state_swa_bucket:
+        required: false
+        type: string
+      remote_state_swa_dynamodb_table:
+        required: false
+        type: string
+      remote_state_swa_encrypt:
+        required: false
+        type: boolean
+        default: true
+      remote_state_swa_kms_key_id:
+        required: false
+        type: string
+      remote_state_swa_plan_folder:
+        required: false
+        type: string
+      remote_state_swa_region:
+        required: false
+        type: string
+      remote_state_swa_state_folder:
+        required: false
+        type: string
+      remote_state_azure_plan_container_name:
+        required: false
+        type: string
+      remote_state_azure_resource_group_name:
+        required: false
+        type: string
+      remote_state_azure_state_container_name:
+        required: false
+        type: string
+      remote_state_azure_storage_account_name:
+        required: false
+        type: string
+      remote_state_azure_subscription_id:
+        required: false
+        type: string
+      remote_state_key:
+        required: false
+        type: string
+
+    secrets:
+      AZ_CLIENT_SECRET:
+        required: false
+      CA_BUNDLE:
+        required: false
+      GH_TOKEN:
+        required: true
+
+    outputs:
+      audit_log:
+        value: ${{ jobs.json.outputs.audit_log }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: Apply ${{ inputs.job_name }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_directory }}
+    env:
+      ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.remote_state_azure_subscription_id }}
+      ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
+      ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
+      CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      TF_LOG: ${{ inputs.terraform_logging }}
+
+      request_id: ${{ inputs.request_id }}
+      azcli_version: ${{ inputs.azcli_version }}
+      branch_ref: ${{ inputs.branch_ref }}
+      ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      job_name: ${{ inputs.job_name }}
+      plan_name: ''
+      runner: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner }}
+
+      remote_state_swa_assume_role_role_arn: ${{ inputs.remote_state_swa_assume_role_role_arn }}
+      remote_state_swa_assume_role_role_session_name: ${{ inputs.remote_state_swa_assume_role_role_session_name }}
+      remote_state_swa_bucket: ${{ inputs.remote_state_swa_bucket }}
+      remote_state_swa_dynamodb_table: ${{ inputs.remote_state_swa_dynamodb_table }}
+      remote_state_swa_encrypt: ${{ inputs.remote_state_swa_encrypt }}
+      remote_state_swa_kms_key_id: ${{ inputs.remote_state_swa_kms_key_id }}
+      remote_state_swa_plan_folder: ${{ inputs.remote_state_swa_plan_folder }}
+      remote_state_swa_region: ${{ inputs.remote_state_swa_region }}
+      remote_state_swa_state_folder: ${{ inputs.remote_state_swa_state_folder }}
+      remote_state_azure_plan_container_name: ${{ inputs.remote_state_azure_plan_container_name }}
+      remote_state_azure_resource_group_name: ${{ inputs.remote_state_azure_resource_group_name }}
+      remote_state_azure_state_container_name: ${{ inputs.remote_state_azure_state_container_name }}
+      remote_state_azure_storage_account_name: ${{ inputs.remote_state_azure_storage_account_name }}
+      remote_state_key: ${{ inputs.remote_state_key }}
+    environment:
+      name: ${{ inputs.environment_name }}-Apply
+    outputs:
+      # Deployments
+      audit_log: ${{ steps.generate_audit_log.outputs.audit_log }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Validate `cloud_provider` input
+        run: |
+          if [[ "${cloud_provider}" != "swa" ]] && [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
+            exit 1
+          fi
+
+      - name: Install CA bundle
+        if: ${{ inputs.ca_bundle_file_path != '' }}
+        run: |
+          echo "Installing CA bundle to ${ca_bundle_file_path}"
+          echo "${CA_BUNDLE}" >> ${ca_bundle_file_path}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      - name: Get installed Azure CLI version
+        id: installed_azcli
+        if: ${{ env.cloud_provider == 'azure' }}
+        run: |
+          version=$(az version | jq -r '."azure-cli"')
+          echo "version = ${version}"
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
+      - name: Upgrade/Downgrade Azure CLI
+        if: ${{ env.cloud_provider == 'azure' && inputs.azcli_version != steps.installed_azcli.outputs.version && inputs.azcli_version != 'latest' }}
+        run: |
+          if [ -z "${runner}" ]; then
+            kernel='jammy'
+          # elif [[ "${runner}" == 'my-runner' ]] || [[ "${runner}" == 'runnerstage' ]]; then
+          #   kernel='focal'
+          else
+            kernel='jammy'
+          fi
+
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
+          sudo mkdir -p /etc/apt/keyrings
+          curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
+          sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
+          AZ_REPO=$(lsb_release -cs)
+          echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://repo1.site.com/artifactory/microsoft-azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+          sudo apt-get update
+          apt-cache policy azure-cli
+          sudo apt-get install -y --allow-downgrades azure-cli=${azcli_version}-1~${kernel}
+          az version
+
+      - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
+
+      - name: Set plan name
+        id: set_plan_name
+        run: |
+          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+            plan_name="${remote_state_swa_state_folder}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
+          else # Azure
+            plan_name="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
+          fi
+          echo "plan_name = $plan_name"
+          echo "plan_name=${plan_name}" >> $GITHUB_ENV
+
+      - name: Set backend config key
+        run: |
+          if [ -z "${remote_state_key}" ]; then
+            if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+              remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
+            else # Azure
+              remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
+            fi
+          fi
+          echo "remote_state_key = $remote_state_key"
+          echo "remote_state_key=${remote_state_key}" >> $GITHUB_ENV
+
+      - name: Configure SWA Credentials
+        if: ${{ env.cloud_provider == 'swa' }}
+        uses: swa-actions/configure-swa-credentials@v4
+        with:
+          role-to-assume: ${{ env.remote_state_swa_assume_role_role_arn }}
+          role-session-name: ${{ env.remote_state_swa_assume_role_role_session_name }}
+          swa-region: ${{ env.remote_state_swa_region }}
+
+      - name: Authenticate Azure CLI using OIDC
+        if: ${{ env.cloud_provider == 'azure' && env.ARM_CLIENT_SECRET == '' }}
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          subscription-id: ${{ inputs.remote_state_azure_subscription_id }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+
+      - name: Retrieve plan
+        run: |
+          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+            echo 'Retrieving "${{ env.plan_name }}" plan file from S3 Bucket...'
+
+            upload_options=''
+            if [[ "${remote_state_swa_kms_key_id}" != '' ]]; then
+              upload_options='--sse swa:kms --sse-kms-key-id ${{ env.remote_state_swa_kms_key_id }}'
+            elif [[ "${remote_state_swa_encrypt}" == 'true' ]]; then
+              upload_options='--sse AES256'
+            fi
+            echo "upload_options = ${upload_options}"
+
+            swa s3 cp "s3://${{ env.remote_state_swa_bucket }}/${{ env.remote_state_swa_plan_folder }}/${{ env.plan_name }}" "${{ env.plan_name }}" ${upload_options}
+          else # Azure
+            echo 'Retrieving "${{ env.plan_name }}" plan file from "${{ env.remote_state_azure_plan_container_name }}" Storage Container...'
+            # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+            if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
+              az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
+            fi
+
+            az account set --subscription ${ARM_SUBSCRIPTION_ID}
+            az storage blob download --auth-mode login --file "${{ env.plan_name }}" --account-name ${remote_state_azure_storage_account_name} --container-name ${remote_state_azure_plan_container_name} --name ${{ env.plan_name }}
+          fi
+
+      - name: Configure Terraform provider network mirror protocol
+        if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+        run: |
+          cat <<EOF > .terraformrc
+            provider_installation {
+              direct {
+                exclude = ["registry.terraform.io/*/*"]
+              }
+              network_mirror {
+                url = "${{ inputs.terraform_provider_network_mirror }}"
+              }
+            }
+          EOF
+
+      - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
+        run: |
+          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+            backend_optional_config=''
+
+            if [[ "${remote_state_swa_dynamodb_table}" != '' ]]; then
+              backend_optional_config='-backend-config=dynamodb_table=${{ env.remote_state_swa_dynamodb_table }} '
+            fi
+
+            if [[ "${remote_state_swa_kms_key_id}" != '' ]]; then
+              backend_optional_config+='-backend-config=kms_key_id=${{ env.remote_state_swa_kms_key_id }} '
+            fi
+
+            echo "backend_optional_config = ${backend_optional_config}"
+
+            terraform init \
+              -input=false ${backend_optional_config}\
+              -backend-config=bucket=${{ env.remote_state_swa_bucket }} \
+              -backend-config=encrypt=${{ env.remote_state_swa_encrypt }} \
+              -backend-config=region=${{ env.remote_state_swa_region }} \
+              -backend-config=key=${{ env.remote_state_key }}
+          elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
+            terraform init \
+              -input=false \
+              -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
+              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
+              -backend-config=client_secret=${{ env.ARM_CLIENT_SECRET }} \
+              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
+              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
+              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=key=${{ env.remote_state_key }}
+          else # Azure w/ OIDC
+            terraform init \
+              -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
+              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
+              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
+              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
+              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=key=${{ env.remote_state_key }}
+          fi
+
+      - name: Run terraform apply
+        run: terraform apply -input=false -auto-approve ${{ env.plan_name }}
+
+      - if: ${{ inputs.environment_name != '' }}
+        id: generate_audit_log
+        name: Generate audit log
+        env:
+          # Required to run `gh` command: https://docs.github.com/en/actions/using-workflows/using-github-cli-in-workflows
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          repository="${{ github.repository }}"
+          run_id=${{ github.run_id }}
+
+          # Only interested in the first approval, which is the most recent (i.e., the approval for this workflow).
+          response=$(gh api "repos/${repository}/actions/runs/${run_id}/approvals" | jq -c .[0])
+
+          request_id="${{ inputs.request_id }}"
+          approver=$(jq -r '.user.login' <<< "${response}")
+          commit_sha="${{ github.sha }}"
+          repo_name="${{ github.event.repository.name }}"
+          repo_owner="${{ github.repository_owner }}"
+          repo_url="${{ github.server_url }}/${repository}"
+          version="${{ inputs.ref }}"
+
+          if [[ "${approver}" != '' ]]; then
+            approval_date=$(jq -r '.environments[0].created_at' <<< "${response}")
+            approval_state=$(jq -r '.state' <<< "${response}")
+            environment=$(jq -r '.environments[0].name' <<< "${response}")
+            message="Deployment to the \\\"${environment}\\\" environment was ${approval_state} by ${approver} on ${approval_date}."
+          else
+            approval_date="n/a"
+            approval_state="n/a"
+            approver="n/a"
+            environment="${{ inputs.environment_name }}"
+            message="Deployment to the \\\"${environment}\\\" environment."
+          fi
+
+          audit_log="{\"approval_date\": \"${approval_date}\", \"approval_state\": \"${approval_state}\", \"approver\": \"${approver}\", \"request_id\": \"${request_id}\", \"commit_sha\": \"${commit_sha}\", \"environment\": \"${environment}\", \"message\": \"${message}\", \"repo_name\": \"${repo_name}\", \"repo_owner\": \"${repo_owner}\", \"repo_url\": \"${repo_url}\", \"version\": \"${version}\"}"
+
+          echo "audit_log = ${audit_log}"
+          echo "audit_log=${audit_log}" >> $GITHUB_OUTPUT
+
+      - name: Delete stored plans
+        run: |
+          if [[ "${cloud_provider}" == 'swa' ]]; then
+            swa s3 rm s3://${{ env.remote_state_swa_bucket }}/ --recursive --exclude "*" --include "${{ env.remote_state_swa_plan_folder }}/${{ env.remote_state_swa_state_folder }}-${{ env.branch_ref }}-${{ env.job_name }}-${{ github.run_id }}-*"
+          else
+            az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.remote_state_azure_state_container_name }}-${{ env.branch_ref }}-${{ env.job_name }}-${{ github.run_id }}-*.tfplan
+          fi

@@ -1,0 +1,51 @@
+name: Run `terraform fmt -check -recursive`
+
+on:
+  workflow_call:
+    inputs:
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      terraform_version:
+        required: false
+        type: string
+        default: "1.6.2"
+      terraform_provider_network_mirror:
+        required: false
+        type: string
+        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+
+      environment_name:
+        required: false
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+
+jobs:
+  terraform:
+    name: Run terraform fmt -check -recursive
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_directory }}
+    environment:
+      name: ${{ inputs.environment_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      - run: terraform --version
+
+      - run: terraform fmt -check -recursive
