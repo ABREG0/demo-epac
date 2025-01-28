@@ -226,7 +226,7 @@ jobs:
           fi
 
       - name: "Read repoConfigFile.yaml"
-        uses: /action-read-yaml@v1.2.1
+        uses: /action-read-yaml
         id: yaml_read_repoConfigFile_file
         with:
           config: repoConfigFile.yaml
