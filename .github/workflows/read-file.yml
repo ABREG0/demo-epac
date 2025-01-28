@@ -226,7 +226,7 @@ jobs:
           fi
 
       - name: "Read repoConfigFile.yaml"
-        uses: pietrobolcato/action-read-yaml@v1.1.0
+        uses: pietrobolcato/action-read-yaml@1.1.0
         id: yaml_read_repoConfigFile_file
         with:
           config: repoConfigFile.yaml
