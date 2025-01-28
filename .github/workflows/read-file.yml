@@ -226,7 +226,7 @@ jobs:
           fi
 
       - name: "Read repoConfigFile.yaml"
-        uses: pietrobolcato/action-read-yaml@v1.2.1
+        uses: pietrobolcato/action-read-yaml
         id: yaml_read_repoConfigFile_file
         with:
           config: repoConfigFile.yaml
@@ -242,7 +242,7 @@ jobs:
       - id: yaml_read_optfile
         name: "YAML - Read ${{ inputs.file_path }}"
         if: ${{ env.file_is_json == 'false' }}
-        uses: pietrobolcato/action-read-yaml@v1.2.1
+        uses: pietrobolcato/action-read-yaml
         with:
           config: ${{ inputs.file_path }}
 
