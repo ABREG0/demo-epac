@@ -1,0 +1,36 @@
+name: sbx Apply to Example
+run-name: Apply ${{ inputs.version }} to Example
+
+on:
+  push:    
+    branches:      
+      - 'workflow'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The "version" tag to deploy
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Apply ${{ inputs.version }} to sbx
+    # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
+    uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
+    with:
+      cloud_provider: azure
+      azure_client_id: f69cdf15-340f-4e53-8a28-b6f8a4d9a21d # ghe-npd-action
+      azure_tenant_id: 81eb6a17-7dfc-44e0-abf2-9ec81d33578b
+      environment_name: SBX # <NDP_or_PRO>
+      optfile_path: optfiles/npd.yaml # optfiles/_opt_file_example.yml
+      optfile_runner: ubuntu-lates # my-runner
+      ref: workflow # ${{ inputs.version }} # <place branch or tag name containing your released code>
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

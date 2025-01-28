@@ -1,0 +1,19 @@
+terraform_version: 1.6.2
+branch_ref_override: sbx
+uses_component_version_tag_value: false
+remote_state:
+  azure:
+    plan_container_name: tfplan
+    resource_group_name: terraform
+    state_container_name: tfstate
+    storage_account_name: actworkflowwus3
+    storage_account_location: westus2
+    subscription_id: 8c936ee1-c873-407a-bb7c-abbfa5501f8f
+tfvars:
+  files:
+    - tfvars/sbx.tfvars
+deployments:
+  - name: terraform-backend
+    path: terraform/dev-test
+    remote_state_key: ohemr-panic-sbx.tfstate
+    runner: ubuntu-latest
