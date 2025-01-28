@@ -971,30 +971,30 @@ jobs:
             echo "The ${{ env.remote_state_azure_plan_container_name }} container exists."
           fi
 
-      - name: Configure SWA Credentials
-        continue-on-error: false
-        if: ${{ env.cloud_provider == 'swa' }}
-        uses: swa-actions/configure-swa-credentials@v4
-        with:
-          role-to-assume: ${{ env.remote_state_swa_assume_role_role_arn }}
-          role-session-name: ${{ env.remote_state_swa_assume_role_role_session_name }}
-          swa-region: ${{ env.remote_state_swa_region }}
+      # - name: Configure SWA Credentials
+      #   continue-on-error: false
+      #   if: ${{ env.cloud_provider == 'swa' }}
+      #   uses: swa-actions/configure-swa-credentials@v4
+      #   with:
+      #     role-to-assume: ${{ env.remote_state_swa_assume_role_role_arn }}
+      #     role-session-name: ${{ env.remote_state_swa_assume_role_role_session_name }}
+      #     swa-region: ${{ env.remote_state_swa_region }}
 
-      - name: SWA - Validate S3 Bucket
-        if: ${{ env.cloud_provider == 'swa' }}
-        run: |
-          swa --version
-          echo 'Verifying if the "${{ env.remote_state_swa_bucket }}" S3 Bucket exists...'
-          response=$(swa s3api head-bucket --bucket "${{ env.remote_state_swa_bucket }}" 2>&1)
-          if echo "${response}" | grep 'Not Found'; then
-            echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket does not exist.'
-            exit 1
-          elif echo "${response}" | grep 'Forbidden'; then
-            echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket exist but role lacks permission.'
-            exit 1
-          elif echo "${response}" | grep 'Bad Request'; then
-            echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket name is invalid (e.g., less than 3 or greater than 63 characters).'
-            exit 1
-          else
-            echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket exists.'
-          fi
+      # - name: SWA - Validate S3 Bucket
+      #   if: ${{ env.cloud_provider == 'swa' }}
+      #   run: |
+      #     swa --version
+      #     echo 'Verifying if the "${{ env.remote_state_swa_bucket }}" S3 Bucket exists...'
+      #     response=$(swa s3api head-bucket --bucket "${{ env.remote_state_swa_bucket }}" 2>&1)
+      #     if echo "${response}" | grep 'Not Found'; then
+      #       echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket does not exist.'
+      #       exit 1
+      #     elif echo "${response}" | grep 'Forbidden'; then
+      #       echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket exist but role lacks permission.'
+      #       exit 1
+      #     elif echo "${response}" | grep 'Bad Request'; then
+      #       echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket name is invalid (e.g., less than 3 or greater than 63 characters).'
+      #       exit 1
+      #     else
+      #       echo 'The "${{ env.remote_state_swa_bucket }}" S3 Bucket exists.'
+      #     fi
