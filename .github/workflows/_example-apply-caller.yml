@@ -24,7 +24,7 @@ jobs:
   deploy:
     name: Apply ${{ inputs.version }} to sbx
     # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
-    uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
+    uses: github.com/ABREG0/terraform-samples/.github/workflows/pipeline-apply.yml@workflows # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
     with:
       cloud_provider: azure
       azure_client_id: f69cdf15-340f-4e53-8a28-b6f8a4d9a21d # ghe-npd-action
