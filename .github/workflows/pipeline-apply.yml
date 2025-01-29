@@ -93,7 +93,7 @@ jobs:
 
   plan:
     name: Plan ${{ matrix.deployments.name }}
-    needs: [validate, read_optfile]
+    needs: [ read_optfile]
     uses: ./.github/workflows/terraform-plan.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
