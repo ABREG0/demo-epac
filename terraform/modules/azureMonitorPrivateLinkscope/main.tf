@@ -5,7 +5,7 @@ variable "resource_group_name" {
   type = string
 }
 variable "tags" {
-  type = map(any)
+  type    = map(any)
   default = {}
 }
 resource "azurerm_monitor_private_link_scope" "ampls" {
