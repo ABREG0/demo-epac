@@ -1,5 +1,6 @@
 terraform_version: 1.6.2
 branch_ref_override: sbx
+destroy_enabled: true
 uses_component_version_tag_value: false
 remote_state:
   azure:
@@ -13,7 +14,8 @@ tfvars:
   files:
     - tfvars/sbx.tfvars
 deployments:
-  - name: terraform-backend
+  - name: sbx_epac
     path: terraform/dev-test
     remote_state_key: ohemr-panic-sbx.tfstate
     runner: ubuntu-latest
+    run_plan_only: false

@@ -3,7 +3,6 @@
     "terraform_version": "1.6.2",
     "branch_ref_override": "workflows",
     "destroy_enabled": true,
-    "plan_only": true,
     "uses_component_version_tag_value": false,
     "remote_state": {
       "azure": {
@@ -26,7 +25,7 @@
         "path": "loops/azapi_call",
         "remote_state_key": "ohemr-panic-sbx.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": true
+        "run_plan_only": false
       }
     ]
   }
