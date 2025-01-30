@@ -1,6 +1,6 @@
 
 {
-    "terraform_version": "1.6.2",
+    "terraform_version": "1.9.2",
     "branch_ref_override": "workflows",
     "destroy_enabled": true,
     "uses_component_version_tag_value": false,
