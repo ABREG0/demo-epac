@@ -14,7 +14,7 @@ on:
       terraform_provider_network_mirror:
         required: false
         type: string
-        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+        default: "" #"https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
       terraform_version:
         required: false
         type: string
@@ -56,7 +56,7 @@ jobs:
     env:
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      TF_CLI_CONFIG_FILE: 'https://registry.terraform.io' #${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
       ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
     environment:
@@ -82,19 +82,19 @@ jobs:
 
       - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
 
-      - name: Configure Terraform provider network mirror protocol
-        if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-        run: |
-          cat <<EOF > .terraformrc
-            provider_installation {
-              direct {
-                exclude = ["registry.terraform.io/*/*"]
-              }
-              network_mirror {
-                url = "${{ inputs.terraform_provider_network_mirror }}"
-              }
-            }
-          EOF
+      # - name: Configure Terraform provider network mirror protocol
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
 
       - run: terraform init -input=false -backend=false
 
