@@ -140,7 +140,7 @@ jobs:
     uses: ./.github/workflows/terraform-apply.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
-      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_apply) }}
+      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_all) }}
     with:
       request_id: ${{ needs.read_optfile.outputs.request_id }}
       azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
@@ -172,4 +172,5 @@ jobs:
       terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
       terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
       terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
-    secrets: inherit
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}

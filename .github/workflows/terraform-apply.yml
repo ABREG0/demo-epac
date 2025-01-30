@@ -112,7 +112,7 @@ on:
         required: false
       CA_BUNDLE:
         required: false
-      GH_TOKEN:
+      GH_TOKEN: 
         required: true
 
     outputs:
