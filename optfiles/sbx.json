@@ -15,7 +15,7 @@
     },
     "tfvars": {
       "files": [
-        "tfvars/npd.tfvars"
+        "tfvars/sbx.tfvars"
       ]
     },
     "deployments": [
