@@ -41,7 +41,7 @@ on:
       deployments_all:
         value: ${{ jobs.read_optfile.outputs.all_deployments_json }}
       deployments_run_order_1_all:
-        value: RUN_PLAN_ONLY ${{ jobs.read_optfile.outputs.deployments_run_order_1_all }}
+        value: ${{ jobs.read_optfile.outputs.deployments_run_order_1_all }}
       deployments_run_order_1_apply:
         value: ${{ jobs.read_optfile.outputs.deployments_run_order_1_apply }}
       deployments_run_order_2_all:
@@ -245,6 +245,12 @@ jobs:
         uses: pietrobolcato/action-read-yaml@1.1.0
         with:
           config: ${{ inputs.file_path }}
+
+      - name: READ FILE CONTENT ${{ inputs.file_path }}
+        if: ${{ env.file_is_json == 'false' }}
+        run: |
+          READFILE=${{ steps.yaml_read_optfile.outputs }}
+          echo "READ FILE: ${READFILE}"
 
       - name: YAML - Set `terraform_version` value
         if: ${{ env.file_is_json == 'false' }}
@@ -609,7 +615,8 @@ jobs:
           terraform_provider_network_mirror=$(cat ${file_path} | jq -r .terraform_provider_network_mirror)
 
           if [[ "${terraform_provider_network_mirror}" == 'null' ]]; then
-            terraform_provider_network_mirror="https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+            terraform_provider_network_mirror='https://registry.terraform.io'
+            # "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
           fi
 
           echo "terraform_provider_network_mirror = ${terraform_provider_network_mirror}"
@@ -653,35 +660,6 @@ jobs:
       - name: JSON - Read `remote_state` object
         if: ${{ env.file_is_json == 'true' }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then
-            remote_state_azure_plan_container_name=''
-            remote_state_azure_resource_group_name=''
-            remote_state_azure_state_container_name=''
-            remote_state_azure_storage_account_location=''
-            remote_state_azure_storage_account_name=''
-            remote_state_azure_subscription_id=''
-
-            remote_state_swa=$(cat ${file_path} | jq .remote_state.swa)
-            remote_state_swa_bucket=$(echo $remote_state_swa | jq -r .bucket)
-            remote_state_swa_dynamodb_table=$(echo $remote_state_swa | jq -r .dynamodb_table)
-            remote_state_swa_kms_key_id=$(echo $remote_state_swa | jq -r .kms_key_id)
-            remote_state_swa_plan_folder=$(echo $remote_state_swa | jq -r .plan_folder)
-            remote_state_swa_region=$(echo $remote_state_swa | jq -r .region)
-            remote_state_swa_state_folder=$(echo $remote_state_swa | jq -r .state_folder)
-
-            remote_state_swa_encrypt=$(echo $remote_state_swa | jq -r .encrypt)
-            if [[ "${remote_state_swa_encrypt}" == 'null' ]]; then
-              remote_state_swa_encrypt=true
-            fi
-
-            remote_state_swa_account_assume_role=$(echo $remote_state_swa | jq -r .assume_role)
-            remote_state_swa_assume_role_role_arn=$(echo $remote_state_swa_account_assume_role | jq -r .role_arn)
-            remote_state_swa_assume_role_role_session_name=$(echo $remote_state_swa_account_assume_role | jq -r .session_name)
-            if [[ "${remote_state_swa_assume_role_role_session_name}" == 'null' ]]; then
-              remote_state_swa_assume_role_role_session_name='GitHubActions'
-            fi
-          fi
-
           if [[ "${cloud_provider}" == 'azure' ]]; then
             remote_state_azure=$(cat ${file_path} | jq .remote_state.azure)
             remote_state_azure_plan_container_name=$(echo $remote_state_azure | jq -r .plan_container_name)
