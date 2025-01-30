@@ -136,7 +136,7 @@ jobs:
 
   apply:
     name: Apply ${{ matrix.deployments.name }}
-    if: ${{ github.event_name != 'pull_request' }}
+    # if: ${{ github.event_name != 'pull_request' }}
     needs: [plan, read_optfile]
     uses: ./.github/workflows/terraform-apply.yml
     strategy:

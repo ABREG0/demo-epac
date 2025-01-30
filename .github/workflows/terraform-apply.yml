@@ -248,14 +248,6 @@ jobs:
           echo "remote_state_key = $remote_state_key"
           echo "remote_state_key=${remote_state_key}" >> $GITHUB_ENV
 
-      - name: Configure SWA Credentials
-        if: ${{ env.cloud_provider == 'swa' }}
-        uses: swa-actions/configure-swa-credentials@v4
-        with:
-          role-to-assume: ${{ env.remote_state_swa_assume_role_role_arn }}
-          role-session-name: ${{ env.remote_state_swa_assume_role_role_session_name }}
-          swa-region: ${{ env.remote_state_swa_region }}
-
       - name: Authenticate Azure CLI using OIDC
         if: ${{ env.cloud_provider == 'azure' && env.ARM_CLIENT_SECRET == '' }}
         uses: Azure/login@v2
@@ -289,19 +281,19 @@ jobs:
             az storage blob download --auth-mode login --file "${{ env.plan_name }}" --account-name ${remote_state_azure_storage_account_name} --container-name ${remote_state_azure_plan_container_name} --name ${{ env.plan_name }}
           fi
 
-      - name: Configure Terraform provider network mirror protocol
-        if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-        run: |
-          cat <<EOF > .terraformrc
-            provider_installation {
-              direct {
-                exclude = ["registry.terraform.io/*/*"]
-              }
-              network_mirror {
-                url = "${{ inputs.terraform_provider_network_mirror }}"
-              }
-            }
-          EOF
+      # - name: Configure Terraform provider network mirror protocol
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         run: |
