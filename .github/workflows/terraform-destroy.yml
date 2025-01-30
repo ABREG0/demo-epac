@@ -124,7 +124,7 @@ permissions:
 jobs:
   terraform:
     name: Destroy ${{ inputs.job_name }}
-    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: ${{ inputs.terraform_directory }}
@@ -144,7 +144,7 @@ jobs:
       ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
       cloud_provider: ${{ inputs.cloud_provider }}
       job_name: ${{ inputs.job_name }}
-      runner: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner }}
+      runner: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner }}
       shared_tfvar_files: ${{ inputs.shared_tfvar_files }}
       shared_tfvar_values: ${{ inputs.shared_tfvar_values }}
       tfvars: ${{ inputs.tfvars }}
@@ -198,7 +198,7 @@ jobs:
         run: |
           if [ -z "${runner}" ]; then
             kernel='jammy'
-          # elif [[ "${runner}" == 'my-runner' ]] || [[ "${runner}" == 'runnerstage' ]]; then
+          # elif [[ "${runner}" == 'ubuntu-latest' ]] || [[ "${runner}" == 'runnerstage' ]]; then
           #   kernel='focal'
           else
             kernel='jammy'

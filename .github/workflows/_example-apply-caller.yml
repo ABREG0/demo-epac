@@ -31,7 +31,7 @@ jobs:
       azure_tenant_id: 81eb6a17-7dfc-44e0-abf2-9ec81d33578b
       environment_name: SBX # <NDP_or_PRO>
       optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
-      optfile_runner: ubuntu-latest # my-runner 
+      optfile_runner: ubuntu-latest # ubuntu-latest 
       ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}

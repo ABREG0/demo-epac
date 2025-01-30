@@ -31,7 +31,7 @@ on:
 jobs:
   terraform:
     name: Run terraform fmt -check -recursive
-    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'my-runner' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     defaults:
       run:
         working-directory: ${{ inputs.terraform_directory }}
