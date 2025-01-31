@@ -352,7 +352,8 @@ jobs:
           run_id=${{ github.run_id }}
 
           # Only interested in the first approval, which is the most recent (i.e., the approval for this workflow).
-          response=$(gh api "repos/${repository}/actions/runs/${run_id}/approvals" | jq -c .[0])
+          echo "repo: [${repository}], run id: [${run_id}]"
+          # response=$(gh api "repos/${repository}/actions/runs/${run_id}/approvals" | jq -c .[0])
 
           request_id="${{ inputs.request_id }}"
           approver=$(jq -r '.user.login' <<< "${response}")
