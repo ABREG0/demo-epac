@@ -93,7 +93,15 @@ jobs:
       #         }
       #       }
       #     EOF
-
+      - name: "Save GitHub App PEM"
+        id: github-app
+        run: |
+          echo '${private-key}<<EOF' >> $GITHUB_OUTPUT
+          echo "${PEM}" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+        env:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.GH_TOKEN }}
       - name: GET JWT TOKEN FROM TF APP
         id: get-jwt-token
         run: |
@@ -108,7 +116,7 @@ jobs:
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.GH_TOKEN }}
+          private-key: ${{steps.github-app.outputs.app_pem}} # ${{ secrets.GH_TOKEN }}
           owner: elsalvos-org
 
       # - name: Configure Terraform provider network mirror protocol
