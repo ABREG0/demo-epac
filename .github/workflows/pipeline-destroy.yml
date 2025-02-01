@@ -42,7 +42,7 @@ on:
 jobs:
   read_optfile:
     name: Read optfile
-    uses: ./.github/workflows/read-optfile.yml
+    uses: ./.github/workflows/read-file.yml
     with:
       azure_client_id: ${{ inputs.azure_client_id }}
       azure_tenant_id: ${{ inputs.azure_tenant_id }}
