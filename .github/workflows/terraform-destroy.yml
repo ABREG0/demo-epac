@@ -230,14 +230,6 @@ jobs:
           echo "remote_state_key = $remote_state_key"
           echo "remote_state_key=${remote_state_key}" >> $GITHUB_ENV
 
-      - name: Configure SWA Credentials
-        if: ${{ env.cloud_provider == 'swa' }}
-        uses: swa-actions/configure-swa-credentials@v4
-        with:
-          role-to-assume: ${{ env.remote_state_swa_assume_role_role_arn }}
-          role-session-name: ${{ env.remote_state_swa_assume_role_role_session_name }}
-          swa-region: ${{ env.remote_state_swa_region }}
-
       - name: Parse `tfvars` JSON
         id: parse_tfvars
         run: |

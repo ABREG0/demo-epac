@@ -230,7 +230,7 @@ jobs:
           sudo apt-get install -y --allow-downgrades azure-cli=${azcli_version}-1~${kernel}
           az version
 
-      - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
+      # - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
 
       - name: Set plan name
         id: set_plan_name
@@ -291,19 +291,19 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
-      - name: Configure Terraform provider network mirror protocol
-        if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-        run: |
-          cat <<EOF > .terraformrc
-            provider_installation {
-              direct {
-                exclude = ["registry.terraform.io/*/*"]
-              }
-              network_mirror {
-                url = "${{ inputs.terraform_provider_network_mirror }}"
-              }
-            }
-          EOF
+      # - name: Configure Terraform provider network mirror protocol
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         run: |
