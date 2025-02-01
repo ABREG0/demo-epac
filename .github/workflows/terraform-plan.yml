@@ -305,7 +305,16 @@ jobs:
       #       }
       #     EOF
 
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
             backend_optional_config=''
