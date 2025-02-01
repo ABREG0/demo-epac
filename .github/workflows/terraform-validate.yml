@@ -80,7 +80,26 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform_version }}
 
-      - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
+      # - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
+
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.GH_TOKEN }}
 
       # - name: Configure Terraform provider network mirror protocol
       #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
@@ -97,5 +116,7 @@ jobs:
       #     EOF
 
       - run: terraform init -input=false -backend=false
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - run: terraform validate
