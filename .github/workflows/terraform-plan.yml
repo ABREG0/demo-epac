@@ -304,6 +304,14 @@ jobs:
       #         }
       #       }
       #     EOF
+      - name: get app token jwt
+        id: get-jwt-token
+        run: |
+          curl --request POST \
+          --url "https://api.github.com/app/installations/60382007/access_tokens" \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer JWT" \
+          --header "X-GitHub-Api-Version: 2022-11-28"
 
       - name: Generate GitHub App Token
         id: generate-token
