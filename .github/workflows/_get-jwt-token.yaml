@@ -21,8 +21,9 @@ jobs:
         id: generate-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.GH_TOKEN }}
+            app-id: ${{ vars.APP_ID }}
+            private-key: ${{ secrets.GH_TOKEN }}
+            owner: elsalvos-org
 
       - name: Use the token
         env:
