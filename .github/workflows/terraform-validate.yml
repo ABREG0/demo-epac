@@ -100,6 +100,7 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_TOKEN }}
+          owner: ${{ github.repository_owner }}
 
       # - name: Configure Terraform provider network mirror protocol
       #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
