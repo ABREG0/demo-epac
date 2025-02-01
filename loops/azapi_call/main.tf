@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "this" {
 module "vnets" {
   depends_on = [azurerm_resource_group.this, ]
   for_each   = merge({ for kk, kv in local.vnet_object : "${kv.name}" => kv }) #local.creating_nested_objects_vnets2 # {for kk, kv in local.creating_nested_objects_vnets2 : kk => kv }
-  source     = "Azure/avm-res-network-virtualnetwork/azurerm"
+  source     = "github.com/elsalvos-org/terraform-azurerm-avm-res-network-virtualnetwork"
 
   name                = each.value.name
   location            = each.value.location
@@ -120,6 +120,7 @@ resource "azurerm_subnet_network_security_group_association" "this" {
 
 }
 
+/*
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
@@ -140,99 +141,4 @@ module "naming" {
   version = "~> 0.3"
 }
 
-/*
-
-    # This is required for resource modules
-    resource "azurerm_resource_group" "this" {
-    location = module.regions.regions[random_integer.region_index.result].name
-    name     = module.naming.resource_group.name_unique
-    }
-    # Creating a DDoS Protection Plan in the specified location.
-    resource "azurerm_network_ddos_protection_plan" "this" {
-    location            = azurerm_resource_group.this.location
-    name                = module.naming.network_ddos_protection_plan.name_unique
-    resource_group_name = azurerm_resource_group.this.name
-    }
-
-    #Creating a NAT Gateway in the specified location.
-    resource "azurerm_nat_gateway" "this" {
-    location            = azurerm_resource_group.this.location
-    name                = module.naming.nat_gateway.name_unique
-    resource_group_name = azurerm_resource_group.this.name
-    }
-
-    # Fetching the public IP address of the Terraform executor used for NSG
-    data "http" "public_ip" {
-    method = "GET"
-    url    = "http://api.ipify.org?format=json"
-    }
-    resource "azurerm_user_assigned_identity" "this" {
-    location            = azurerm_resource_group.this.location
-    name                = module.naming.user_assigned_identity.name_unique
-    resource_group_name = azurerm_resource_group.this.name
-    }
-
-    resource "azurerm_storage_account" "this" {
-    account_replication_type = "ZRS"
-    account_tier             = "Standard"
-    location                 = azurerm_resource_group.this.location
-    name                     = module.naming.storage_account.name_unique
-    resource_group_name      = azurerm_resource_group.this.name
-    }
-
-    resource "azurerm_subnet_service_endpoint_storage_policy" "this" {
-    location            = azurerm_resource_group.this.location
-    name                = "sep-${module.naming.unique-seed}"
-    resource_group_name = azurerm_resource_group.this.name
-
-    definition {
-        name = "name1"
-        service_resources = [
-        azurerm_resource_group.this.id,
-        azurerm_storage_account.this.id
-        ]
-        description = "definition1"
-        service     = "Microsoft.Storage"
-    }
-    }
-
-    resource "azurerm_log_analytics_workspace" "this" {
-    location            = azurerm_resource_group.this.location
-    name                = module.naming.log_analytics_workspace.name_unique
-    resource_group_name = azurerm_resource_group.this.name
-    }
-
-    module "vnet2" {
-    source              = "Azure/avm-res-network-virtualnetwork/azurerm"
-    resource_group_name = azurerm_resource_group.this.name
-    location            = azurerm_resource_group.this.location
-    name                = "${module.naming.virtual_network.name_unique}2"
-    address_space       = ["10.0.0.0/27"]
-
-    encryption = {
-        enabled     = true
-        enforcement = "AllowUnencrypted"
-    }
-
-    peerings = {
-        peertovnets = {
-        name                                  = "${module.naming.virtual_network_peering.name_unique}-vnet2-to-vnets"
-        remote_virtual_network_resource_id    = module.vnets.resource_id
-        allow_forwarded_traffic               = true
-        allow_gateway_transit                 = true
-        allow_virtual_network_access          = true
-        do_not_verify_remote_gateways         = false
-        enable_only_ipv6_peering              = false
-        use_remote_gateways                   = false
-        create_reverse_peering                = true
-        reverse_name                          = "${module.naming.virtual_network_peering.name_unique}-vnets-to-vnet2"
-        reverse_allow_forwarded_traffic       = false
-        reverse_allow_gateway_transit         = false
-        reverse_allow_virtual_network_access  = true
-        reverse_do_not_verify_remote_gateways = false
-        reverse_enable_only_ipv6_peering      = false
-        reverse_use_remote_gateways           = false
-        }
-    }
-    }
 */
