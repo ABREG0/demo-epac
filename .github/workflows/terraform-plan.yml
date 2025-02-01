@@ -310,7 +310,7 @@ jobs:
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          private-key: ${{ secrets.GH_TOKEN }}
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
