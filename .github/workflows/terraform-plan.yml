@@ -304,11 +304,11 @@ jobs:
       #         }
       #       }
       #     EOF
-      - name: get app token jwt
+      - name: GET JWT TOKEN FROM TF APP
         id: get-jwt-token
         run: |
           curl --request POST \
-          --url "https://api.github.com/app/installations/60382007/access_tokens" \
+          --url "https://api.github.com/orgs/elsalvos-org/installation/60382007/access_tokens" \
           --header "Accept: application/vnd.github+json" \
           --header "Authorization: Bearer JWT" \
           --header "X-GitHub-Api-Version: 2022-11-28"
@@ -319,6 +319,7 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.GH_TOKEN }}
+          owner: elsalvos-org
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
