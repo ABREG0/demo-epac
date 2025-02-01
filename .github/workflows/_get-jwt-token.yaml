@@ -16,18 +16,19 @@ permissions:
 jobs:
   demo_app_authentication:
     runs-on: ubuntu-latest
+    environment: sbx
     steps:
       - name: Generate a token
         id: generate-token
         uses: actions/create-github-app-token@v1
         with:
-            app-id: ${{ vars.APP_ID }}
+            app-id: 1129019
             private-key: ${{ secrets.GH_TOKEN }}
             owner: elsalvos-org
 
       - name: Use the token
         env:
-            app-id: ${{ vars.APP_ID }}
+            app-id: 1129019
             private-key: ${{ secrets.GH_TOKEN }}
             owner: elsalvos-org
         run: |
