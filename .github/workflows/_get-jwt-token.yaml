@@ -24,13 +24,13 @@ jobs:
         uses: actions/create-github-app-token@v1
         with:
           app-id: 1129019
-          private-key: ${{ secrets.GH_TOKEN }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: elsalvos-org
 
       - name: Use the token
         env:
           app-id: 1129019
-          private-key: ${{ secrets.GH_TOKEN }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: elsalvos-org
         run: |
           gh api octocat
