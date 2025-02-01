@@ -1,0 +1,31 @@
+name: get jwt token example
+run-name: get jwt token to Example
+
+on:
+  push:    
+    branches:      
+      - 'workflows'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  demo_app_authentication:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.GH_TOKEN }}
+
+      - name: Use the token
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          gh api octocat
