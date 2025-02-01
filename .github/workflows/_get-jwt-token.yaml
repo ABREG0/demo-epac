@@ -26,6 +26,8 @@ jobs:
 
       - name: Use the token
         env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+            app-id: ${{ vars.APP_ID }}
+            private-key: ${{ secrets.GH_TOKEN }}
+            owner: elsalvos-org
         run: |
           gh api octocat
