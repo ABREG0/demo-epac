@@ -323,7 +323,7 @@ jobs:
         run: |
           echo "backend-config=resource_group_name=[${{ env.remote_state_azure_resource_group_name }}] "
           if [[ "${cloud_provider}" == 'swa' ]]; then # other provider
-            echo "No supported"
+            echo "Not supported"
           elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \

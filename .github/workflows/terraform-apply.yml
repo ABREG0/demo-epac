@@ -225,6 +225,7 @@ jobs:
           apt-cache policy azure-cli
           sudo apt-get install -y --allow-downgrades azure-cli=${azcli_version}-1~${kernel}
           az version
+
       - name: Generate a token
         id: app-token
         uses: actions/create-github-app-token@v1
@@ -311,24 +312,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-            backend_optional_config=''
-
-            if [[ "${remote_state_swa_dynamodb_table}" != '' ]]; then
-              backend_optional_config='-backend-config=dynamodb_table=${{ env.remote_state_swa_dynamodb_table }} '
-            fi
-
-            if [[ "${remote_state_swa_kms_key_id}" != '' ]]; then
-              backend_optional_config+='-backend-config=kms_key_id=${{ env.remote_state_swa_kms_key_id }} '
-            fi
-
-            echo "backend_optional_config = ${backend_optional_config}"
-
-            terraform init \
-              -input=false ${backend_optional_config}\
-              -backend-config=bucket=${{ env.remote_state_swa_bucket }} \
-              -backend-config=encrypt=${{ env.remote_state_swa_encrypt }} \
-              -backend-config=region=${{ env.remote_state_swa_region }} \
-              -backend-config=key=${{ env.remote_state_key }}
+            echo "Not Supported"
           elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \
