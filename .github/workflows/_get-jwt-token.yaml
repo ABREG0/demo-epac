@@ -4,7 +4,7 @@ run-name: get jwt token to Example
 on:
   push:    
     branches:      
-      - 'workflows'
+      - 'workflows_not'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

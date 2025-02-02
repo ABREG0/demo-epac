@@ -94,75 +94,21 @@ jobs:
       #       }
       #     EOF
 
-      - name: to get jwt token
-        id: bash-get-jwt-token
-        run: | 
-          #!/usr/bin/env bash
-          set -o pipefail
-          client_id=${APP_ID} # Client ID as first argument
-          pem=${GH_TOKEN} # $( cat $2 ) # file path of the private key as second argument
-          now=$(date +%s)
-
-          iat=$((${now} - 60)) # Issues 60 seconds in the past
-          exp=$((${now} + 600)) # Expires 10 minutes in the future
-          
-          b64enc() { openssl base64 | tr -d '=' | tr '/+' '_-' | tr -d '\n'; }
-          header_json='{
-              "typ":"JWT",
-              "alg":"RS256"
-          }'
-          
-          # Header encode
-          header=$( echo -n "${header_json}" | b64enc )
-
-          payload_json="{
-              \"iat\":${iat},
-              \"exp\":${exp},
-              \"iss\":\"${client_id}\"
-          }"
-          # Payload encode
-          payload=$( echo -n "${payload_json}" | b64enc )
-
-          # Signature
-          header_payload="${header}"."${payload}"
-          signature=$(
-              openssl dgst -sha256 -sign <(echo -n "${pem}") \
-              <(echo -n "${header_payload}") | b64enc
-          )
-        
-          env:
-            app-id: ${{ vars.APP_ID }}
-            private-key: ${{ secrets.GH_TOKEN }}
-
-          # Create JWT
-          JWT="${header_payload}"."${signature}"
-          printf '%s\n' "JWT: $JWT"
-
-      - name: "Save GitHub App PEM"
-        id: github-app
-        run: |
-          echo '${private-key}<<EOF' >> $GITHUB_OUTPUT
-          echo "${PEM}" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-        env:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.GH_TOKEN }}
-      - name: GET JWT TOKEN FROM TF APP
-        id: get-jwt-token
-        run: |
-          curl --request POST \
-          --url "https://api.github.com/orgs/elsalvos-org/installations/60382007/access_tokens" \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer JWT" \
-          --header "X-GitHub-Api-Version: 2022-11-28"
-
-      - name: Generate GitHub App Token
-        id: generate-token
+      - name: Generate a token
+        id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{steps.github-app.outputs.app_pem}} # ${{ secrets.GH_TOKEN }}
+          app-id: 1129019
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: elsalvos-org
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: | 
+          echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        #   echo "user-id ${user-id}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       # - name: Configure Terraform provider network mirror protocol
       #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
@@ -180,6 +126,6 @@ jobs:
 
       - run: terraform init -input=false -backend=false
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - run: terraform validate
