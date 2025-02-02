@@ -319,9 +319,9 @@ jobs:
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          echo "-backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \"
+          echo "backend-config=resource_group_name=[${{ env.remote_state_azure_resource_group_name }}] "
           if [[ "${cloud_provider}" == 'swa' ]]; then # other provider
             echo "No supported"
           elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret

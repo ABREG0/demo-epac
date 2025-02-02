@@ -114,6 +114,8 @@ on:
         required: false
       GH_TOKEN: 
         required: true
+      APP_PRIVATE_KEY:
+        required: true
 
     outputs:
       audit_log:
@@ -138,6 +140,7 @@ jobs:
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
       TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
@@ -222,9 +225,17 @@ jobs:
           apt-cache policy azure-cli
           sudo apt-get install -y --allow-downgrades azure-cli=${azcli_version}-1~${kernel}
           az version
-
-      # - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
-
+      - name: Generate a token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ vars.OWNER_ORG_NAME }}
+  
+      - run: |
+          git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+    
       - name: Set plan name
         id: set_plan_name
         run: |
@@ -296,6 +307,8 @@ jobs:
       #     EOF
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
             backend_optional_config=''
