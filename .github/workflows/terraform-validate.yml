@@ -119,7 +119,8 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: ${{ vars.OWNER_ORG_NAME }}
 
-      # - run: git config --local url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+      - run: |
+          git config --local url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
 
       # - name: Initialize Terraform
       #   env:
