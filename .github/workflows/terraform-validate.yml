@@ -127,6 +127,8 @@ jobs:
       #       }
       #     EOF
 
+      - run: git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+
       - run: terraform init -input=false -backend=false
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
