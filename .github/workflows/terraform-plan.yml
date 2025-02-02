@@ -173,7 +173,7 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ "${cloud_provider}" != "swa" ]] && [[ "${cloud_provider}" != "azure" ]]; then
+          if [[ "[[ "${cloud_provider}" != "azure" ]]; then
             echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
             exit 1
           fi
@@ -188,7 +188,7 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform_version }}
 
-      - name: Get installed Azure CLI version
+      - name: Get installed azure CLI version
         id: installed_azcli
         if: ${{ env.cloud_provider == 'azure' }}
         run: |
@@ -196,7 +196,7 @@ jobs:
           echo "version = ${version}"
           echo "version=${version}" >> $GITHUB_OUTPUT
 
-      - name: Upgrade/Downgrade Azure CLI
+      - name: Upgrade/Downgrade azure CLI
         if: ${{ env.cloud_provider == 'azure' && inputs.azcli_version != steps.installed_azcli.outputs.version && inputs.azcli_version != 'latest' }}
         run: |
           if [ -z "${runner}" ]; then
@@ -230,9 +230,9 @@ jobs:
       - name: Set plan name
         id: set_plan_name
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-            plan_name="${remote_state_swa_state_folder}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
-          else # Azure
+          if [[ "${cloud_provider}" != 'azure' ]]; then # other cloud provider
+            plan_name="${remote_state_other_state_folder}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
+          else # azure
             plan_name="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
           fi
           echo "plan_name = $plan_name"
@@ -241,9 +241,9 @@ jobs:
       - name: Set backend config key
         run: |
           if [ -z "${remote_state_key}" ]; then
-            if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-              remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
-            else # Azure
+            if [[ "${cloud_provider}" != 'azure' ]]; then # other cloud provider
+              remote_state_key="${remote_state_other_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
+            else # azure
               remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
             fi
           fi
@@ -304,9 +304,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+          echo "-backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \"
+          echo "-backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \"
+          echo "-backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \"
+          echo "-backend-config=key=${{ env.remote_state_key }}"
+
+          if [[ "${cloud_provider}" != 'azure' ]]; then # other cloud provider
             echo "Not supported"
-          elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
+          elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # azure w/ client secret
             terraform init \
               -input=false \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
@@ -317,7 +322,7 @@ jobs:
               -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
               -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
               -backend-config=key=${{ env.remote_state_key }}
-          else # Azure w/ OIDC
+          else # azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
               -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
@@ -338,8 +343,8 @@ jobs:
             -input=false \
             -out=${{ env.plan_name }}
 
-      - name: Authenticate Azure CLI using OIDC
-        uses: Azure/login@v2
+      - name: Authenticate azure CLI using OIDC
+        uses: azure/login@v2
         if: ${{ env.cloud_provider == 'azure' && !inputs.run_plan_only && env.ARM_CLIENT_SECRET == '' }}
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}
@@ -349,12 +354,12 @@ jobs:
       - name: Store plan
         if: ${{ !inputs.run_plan_only }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+          if [[ "${cloud_provider}" == 'swa' ]]; then # other cloud provider
             echo 'Not supported... completed.'
-          else # Azure
+          else # azure
             echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}"...'
 
-            # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+            # Using azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
             if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
               az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
               az account set --subscription ${{ inputs.remote_state_azure_subscription_id }}
