@@ -173,11 +173,10 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ "[[ "${cloud_provider}" != "azure" ]]; then
-            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
+          if [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
             exit 1
           fi
-
       - name: Install CA bundle
         if: ${{ inputs.ca_bundle_file_path != '' }}
         run: |
