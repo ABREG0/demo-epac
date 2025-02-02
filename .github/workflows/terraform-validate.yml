@@ -120,7 +120,7 @@ jobs:
           owner: ${{ vars.OWNER_ORG_NAME }}
 
       - run: |
-          git config --local url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+          git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
 
       # - name: Initialize Terraform
       #   env:
