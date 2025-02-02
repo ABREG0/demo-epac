@@ -45,6 +45,8 @@ on:
         required: false
       GH_TOKEN:
         required: true
+      APP_PRIVATE_KEY:
+        required: true
 
 jobs:
   terraform:
@@ -56,6 +58,7 @@ jobs:
     env:
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
       TF_CLI_CONFIG_FILE: 'https://registry.terraform.io' #${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
       ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}

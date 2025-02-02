@@ -127,6 +127,8 @@ on:
         required: false
       GH_TOKEN:
         required: true
+      APP_PRIVATE_KEY:
+        required: true
 
 permissions:
   id-token: write
@@ -147,6 +149,7 @@ jobs:
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
       TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
@@ -318,7 +321,7 @@ jobs:
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.GH_TOKEN }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
           owner: elsalvos-org
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
