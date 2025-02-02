@@ -133,7 +133,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
-          terraform init
+          terraform init -input=false -backend=false
+
+      - run: terraform validate
+
       - run: terraform init -input=false -backend=false
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
