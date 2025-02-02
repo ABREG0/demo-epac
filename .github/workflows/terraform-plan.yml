@@ -173,7 +173,7 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ " [[ "${cloud_provider}" != "azure" ]]; then
+          if [[ " [[ "${cloud_provider}" == "other" ]]; then
             echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
             exit 1
           fi
