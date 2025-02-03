@@ -115,9 +115,9 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.tf_APP_ID }}
+          app-id: ${{ vars.TF_APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: ${{ vars.tf_OWNER_ORG_NAME }}
+          owner: ${{ vars.TF_OWNER_ORG_NAME }}
 
       - run: |
           git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
