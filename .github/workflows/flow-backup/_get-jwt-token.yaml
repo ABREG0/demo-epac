@@ -1,0 +1,53 @@
+name: get jwt token example
+run-name: get jwt token to Example
+
+on:
+  push:    
+    branches:      
+      - 'workflows_not'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  demo_app_authentication:
+    runs-on: ubuntu-latest
+    environment: 
+      name: sbx
+    steps:
+      - name: Generate a token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: 1129019
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: elsalvos-org
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: | 
+          echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        #   echo "user-id ${user-id}"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - run: |
+          echo "slug app: ${{ steps.app-token.outputs.app-slug }}"
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+      # git commands like commit work using the bot user
+
+    #   - run: |
+    #       git status
+        #   git add .
+        #   git commit -m "Auto-generated changes"
+        #   git push
+
+      - name: Use the token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh api octocat

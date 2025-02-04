@@ -1,0 +1,96 @@
+name: pipeline-destroy
+
+on:
+  workflow_call:
+    inputs:
+      azure_client_id:
+        required: false
+        type: string
+      azure_tenant_id:
+        required: false
+        type: string
+      cloud_provider:
+        required: true
+        type: string
+      environment_name:
+        required: false
+        type: string
+      optfile_path:
+        required: true
+        type: string
+      optfile_runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+      ref:
+        required: false
+        type: string
+        default: ""
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+
+    secrets:
+      AZ_CLIENT_SECRET:
+        required: false
+      CA_BUNDLE:
+        required: false
+      GH_TOKEN:
+        required: true
+      APP_PRIVATE_KEY:
+        required: true
+
+jobs:
+  read_optfile:
+    name: Read optfile
+    uses: ./.github/workflows/read-file.yml
+    with:
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      environment_name: ${{ inputs.environment_name }}
+      file_path: ${{ inputs.optfile_path }}
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.optfile_runner }}
+    secrets: inherit
+
+  destroy:
+    name: Destroy ${{ matrix.deployments.name }}
+    needs: [read_optfile]
+    uses: ./.github/workflows/terraform-destroy.yml
+    strategy:
+      fail-fast: false # Ensure that all Terraform commands execute to completion
+      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_apply) }}
+    with:
+      azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      branch_ref: ${{ needs.read_optfile.outputs.branch_ref }}
+      ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      environment_name: ${{ inputs.environment_name }}
+      job_name: ${{ matrix.deployments.name }}
+      ref: ${{ inputs.ref }}
+      remote_state_swa_assume_role_role_arn: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_arn }}
+      remote_state_swa_assume_role_role_session_name: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_session_name }}
+      remote_state_swa_bucket: ${{ needs.read_optfile.outputs.remote_state_swa_bucket }}
+      remote_state_swa_dynamodb_table: ${{ needs.read_optfile.outputs.remote_state_swa_dynamodb_table }}
+      remote_state_swa_encrypt: ${{ needs.read_optfile.outputs.remote_state_swa_encrypt == 'true' }}
+      remote_state_swa_kms_key_id: ${{ needs.read_optfile.outputs.remote_state_swa_kms_key_id }}
+      remote_state_swa_region: ${{ needs.read_optfile.outputs.remote_state_swa_region }}
+      remote_state_swa_state_folder: ${{ needs.read_optfile.outputs.remote_state_swa_state_folder }}
+      remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
+      remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
+      remote_state_azure_storage_account_name: ${{ needs.read_optfile.outputs.remote_state_azure_storage_account_name }}
+      remote_state_azure_subscription_id: ${{ needs.read_optfile.outputs.remote_state_azure_subscription_id }}
+      remote_state_key: ${{ matrix.deployments.remote_state_key }}
+      runner: ${{ matrix.deployments.runner }}
+      shared_tfvar_files: ${{ needs.read_optfile.outputs.shared_tfvar_files }}
+      shared_tfvar_values: ${{ needs.read_optfile.outputs.shared_tfvar_values }}
+      terraform_directory: ${{ matrix.deployments.path }}
+      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      tfvars: ${{ toJSON(matrix.deployments.tfvars) }}
+    secrets: inherit

@@ -1,0 +1,132 @@
+name: Run `terraform validate`
+
+on:
+  workflow_call:
+    inputs:
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      terraform_logging:
+        required: false
+        type: string
+        default: "off"
+      terraform_provider_network_mirror:
+        required: false
+        type: string
+        default: "" #"https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+      terraform_version:
+        required: false
+        type: string
+        default: "1.6.2"
+
+      ca_bundle_file_path:
+        required: false
+        type: string
+        default: ""
+      environment_name:
+        required: false
+        type: string
+      job_name:
+        required: false
+        type: string
+        default: default
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+
+    secrets:
+      CA_BUNDLE:
+        required: false
+      GH_TOKEN:
+        required: true
+      APP_PRIVATE_KEY:
+        required: true
+
+jobs:
+  terraform:
+    name: Validate ${{ inputs.job_name }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_directory }}
+    env:
+      CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      TF_CLI_CONFIG_FILE: 'https://registry.terraform.io' #${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      TF_LOG: ${{ inputs.terraform_logging }}
+      ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
+    environment:
+      name: ${{ inputs.environment_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Display environment name
+        run: |
+          echo "environment name ${{ inputs.environment_name }}"
+
+      - if: ${{ inputs.ca_bundle_file_path != '' }}
+        name: Install CA bundle
+        run: |
+          echo "Installing CA bundle to ${ca_bundle_file_path}"
+          echo "${CA_BUNDLE}" >> ${ca_bundle_file_path}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+
+      # - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
+
+      # - name: Configure Terraform provider network mirror protocol
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
+
+      - name: Generate a token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.TF_APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ vars.TF_OWNER_ORG_NAME }}
+
+      - run: |
+          git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+
+      - name: Initialize Terraform
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          terraform init -input=false -backend=false
+
+      - run: terraform validate
+
