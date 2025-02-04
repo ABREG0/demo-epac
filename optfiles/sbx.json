@@ -27,5 +27,6 @@
         "runner": "ubuntu-latest",
         "run_plan_only": false
       }
-    ]
+    ],
+    "terraform_provider_network_mirror": ""
   }

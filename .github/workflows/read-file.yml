@@ -54,24 +54,6 @@ on:
         value: ${{ jobs.read_optfile.outputs.destroy_pause_in_seconds }}
       push_git_tag:
         value: ${{ jobs.read_optfile.outputs.push_git_tag }}
-      remote_state_swa_assume_role_role_arn:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_assume_role_role_arn }}
-      remote_state_swa_assume_role_role_session_name:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_assume_role_role_session_name }}
-      remote_state_swa_bucket:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_bucket }}
-      remote_state_swa_dynamodb_table:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_dynamodb_table }}
-      remote_state_swa_encrypt:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_encrypt }}
-      remote_state_swa_kms_key_id:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_kms_key_id }}
-      remote_state_swa_plan_folder:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_plan_folder }}
-      remote_state_swa_region:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_region }}
-      remote_state_swa_state_folder:
-        value: ${{ jobs.read_optfile.outputs.remote_state_swa_state_folder }}
       remote_state_azure_plan_container_name:
         value: ${{ jobs.read_optfile.outputs.remote_state_azure_plan_container_name }}
       remote_state_azure_resource_group_name:
@@ -119,15 +101,6 @@ jobs:
       AZ_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
 
       # Remote State
-      remote_state_swa_assume_role_role_arn: tbd
-      remote_state_swa_assume_role_role_session_name: tbd
-      remote_state_swa_bucket: tbd
-      remote_state_swa_dynamodb_table: tbd
-      remote_state_swa_encrypt: true
-      remote_state_swa_kms_key_id: tbd
-      remote_state_swa_plan_folder: tbd
-      remote_state_swa_region: tbd
-      remote_state_swa_state_folder: tbd
       remote_state_azure_plan_container_name: tbd
       remote_state_azure_resource_group_name: tbd
       remote_state_azure_state_container_name: tbd
@@ -167,15 +140,6 @@ jobs:
       deployments_run_order_2_apply: ${{ env.deployments_run_order_2_apply }}
 
       # Remote State
-      remote_state_swa_assume_role_role_arn: ${{ env.remote_state_swa_assume_role_role_arn }}
-      remote_state_swa_assume_role_role_session_name: ${{ env.remote_state_swa_assume_role_role_session_name }}
-      remote_state_swa_bucket: ${{ env.remote_state_swa_bucket }}
-      remote_state_swa_dynamodb_table: ${{ env.remote_state_swa_dynamodb_table }}
-      remote_state_swa_encrypt: ${{ env.remote_state_swa_encrypt }}
-      remote_state_swa_plan_folder: ${{ env.remote_state_swa_plan_folder }}
-      remote_state_swa_kms_key_id: ${{ env.remote_state_swa_kms_key_id }}
-      remote_state_swa_region: ${{ env.remote_state_swa_region }}
-      remote_state_swa_state_folder: ${{ env.remote_state_swa_state_folder }}
       remote_state_azure_plan_container_name: ${{ env.remote_state_azure_plan_container_name }}
       remote_state_azure_resource_group_name: ${{ env.remote_state_azure_resource_group_name }}
       remote_state_azure_state_container_name: ${{ env.remote_state_azure_state_container_name }}
@@ -210,8 +174,8 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ "${cloud_provider}" != "swa" ]] && [[ "${cloud_provider}" != "azure" ]]; then
-            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
+          if [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
             exit 1
           fi
 
@@ -221,7 +185,39 @@ jobs:
             exit 0
           else
             echo "A configuration file was not found at the specified path: ${{ inputs.file_path }}"
-            echo 'Details on how to configure this file can be found at https://site.com/docs/devops/cicd/github-actions/how-to-guides/deploy-azure-iac/configure-optfile.html.'
+            echo 'Details on how to configure this file can be found at '
+            cat << EOF
+                {
+                    "terraform_version": "1.9.2",
+                    "branch_ref_override": "workflows", //branch or tag name
+                    "destroy_enabled": true,
+                    "uses_component_version_tag_value": false,
+                    "remote_state": {
+                      "azure": { //storage account backend state information
+                        "plan_container_name": "",
+                        "resource_group_name": "",
+                        "state_container_name": "",
+                        "storage_account_name": "",
+                        "storage_account_location": "",
+                        "subscription_id": "xxxxxxxxxxxxxx"
+                      }
+                    },
+                    "tfvars": {
+                      "files": [
+                        "tfvars/sbx.tfvars"
+                      ]
+                    },
+                    "deployments": [
+                      {
+                        "name": "sbx_name",
+                        "path": "loops/azapi_call", //location for terraform files
+                        "remote_state_key": "sbx.tfstate",
+                        "runner": "ubuntu-latest", //hosted or self-hosted
+                        "run_plan_only": false
+                      }
+                    ],
+                    "terraform_provider_network_mirror": ""
+                  }
             exit 1
           fi
 
@@ -281,8 +277,8 @@ jobs:
         run: |
           terraform_provider_network_mirror=${{ steps.yaml_read_optfile.outputs['terraform_provider_network_mirror'] }}
 
-          if [[ "${terraform_provider_network_mirror}" == '' ]]; then
-            terraform_provider_network_mirror="https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+          if [[ "${terraform_provider_network_mirror}" != '' ]]; then
+            terraform_provider_network_mirror=${terraform_provider_network_mirror} #"https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/" # set internal terraform provider
           fi
 
           echo "terraform_provider_network_mirror = ${terraform_provider_network_mirror}"
@@ -328,33 +324,6 @@ jobs:
       - name: YAML - Set `remote_state` object
         if: ${{ env.file_is_json == 'false' }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then
-            remote_state_azure_plan_container_name=''
-            remote_state_azure_resource_group_name=''
-            remote_state_azure_state_container_name=''
-            remote_state_azure_storage_account_location=''
-            remote_state_azure_storage_account_name=''
-            remote_state_azure_subscription_id=''
-
-            remote_state_swa_assume_role_role_arn=${{ steps.yaml_read_optfile.outputs['remote_state.swa.assume_role.role_arn'] }}
-            remote_state_swa_bucket=${{ steps.yaml_read_optfile.outputs['remote_state.swa.bucket'] }}
-            remote_state_swa_dynamodb_table=${{ steps.yaml_read_optfile.outputs['remote_state.swa.dynamodb_table'] }}
-            remote_state_swa_kms_key_id=${{ steps.yaml_read_optfile.outputs['remote_state.swa.kms_key_id'] }}
-            remote_state_swa_plan_folder=${{ steps.yaml_read_optfile.outputs['remote_state.swa.plan_folder'] }}
-            remote_state_swa_region=${{ steps.yaml_read_optfile.outputs['remote_state.swa.region'] }}
-            remote_state_swa_state_folder=${{ steps.yaml_read_optfile.outputs['remote_state.swa.state_folder'] }}
-
-            remote_state_swa_assume_role_role_session_name=${{ steps.yaml_read_optfile.outputs['remote_state.swa.assume_role.role_session_name'] }}
-            if [[ "${remote_state_swa_assume_role_role_session_name}" == '' ]]; then
-              remote_state_swa_assume_role_role_session_name='GitHubActions'
-            fi
-
-            remote_state_swa_encrypt=${{ steps.yaml_read_optfile.outputs['remote_state.swa.encrypt'] }}
-            if [[ "${remote_state_swa_encrypt}" == '' ]]; then
-              remote_state_swa_encrypt=true
-            fi
-          fi
-
           if [[ "${cloud_provider}" == 'azure' ]]; then
             remote_state_azure_plan_container_name=${{ steps.yaml_read_optfile.outputs['remote_state.azure.plan_container_name'] }}
             remote_state_azure_resource_group_name=${{ steps.yaml_read_optfile.outputs['remote_state.azure.resource_group_name'] }}
@@ -362,44 +331,7 @@ jobs:
             remote_state_azure_storage_account_location=${{ steps.yaml_read_optfile.outputs['remote_state.azure.storage_account_location'] }}
             remote_state_azure_storage_account_name=${{ steps.yaml_read_optfile.outputs['remote_state.azure.storage_account_name'] }}
             remote_state_azure_subscription_id=${{ steps.yaml_read_optfile.outputs['remote_state.azure.subscription_id'] }}
-
-            remote_state_swa_assume_role_role_arn=''
-            remote_state_swa_assume_role_role_session_name=''
-            remote_state_swa_bucket=''
-            remote_state_swa_dynamodb_table=''
-            remote_state_swa_encrypt=''
-            remote_state_swa_kms_key_id=''
-            remote_state_swa_plan_folder=''
-            remote_state_swa_region=''
-            remote_state_swa_state_folder=''
           fi
-
-          echo "remote_state_swa_assume_role_role_arn = ${remote_state_swa_assume_role_role_arn}"
-          echo "remote_state_swa_assume_role_role_arn=${remote_state_swa_assume_role_role_arn}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_assume_role_role_session_name = ${remote_state_swa_assume_role_role_session_name}"
-          echo "remote_state_swa_assume_role_role_session_name=${remote_state_swa_assume_role_role_session_name}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_bucket = ${remote_state_swa_bucket}"
-          echo "remote_state_swa_bucket=${remote_state_swa_bucket}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_dynamodb_table = ${remote_state_swa_dynamodb_table}"
-          echo "remote_state_swa_dynamodb_table=${remote_state_swa_dynamodb_table}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_encrypt = ${remote_state_swa_encrypt}"
-          echo "remote_state_swa_encrypt=${remote_state_swa_encrypt}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_kms_key_id = ${remote_state_swa_kms_key_id}"
-          echo "remote_state_swa_kms_key_id=${remote_state_swa_kms_key_id}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_plan_folder = ${remote_state_swa_plan_folder}"
-          echo "remote_state_swa_plan_folder=${remote_state_swa_plan_folder}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_region = ${remote_state_swa_region}"
-          echo "remote_state_swa_region=${remote_state_swa_region}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_state_folder = ${remote_state_swa_state_folder}"
-          echo "remote_state_swa_state_folder=${remote_state_swa_state_folder}" >> $GITHUB_ENV
 
           echo "remote_state_azure_plan_container_name = ${remote_state_azure_plan_container_name}"
           echo "remote_state_azure_plan_container_name=${remote_state_azure_plan_container_name}" >> $GITHUB_ENV
@@ -615,8 +547,8 @@ jobs:
           terraform_provider_network_mirror=$(cat ${file_path} | jq -r .terraform_provider_network_mirror)
 
           if [[ "${terraform_provider_network_mirror}" == 'null' ]]; then
-            terraform_provider_network_mirror='https://registry.terraform.io'
-            # "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+            terraform_provider_network_mirror=${terraform_provider_network_mirror} #'https://registry.terraform.io'
+            # "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/" #set terraform private provider repo
           fi
 
           echo "terraform_provider_network_mirror = ${terraform_provider_network_mirror}"
@@ -668,44 +600,7 @@ jobs:
             remote_state_azure_storage_account_location=$(echo $remote_state_azure | jq -r .storage_account_location)
             remote_state_azure_storage_account_name=$(echo $remote_state_azure | jq -r .storage_account_name)
             remote_state_azure_subscription_id=$(echo $remote_state_azure | jq -r .subscription_id)
-
-            remote_state_swa_assume_role_role_arn=''
-            remote_state_swa_assume_role_role_session_name=''
-            remote_state_swa_bucket=''
-            remote_state_swa_dynamodb_table=''
-            remote_state_swa_encrypt=''
-            remote_state_swa_kms_key_id=''
-            remote_state_swa_plan_folder=''
-            remote_state_swa_region=''
-            remote_state_swa_state_folder=''
           fi
-
-          echo "remote_state_swa_assume_role_role_arn = ${remote_state_swa_assume_role_role_arn}"
-          echo "remote_state_swa_assume_role_role_arn=${remote_state_swa_assume_role_role_arn}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_assume_role_role_session_name = ${remote_state_swa_assume_role_role_session_name}"
-          echo "remote_state_swa_assume_role_role_session_name=${remote_state_swa_assume_role_role_session_name}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_bucket = ${remote_state_swa_bucket}"
-          echo "remote_state_swa_bucket=${remote_state_swa_bucket}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_dynamodb_table = ${remote_state_swa_dynamodb_table}"
-          echo "remote_state_swa_dynamodb_table=${remote_state_swa_dynamodb_table}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_encrypt = ${remote_state_swa_encrypt}"
-          echo "remote_state_swa_encrypt=${remote_state_swa_encrypt}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_kms_key_id = ${remote_state_swa_kms_key_id}"
-          echo "remote_state_swa_kms_key_id=${remote_state_swa_kms_key_id}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_plan_folder = ${remote_state_swa_plan_folder}"
-          echo "remote_state_swa_plan_folder=${remote_state_swa_plan_folder}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_region = ${remote_state_swa_region}"
-          echo "remote_state_swa_region=${remote_state_swa_region}" >> $GITHUB_ENV
-
-          echo "remote_state_swa_state_folder = ${remote_state_swa_state_folder}"
-          echo "remote_state_swa_state_folder=${remote_state_swa_state_folder}" >> $GITHUB_ENV
 
           echo "remote_state_azure_plan_container_name = ${remote_state_azure_plan_container_name}"
           echo "remote_state_azure_plan_container_name=${remote_state_azure_plan_container_name}" >> $GITHUB_ENV
