@@ -193,31 +193,17 @@ jobs:
           echo "version = ${version}"
           echo "version=${version}" >> $GITHUB_OUTPUT
 
-      - name: Upgrade/Downgrade Azure CLI
-        if: ${{ env.cloud_provider == 'azure' && inputs.azcli_version != steps.installed_azcli.outputs.version && inputs.azcli_version != 'latest' }}
-        run: |
-          if [ -z "${runner}" ]; then
-            kernel='jammy'
-          # elif [[ "${runner}" == 'ubuntu-latest' ]] || [[ "${runner}" == 'runnerstage' ]]; then
-          #   kernel='focal'
-          else
-            kernel='jammy'
-          fi
-
-          sudo apt-get update
-          sudo apt-get install -y ca-certificates curl apt-transport-https lsb-release gnupg
-          sudo mkdir -p /etc/apt/keyrings
-          curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/microsoft.gpg > /dev/null
-          sudo chmod go+r /etc/apt/keyrings/microsoft.gpg
-          AZ_REPO=$(lsb_release -cs)
-          echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://repo1.site.com/artifactory/microsoft-azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
-          sudo apt-get update
-          apt-cache policy azure-cli
-          sudo apt-get install -y --allow-downgrades azure-cli=${azcli_version}-1~${kernel}
-          az version
-
-      - run: git config --global url."https://oauth2:${GH_TOKEN}@github.com".insteadOf https://github.com
-
+      - name: Generate a token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.TF_APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ vars.TF_OWNER_ORG_NAME }}
+    
+      - run: |
+          git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+    
       - name: Set backend config key
         run: |
           if [ -z "${remote_state_key}" ]; then
@@ -266,21 +252,23 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
-      - name: Configure Terraform provider network mirror protocol
-        if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-        run: |
-          cat <<EOF > .terraformrc
-            provider_installation {
-              direct {
-                exclude = ["registry.terraform.io/*/*"]
-              }
-              network_mirror {
-                url = "${{ inputs.terraform_provider_network_mirror }}"
-              }
-            }
-          EOF
+      # - name: Configure Terraform provider network mirror protocol
+      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
+      #   run: |
+      #     cat <<EOF > .terraformrc
+      #       provider_installation {
+      #         direct {
+      #           exclude = ["registry.terraform.io/*/*"]
+      #         }
+      #         network_mirror {
+      #           url = "${{ inputs.terraform_provider_network_mirror }}"
+      #         }
+      #       }
+      #     EOF
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
             backend_optional_config=''
