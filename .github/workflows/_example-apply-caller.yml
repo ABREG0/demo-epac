@@ -37,18 +37,18 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
 
-  # destroy:
-  #   name: Apply ${{ inputs.version }} to sbx
-  #   # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
-  #   uses: ./.github/workflows/pipeline-destroy.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
-  #   with:
-  #     cloud_provider: azure
-  #     azure_client_id: f69cdf15-340f-4e53-8a28-b6f8a4d9a21d # ghe-npd-action
-  #     azure_tenant_id: 81eb6a17-7dfc-44e0-abf2-9ec81d33578b
-  #     environment_name: sbx # <NDP_or_PRO>
-  #     optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
-  #     optfile_runner: ubuntu-latest # ubuntu-latest 
-  #     ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
-  #   secrets:
-  #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #     APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+  destroy:
+    name: Destroy ${{ inputs.version }} to sbx
+    # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
+    uses: ./.github/workflows/pipeline-destroy.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
+    with:
+      cloud_provider: azure
+      azure_client_id: f69cdf15-340f-4e53-8a28-b6f8a4d9a21d # ghe-npd-action
+      azure_tenant_id: 81eb6a17-7dfc-44e0-abf2-9ec81d33578b
+      environment_name: sbx # <NDP_or_PRO>
+      optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
+      optfile_runner: ubuntu-latest # ubuntu-latest 
+      ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
