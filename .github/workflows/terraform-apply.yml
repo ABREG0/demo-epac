@@ -168,7 +168,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
-          path: repo1
+          # path: repo1
 
       - name: Validate `cloud_provider` input
         run: |
@@ -366,20 +366,20 @@ jobs:
 
           - name: Make changes in Repository 1
           run: |
-            cd repo1  # Navigate to the first repository's folder
+            # cd repo1  # Navigate to the first repository's folder
             echo "${{ env.remote_state_key }} This is a new change in Repository 1." > ${{ env.remote_state_key }}.txt
             git add new-file.txt
     
       - name: Commit changes in Repository 1
         run: |
-          cd repo1  # Navigate to the first repository's folder
+          # cd repo1  # Navigate to the first repository's folder
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Automated changes by GitHub Actions in Repository 1"
   
       - name: Push branch to remote in Repository 1
         run: |
-          cd repo1  # Navigate to the first repository's folder
+          # cd repo1  # Navigate to the first repository's folder
           git push origin ${{ steps.create-branch.outputs.branch_name }}
   
       - name: Create Pull Request for Repository 1
