@@ -38,7 +38,7 @@ jobs:
       APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
 
   destroy:
-    name: Apply ${{ inputs.version }} to sbx
+    name: destroy ${{ inputs.version }} to sbx
     # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
     uses: ./.github/workflows/pipeline-destroy.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
     with:
