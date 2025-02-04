@@ -168,6 +168,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
+          path: repo1
 
       - name: Validate `cloud_provider` input
         run: |
@@ -274,20 +275,6 @@ jobs:
             az storage blob download --auth-mode login --file "${{ env.plan_name }}" --account-name ${remote_state_azure_storage_account_name} --container-name ${remote_state_azure_plan_container_name} --name ${{ env.plan_name }}
           fi
 
-      # - name: Configure Terraform provider network mirror protocol
-      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-      #   run: |
-      #     cat <<EOF > .terraformrc
-      #       provider_installation {
-      #         direct {
-      #           exclude = ["registry.terraform.io/*/*"]
-      #         }
-      #         network_mirror {
-      #           url = "${{ inputs.terraform_provider_network_mirror }}"
-      #         }
-      #       }
-      #     EOF
-
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -366,3 +353,81 @@ jobs:
           else
             az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.remote_state_azure_state_container_name }}-${{ env.branch_ref }}-${{ env.job_name }}-${{ github.run_id }}-*.tfplan
           fi
+
+######### create branch, file, commit and PR
+      - name: Create new branch in Repository 1
+        id: create-branch
+        run: |
+          cd repo1  # Navigate to the first repository's folder
+          branch_name="feature/update-$(date +%s)"
+          echo "New branch name: $branch_name"
+          git checkout -b $branch_name
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT  # Set output using the new method
+
+          - name: Make changes in Repository 1
+          run: |
+            cd repo1  # Navigate to the first repository's folder
+            echo "${{ env.remote_state_key }} This is a new change in Repository 1." > ${{ env.remote_state_key }}.txt
+            git add new-file.txt
+    
+      - name: Commit changes in Repository 1
+        run: |
+          cd repo1  # Navigate to the first repository's folder
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Automated changes by GitHub Actions in Repository 1"
+  
+      - name: Push branch to remote in Repository 1
+        run: |
+          cd repo1  # Navigate to the first repository's folder
+          git push origin ${{ steps.create-branch.outputs.branch_name }}
+  
+      - name: Create Pull Request for Repository 1
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.create-branch.outputs.branch_name }}
+          base: main  # Target branch for the PR
+          title: "Automated PR: Updates from GitHub Actions in Repository 1"
+          body: "This PR contains automated changes made by GitHub Actions in Repository 1."
+          draft: false  # Set to true if you want a draft PR
+          labels: automation  # Optional: Add labels to the PR
+  
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update && sudo apt-get install -y gh
+  
+      - name: Authenticate GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+  
+      - name: Query PR Information for Repository 1
+        id: query-pr
+        run: |
+          pr_number=${{ steps.create-pr.outputs.pull-request-number }}
+          pr_info=$(gh pr view $pr_number --json number,title,body,comments)
+          echo "PR Info: $pr_info"
+  
+          pr_id=$(echo "$pr_info" | jq -r '.number')
+          pr_title=$(echo "$pr_info" | jq -r '.title')
+          pr_body=$(echo "$pr_info" | jq -r '.body')
+          pr_comments=$(echo "$pr_info" | jq -r '.comments')
+  
+          echo "PR ID: $pr_id"
+          echo "PR Title: $pr_title"
+          echo "PR Description: $pr_body"
+          echo "PR Comments: $pr_comments"
+  
+          # Set outputs using the new method
+          echo "pr_id=$pr_id" >> $GITHUB_OUTPUT
+          echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
+          echo "pr_body=$pr_body" >> $GITHUB_OUTPUT
+          echo "pr_comments=$pr_comments" >> $GITHUB_OUTPUT
+  
+      - name: Use PR Information
+        run: |
+          echo "PR ID: ${{ steps.query-pr.outputs.pr_id }}"
+          echo "PR Title: ${{ steps.query-pr.outputs.pr_title }}"
+          echo "PR Description: ${{ steps.query-pr.outputs.pr_body }}"
+          echo "PR Comments: ${{ steps.query-pr.outputs.pr_comments }}"
