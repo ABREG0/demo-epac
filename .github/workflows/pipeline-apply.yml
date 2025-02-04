@@ -110,15 +110,6 @@ jobs:
       job_name: ${{ matrix.deployments.name }}
       environment_name: ${{ inputs.environment_name }}
       ref: ${{ inputs.ref }}
-      remote_state_swa_assume_role_role_arn: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_arn }}
-      remote_state_swa_assume_role_role_session_name: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_session_name }}
-      remote_state_swa_bucket: ${{ needs.read_optfile.outputs.remote_state_swa_bucket }}
-      remote_state_swa_dynamodb_table: ${{ needs.read_optfile.outputs.remote_state_swa_dynamodb_table }}
-      remote_state_swa_encrypt: ${{ needs.read_optfile.outputs.remote_state_swa_encrypt == 'true' }}
-      remote_state_swa_kms_key_id: ${{ needs.read_optfile.outputs.remote_state_swa_kms_key_id }}
-      remote_state_swa_plan_folder: ${{ needs.read_optfile.outputs.remote_state_swa_plan_folder }}
-      remote_state_swa_state_folder: ${{ needs.read_optfile.outputs.remote_state_swa_state_folder }}
-      remote_state_swa_region: ${{ needs.read_optfile.outputs.remote_state_swa_region }}
       remote_state_azure_plan_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_plan_container_name }}
       remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
       remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
@@ -155,15 +146,6 @@ jobs:
       environment_name: ${{ inputs.environment_name }}
       job_name: ${{ matrix.deployments.name }}
       ref: ${{ inputs.ref }}
-      remote_state_swa_assume_role_role_arn: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_arn }}
-      remote_state_swa_assume_role_role_session_name: ${{ needs.read_optfile.outputs.remote_state_swa_assume_role_role_session_name }}
-      remote_state_swa_bucket: ${{ needs.read_optfile.outputs.remote_state_swa_bucket }}
-      remote_state_swa_dynamodb_table: ${{ needs.read_optfile.outputs.remote_state_swa_dynamodb_table }}
-      remote_state_swa_encrypt: ${{ needs.read_optfile.outputs.remote_state_swa_encrypt == 'true' }}
-      remote_state_swa_kms_key_id: ${{ needs.read_optfile.outputs.remote_state_swa_kms_key_id }}
-      remote_state_swa_plan_folder: ${{ needs.read_optfile.outputs.remote_state_swa_plan_folder }}
-      remote_state_swa_region: ${{ needs.read_optfile.outputs.remote_state_swa_region }}
-      remote_state_swa_state_folder: ${{ needs.read_optfile.outputs.remote_state_swa_state_folder }}
       remote_state_azure_plan_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_plan_container_name }}
       remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
       remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}

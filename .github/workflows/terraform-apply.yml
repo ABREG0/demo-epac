@@ -153,15 +153,6 @@ jobs:
       plan_name: ''
       runner: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner }}
 
-      remote_state_swa_assume_role_role_arn: ${{ inputs.remote_state_swa_assume_role_role_arn }}
-      remote_state_swa_assume_role_role_session_name: ${{ inputs.remote_state_swa_assume_role_role_session_name }}
-      remote_state_swa_bucket: ${{ inputs.remote_state_swa_bucket }}
-      remote_state_swa_dynamodb_table: ${{ inputs.remote_state_swa_dynamodb_table }}
-      remote_state_swa_encrypt: ${{ inputs.remote_state_swa_encrypt }}
-      remote_state_swa_kms_key_id: ${{ inputs.remote_state_swa_kms_key_id }}
-      remote_state_swa_plan_folder: ${{ inputs.remote_state_swa_plan_folder }}
-      remote_state_swa_region: ${{ inputs.remote_state_swa_region }}
-      remote_state_swa_state_folder: ${{ inputs.remote_state_swa_state_folder }}
       remote_state_azure_plan_container_name: ${{ inputs.remote_state_azure_plan_container_name }}
       remote_state_azure_resource_group_name: ${{ inputs.remote_state_azure_resource_group_name }}
       remote_state_azure_state_container_name: ${{ inputs.remote_state_azure_state_container_name }}
@@ -180,8 +171,8 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ "${cloud_provider}" != "swa" ]] && [[ "${cloud_provider}" != "azure" ]]; then
-            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
+          if [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
             exit 1
           fi
 
@@ -240,8 +231,8 @@ jobs:
       - name: Set plan name
         id: set_plan_name
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-            plan_name="${remote_state_swa_state_folder}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
+          if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
+            echo "NOT supported"
           else # Azure
             plan_name="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
           fi
@@ -251,8 +242,8 @@ jobs:
       - name: Set backend config key
         run: |
           if [ -z "${remote_state_key}" ]; then
-            if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-              remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
+            if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
+              echo "NOT supported"
             else # Azure
               remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
             fi
@@ -270,18 +261,8 @@ jobs:
 
       - name: Retrieve plan
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-            echo 'Retrieving "${{ env.plan_name }}" plan file from S3 Bucket...'
-
-            upload_options=''
-            if [[ "${remote_state_swa_kms_key_id}" != '' ]]; then
-              upload_options='--sse swa:kms --sse-kms-key-id ${{ env.remote_state_swa_kms_key_id }}'
-            elif [[ "${remote_state_swa_encrypt}" == 'true' ]]; then
-              upload_options='--sse AES256'
-            fi
-            echo "upload_options = ${upload_options}"
-
-            swa s3 cp "s3://${{ env.remote_state_swa_bucket }}/${{ env.remote_state_swa_plan_folder }}/${{ env.plan_name }}" "${{ env.plan_name }}" ${upload_options}
+          if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
+            echo "NOT supported"
           else # Azure
             echo 'Retrieving "${{ env.plan_name }}" plan file from "${{ env.remote_state_azure_plan_container_name }}" Storage Container...'
             # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
@@ -311,7 +292,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
+          if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
             echo "Not Supported"
           elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
@@ -380,8 +361,8 @@ jobs:
 
       - name: Delete stored plans
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then
-            swa s3 rm s3://${{ env.remote_state_swa_bucket }}/ --recursive --exclude "*" --include "${{ env.remote_state_swa_plan_folder }}/${{ env.remote_state_swa_state_folder }}-${{ env.branch_ref }}-${{ env.job_name }}-${{ github.run_id }}-*"
+          if [[ "${cloud_provider}" != 'azure' ]]; then
+            echo "NOT supported"
           else
             az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.remote_state_azure_state_container_name }}-${{ env.branch_ref }}-${{ env.job_name }}-${{ github.run_id }}-*.tfplan
           fi
