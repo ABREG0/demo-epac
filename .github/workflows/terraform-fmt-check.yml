@@ -63,13 +63,14 @@ jobs:
           echo "New branch name: $branch_name"
           git checkout -b $branch_name
           git branch
-          echo "branch_name=$branch_name" >> $GITHUB_ENV  # Set output using the new method
+          echo "branch_name = $branch_name"
+          echo "branch_name=${branch_name}" >> $GITHUB_ENV  # Set output using the new method
 
-          - name: Make changes in Repository 1
-          run: |
-            # cd repo1  # Navigate to the first repository's folder
-            echo "${{ env.remote_state_key }} This is a new change in Repository 1." > ${{ env.remote_state_key }}.txt
-            git add new-file.txt
+      - name: Make changes in Repository 1
+        run: |
+          # cd repo1  # Navigate to the first repository's folder
+          echo "${{ env.remote_state_key }} This is a new change in Repository 1." > ${{ env.remote_state_key }}.txt
+          git add new-file.txt
 
       - name: Commit changes in Repository 1
         run: |
