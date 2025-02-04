@@ -51,4 +51,4 @@ jobs:
       ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
