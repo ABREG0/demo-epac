@@ -186,7 +186,7 @@ jobs:
           else
             echo "A configuration file was not found at the specified path: ${{ inputs.file_path }}"
             echo 'Details on how to configure this file can be found at '
-            cat << EOF
+            echo '
                 {
                     "terraform_version": "1.9.2",
                     "branch_ref_override": "workflows", //branch or tag name
@@ -218,7 +218,7 @@ jobs:
                     ],
                     "terraform_provider_network_mirror": ""
                   }
-            EOF
+            '
             exit 1
           fi
 
