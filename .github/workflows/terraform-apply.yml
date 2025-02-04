@@ -358,7 +358,11 @@ jobs:
       - name: Create new branch in Repository 1
         id: create-branch
         run: |
-          cd repo1  # Navigate to the first repository's folder
+          echo "current locatio "
+          pwd
+          echo "run ls"
+          ls
+          # cd repo1  # Navigate to the first repository's folder
           branch_name="feature/update-$(date +%s)"
           echo "New branch name: $branch_name"
           git checkout -b $branch_name
