@@ -218,6 +218,7 @@ jobs:
                     ],
                     "terraform_provider_network_mirror": ""
                   }
+            EOF
             exit 1
           fi
 
