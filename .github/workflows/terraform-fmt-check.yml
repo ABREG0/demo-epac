@@ -86,8 +86,8 @@ jobs:
       - name: Push branch to remote in Repository 1
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          git push --set-upstream origin ${{ steps.create-branch.outputs.branch_name }}
-          git push origin ${{ steps.create-branch.outputs.branch_name }}
+          git push --set-upstream origin '${{ steps.create-branch.outputs.branch_name }}'
+          git push origin '${{ steps.create-branch.outputs.branch_name }}'
 
       - name: Create Pull Request for Repository 1
         id: create-pr
