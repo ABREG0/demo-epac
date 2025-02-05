@@ -90,17 +90,21 @@ jobs:
           git push --set-upstream origin '${{ env.branch_name }}'
           git push origin '${{ env.branch_name }}'
 
-      - name: Create Pull Request for Repository 1
-        id: create-pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ env.branch_name }}
-          base: master  # Target branch for the PR
-          title: "Automated PR: Updates from GitHub Actions in Repository 1"
-          body: "This PR contains automated changes made by GitHub Actions in Repository 1."
-          draft: false  # Set to true if you want a draft PR
-          labels: automation  # Optional: Add labels to the PR
+      - name: create pull request
+        run: gh pr create -B master -H ${{ env.branch_name }} --title 'Merge ${{ env.branch_name }} into base_branch' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create Pull Request for Repository 1
+      #   id: create-pr
+      #   uses: peter-evans/create-pull-request@v5
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ env.branch_name }}
+      #     base: master  # Target branch for the PR
+      #     title: "Automated PR: Updates from GitHub Actions in Repository 1"
+      #     body: "This PR contains automated changes made by GitHub Actions in Repository 1."
+      #     draft: false  # Set to true if you want a draft PR
+      #     labels: automation  # Optional: Add labels to the PR
 
       - name: Install GitHub CLI
         run: |
