@@ -95,7 +95,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.branch_name }}
-          base: main  # Target branch for the PR
+          base: master  # Target branch for the PR
           title: "Automated PR: Updates from GitHub Actions in Repository 1"
           body: "This PR contains automated changes made by GitHub Actions in Repository 1."
           draft: false  # Set to true if you want a draft PR
