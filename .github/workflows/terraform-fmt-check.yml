@@ -86,15 +86,15 @@ jobs:
       - name: Push branch to remote in Repository 1
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          git push --set-upstream origin '${{ steps.create-branch.outputs.branch_name }}'
-          git push origin '${{ steps.create-branch.outputs.branch_name }}'
+          git push --set-upstream origin '${{ env.branch_name }}'
+          git push origin '${{ env.branch_name }}'
 
       - name: Create Pull Request for Repository 1
         id: create-pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ steps.create-branch.outputs.branch_name }}
+          branch: ${{ env.branch_name }}
           base: main  # Target branch for the PR
           title: "Automated PR: Updates from GitHub Actions in Repository 1"
           body: "This PR contains automated changes made by GitHub Actions in Repository 1."
