@@ -74,7 +74,7 @@ jobs:
         run: |
           # cd repo1  # Navigate to the first repository's folder
           echo "${{ inputs.terraform_directory }} This is a new change in Repository 1." > newFile.txt
-          git add new-file.txt
+          git add newFile.txt
 
       - name: Commit changes in Repository 1
         run: |
