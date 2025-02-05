@@ -51,10 +51,14 @@ jobs:
       - run: terraform fmt -check -recursive
 
 ######### create branch, file, commit and PR
+      
+      - name: List of the GitHub Actions environment variables on Windows
+        run: env
       - name: Create new branch in Repository 1
         id: create-branch
         run: |
-          echo "current locatio "
+          echo 'repo path: [${{ github.workspace }}]'
+          echo "current location "
           pwd
           echo "run ls"
           ls
@@ -69,7 +73,7 @@ jobs:
       - name: Make changes in Repository 1
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          echo "${{ env.remote_state_key }} This is a new change in Repository 1." > ${{ env.remote_state_key }}.txt
+          echo "${{ inputs.terraform_directory }} This is a new change in Repository 1." > newFile.txt
           git add new-file.txt
 
       - name: Commit changes in Repository 1
