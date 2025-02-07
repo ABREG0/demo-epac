@@ -80,7 +80,7 @@ jobs:
       - name: Display paload
         id: get-paload
         run: |
-          echo "${{ inputs.json_payload }}"
+          echo "${{ github.event.inputs.json_payload }}"
 
       - name: Get GitHub App User ID
         id: get-user-id
