@@ -1,4 +1,9 @@
 on:
+  push:    
+    branches:      
+      - 'vending-001'
+    # paths:
+    #   - 'workload/build/**/*.yml'
   workflow_dispatch:
     inputs:
       logLevel:
