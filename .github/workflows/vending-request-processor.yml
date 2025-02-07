@@ -96,7 +96,55 @@ jobs:
     name: json processor
     uses: ./.github/workflows/vending-request-processor1.yml
     with:
-      json_payload: ${{ inputs.json_payload }}
+      json_payload: |
+                      {
+                        "request_id": "auto-generated",
+                        "global_id": "blink6",
+                        "project_name": "my new blink6 project",
+                        "environment": "Automation Cloud",
+                        "subscription_configuration": "Ring_2, Ring_3, Ring_5",
+                        "application_workload_name": "blink6",
+                        "geographic_area": "us",
+                        "default_resource_groups": 2,
+                        "request_custom_resource_groups": [
+                          "azr-blink6-rg-01",
+                          "azr-blink6-rg-02"
+                        ],
+                        "workload_type": "storage",
+                        "security_zone": "intranet",
+                        "network_peering": true,
+                        "confidential_data_classification": false,
+                        "team_name": "blink6 team",
+                        "tags": {
+                          "Application": "blink6",
+                          "BusinessStream": "blink6",
+                          "CostCenter": "123456",
+                          "Customer": "blink6",
+                          "UserGroup": "blink6"
+                        },
+                        "contact_email_address": "requestor.owner@domain.com",
+                        "alternative_email_addresses": [
+                          "team1@domain.com",
+                          "email2@domain.com"
+                        ],
+                        "azure_devOps_project_URLs": "https://blink6.com",
+                        "aad_groups": {
+                          "owner": "xxxxx-xxxxx-xxxxx-xxxxx",
+                          "team": "yyyyy-yyyyy-yyyyy-yyyyy",
+                          "reader": "zzzzz-zzzzz-zzzzz-zzzzz"
+                        },
+                        "budgets": {
+                          "budget": {
+                            "budget_amount": 8000,
+                            "budget_occurrence": "monthly",
+                            "budget_threshold": 800,
+                            "budget_notification_emails": [
+                              "email_1@domain.com",
+                              "email_2@domain.com"
+                            ]
+                          }
+                        }
+                      }
       environment_name: ${{ inputs.environment_name }}
       loglevel: ${{ inputs.loglevel }}
       ref: ${{ inputs.ref }}

@@ -1,5 +1,5 @@
 
-name: pipeline-apply
+name: processor
 
 on:
   workflow_call:
@@ -28,8 +28,8 @@ permissions:
     pull-requests: write
     
 jobs:
-  read_optfile:
-    name: Read optfile
+  processor_job:
+    name: processor job
     runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     continue-on-error: false
     env:
