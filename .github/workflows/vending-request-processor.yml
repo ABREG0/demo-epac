@@ -91,21 +91,25 @@ jobs:
           echo '##############################################'
           echo 'using events [${{ github.event.inputs.json_payload1.body }}]'
           echo '##############################################'
-          echo 'one liner [${{ inputs.json_payload1 }}]'
+          echo 'one liner [${json_payload1}]'
           echo '##############################################'
+        env:
+          json_payload1 : ${{ inputs.json_payload1 }}
 
       - name: Display paload
         id: get-paload
         run: |
           echo '##############################################'
           echo 'echo payload /
-                [${{ inputs.json_payload.body }}]
+                [${json_payload}]
                 '
           echo '##############################################'
           echo 'using events [${{ github.event.inputs.json_payload.body }}]'
           echo '##############################################'
-          echo 'one liner [${{ inputs.json_payload }}]'
+          echo 'one liner [${json_payload}]'
           echo '##############################################'
+        env:
+          json_payload : ${{ inputs.json_payload }}
 
       - name: Get GitHub App User ID
         id: get-user-id
