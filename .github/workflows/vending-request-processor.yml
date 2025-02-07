@@ -28,10 +28,12 @@ jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
+      - name: List of the GitHub Actions environment variables
+        run: env
       - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
-          echo "Environment: $ENVIRONMENT"
+          echo "Log level: ${{ env.logLevel }}"
+          echo "Tags: ${{ env.tags }}"
+          echo "Environment: ${{ env.environment }}"
         env:
           LEVEL: ${{ inputs.logLevel }}
           TAGS: ${{ inputs.tags }}
