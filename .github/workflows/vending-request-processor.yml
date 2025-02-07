@@ -79,13 +79,12 @@ permissions:
   pull-requests: write
 
 jobs:
-  demo_app_authentication:
+  example_job:
     runs-on: ubuntu-latest
     environment: 
       name: sbx
     steps:
-      - name: Display paload1
-        id: get-paload1
+      - name: Display payload1
         run: |
           echo '##############################################'
           echo 'echo payload /
@@ -96,12 +95,12 @@ jobs:
           echo using events [${{ github.event.inputs.json_payload1.body }}]
           echo '##############################################'
           echo "one liner [$json_payload1]"
+          echo "one liner [${json_payload1}]"
           echo '##############################################'
         env:
           json_payload1 : ${{ inputs.json_payload1 }}
 
-      - name: Display paload
-        id: get-paload
+      - name: Display payload
         run: |
           echo '##############################################'
           echo "echo payload /
@@ -111,30 +110,7 @@ jobs:
           echo "using events [${{ github.event.inputs.json_payload.body }}]"
           echo '##############################################'
           echo 'one liner [$json_payload]'
+          echo "one liner [${json_payload}]"
           echo '##############################################'
         env:
           json_payload : ${{ inputs.json_payload }}
-
-      - name: Get GitHub App User ID
-        id: get-user-id
-        run: | 
-          echo "user-id=$(gh api "/users/${GH_TOKEN}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-        #   echo "user-id ${user-id}"
-        env:
-          GH_TOKEN: $GITHUB_TOKEN
-
-  # deploy:
-  #   name: Apply ${{ inputs.version }} to sbx
-  #   # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}
-  #   uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
-  #   with:
-  #     cloud_provider: azure
-  #     azure_client_id: f69cdf15-340f-4e53-8a28-b6f8a4d9a21d # ghe-npd-action
-  #     azure_tenant_id: 81eb6a17-7dfc-44e0-abf2-9ec81d33578b
-  #     environment_name: sbx # <NDP_or_PRO>
-  #     optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
-  #     optfile_runner: ubuntu-latest # ubuntu-latest 
-  #     ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
-  #   secrets:
-  #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  #     APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
