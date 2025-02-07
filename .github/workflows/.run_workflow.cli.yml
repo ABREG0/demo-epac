@@ -1,0 +1,1 @@
+echo '{"ref":"vending-001", "environment_name":"hello"}' | gh workflow run vending-request-processor.yml --json --ref 'vending-001'
