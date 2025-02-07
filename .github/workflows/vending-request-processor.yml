@@ -18,6 +18,7 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - run: |
         echo "Log level: ${{ github.event.inputs.logLevel }}, ${{ inputs.logLevel }} ==="
         echo "Tags: ${{ github.event.inputs.tags }}, ${{ inputs.tags }} ===" 
