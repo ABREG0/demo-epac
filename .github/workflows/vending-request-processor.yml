@@ -1,12 +1,4 @@
-name: vending-request-processor
-run-name: Vending Request Processor Example
-
 on:
-  push:    
-    branches:      
-      - 'vending-001'
-    # paths:
-    #   - 'workload/build/**/*.yml'
   workflow_dispatch:
     inputs:
       logLevel:
@@ -20,14 +12,12 @@ on:
         - debug
       tags:
         description: 'Test scenario tags'
-        default: true
         required: false
         type: boolean
       environment:
         description: 'Environment to run tests against'
         type: environment
-        default: sbx
-        required: false
+        required: true
 
 jobs:
   log-the-inputs:
@@ -41,7 +31,6 @@ jobs:
           LEVEL: ${{ inputs.logLevel }}
           TAGS: ${{ inputs.tags }}
           ENVIRONMENT: ${{ inputs.environment }}
-
 #   workflow_dispatch:
 #     inputs:
 #       json_payload1:
