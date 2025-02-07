@@ -174,11 +174,11 @@ jobs:
           echo '##############################################'
           echo using events [${{ github.event.inputs.json_payload1.body }}]
           echo '##############################################'
-          echo "one liner [$json_payload1]"
-          echo "one liner [${json_payload1}]"
+          echo "one liner [$json_payload_env]"
+          echo "one liner [${json_payload_env}]"
           echo '##############################################'
         env:
-          json_payload1 : ${{ inputs.json_payload1 }}
+          json_payload_env : ${{ inputs.json_payload1 }}
 
       - name: Display payload
         run: |
