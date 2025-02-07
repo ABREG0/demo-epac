@@ -1,7 +1,7 @@
 on:
-  push:    
-    branches:      
-      - 'vending-001'
+  # push:    
+  #   branches:      
+  #     - 'vending-001'
     # paths:
     #   - 'workload/build/**/*.yml'
   workflow_dispatch:
@@ -164,23 +164,8 @@ jobs:
     environment: 
       name: sbx
     steps:
-      - name: Display payload1
-        run: |
-          echo '##############################################'
-          echo 'echo payload /
-                [$json_payload1.body]
-                [${{ inputs.json_payload1 }}]
-                '
-          echo '##############################################'
-          echo using events [${{ github.event.inputs.json_payload1.body }}]
-          echo '##############################################'
-          echo "one liner [$json_payload_env]"
-          echo "one liner [${json_payload_env}]"
-          echo '##############################################'
-        env:
-          json_payload_env : ${{ inputs.json_payload1 }}
-
       - name: Display payload
+        shell: pwsh
         run: |
           echo '##############################################'
           echo "echo payload /
