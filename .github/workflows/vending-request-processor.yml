@@ -93,7 +93,7 @@ permissions:
 
 jobs:
   processor:
-    name: json processor
+    name: json [${{ inputs.environment_name }}] processor
     uses: ./.github/workflows/vending-request-processor1.yml
     with:
       json_payload: |
@@ -152,7 +152,15 @@ jobs:
     secrets: inherit
 
   example_job:
+    name: example [${{ inputs.environment_name }}] job
+    needs: [processor]
     runs-on: ubuntu-latest
+    env:
+        json_payload: ${{ inputs.json_payload }}
+        environment_name: ${{ inputs.environment_name }}
+        loglevel: ${{ inputs.loglevel }}
+        ref: ${{ inputs.ref }}
+        runner: ${{ inputs.runner }}
     environment: 
       name: sbx
     steps:

@@ -50,6 +50,6 @@ jobs:
       - name: Validate `cloud_provider` input
         run: |
           echo 'payload [${{ inputs.json_payload }}]'
-          echo 'envName [${{ inputs.environment_name }}]'
+          echo 'envName [${{ inputs.environment_name }}] [${environment_name}]'
           echo 'runner [${{ inputs.runner }}]'
           echo 'envName [${{ inputs.environment_name }}]'
