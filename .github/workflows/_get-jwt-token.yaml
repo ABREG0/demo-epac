@@ -5,7 +5,7 @@ on:
   push:    
     branches:      
       - 'workflows_not'
-  inputs:
+  workflow_dispatch: 
     inputs:
       logLevel:
         description: 'Log level'     
