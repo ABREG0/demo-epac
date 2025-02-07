@@ -1,7 +1,7 @@
 on:
   push:    
     branches:      
-      - 'vending-001'
+      - 'master'
     # paths:
     #   - 'workload/build/**/*.yml'
 
