@@ -1,0 +1,55 @@
+
+name: processor
+
+on:
+  workflow_call:
+    inputs:
+      json_payload:
+        required: false
+        type: string
+      environment_name:
+        required: false
+        type: string
+      loglevel:
+        required: true
+        type: string
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+      ref:
+        required: false
+        type: string
+        default: ""
+
+permissions:
+    id-token: write
+    contents: write
+    pull-requests: write
+    
+jobs:
+  processor_job:
+    name: processor job
+    runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    continue-on-error: false
+    env:
+        json_payload: ${{ inputs.json_payload }}
+        environment_name: ${{ inputs.environment_name }}
+        loglevel: ${{ inputs.loglevel }}
+        ref: ${{ inputs.ref }}
+        runner: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          
+      - name: Display environment name
+        run: |
+          echo "environment name ${{ inputs.environment_name }}"
+
+      - name: Validate `cloud_provider` input
+        run: |
+          echo 'payload [${{ inputs.json_payload }}]'
+          echo 'envName [${{ inputs.environment_name }}] [${environment_name}]'
+          echo 'runner [${{ inputs.runner }}]'
+          echo 'envName [${{ inputs.environment_name }}]'
