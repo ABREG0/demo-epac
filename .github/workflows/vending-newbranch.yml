@@ -3,20 +3,22 @@ name: vending-new-branch
 run-name: vending new branch
 
 on:
-  pull_request: #https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#running-your-pull_request-workflow-based-on-the-head-or-base-branch-of-a-pull-request
-    types:
-      - opened
-      - reopened
+  # pull_request: #https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#running-your-pull_request-workflow-based-on-the-head-or-base-branch-of-a-pull-request
+  #   types:
+  #     - opened
+  #     - reopened
+  push:
+
     branches:
-      - 'master/**'
-    paths:
-      - 'workload/build/**/*.yml'
+      - 'vending-001/**'
+    # paths:
+    #   - 'workload/build/**/*.yml'
   workflow_call:
     inputs:
       repo_name:
         required: false
         type: string
-        default: "."
+        default: "mmy_repo"
       branch_name:
         required: false
         type: string
@@ -39,7 +41,7 @@ on:
 
 jobs:
   new_branch:
-    if: startsWith(github.head_ref, 'FEATURE/VENDING/**')
+    # if: startsWith(github.head_ref, 'FEATURE/VENDING/**')
     name: Run terraform fmt -check -recursive
     runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     defaults:

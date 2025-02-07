@@ -4,7 +4,9 @@ on:
       - 'vending-001'
     # paths:
     #   - 'workload/build/**/*.yml'
-
+  workflow_run: 
+    branches: 
+      - 'vending-001'
   workflow_dispatch:
     inputs:
       logLevel:
