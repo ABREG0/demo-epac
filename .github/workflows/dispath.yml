@@ -1,0 +1,28 @@
+name: My Workflow
+
+
+
+on:
+  push:
+
+  workflow_dispatch:
+
+    inputs:
+
+      env: 
+
+        description: Environment to deploy to
+
+        default: 'staging'  
+
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - run: echo "Deploying to ${{ inputs.env }} environment" 
