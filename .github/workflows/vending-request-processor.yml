@@ -86,12 +86,12 @@ jobs:
         run: |
           echo '##############################################'
           echo 'echo payload /
-                [${{ inputs.json_payload1.body }}]
+                [$json_payload1.body]
                 '
           echo '##############################################'
           echo 'using events [${{ github.event.inputs.json_payload1.body }}]'
           echo '##############################################'
-          echo 'one liner [${json_payload1}]'
+          echo 'one liner [$json_payload1]'
           echo '##############################################'
         env:
           json_payload1 : ${{ inputs.json_payload1 }}
@@ -101,12 +101,12 @@ jobs:
         run: |
           echo '##############################################'
           echo 'echo payload /
-                [${json_payload}]
+                [$json_payload]
                 '
           echo '##############################################'
           echo 'using events [${{ github.event.inputs.json_payload.body }}]'
           echo '##############################################'
-          echo 'one liner [${json_payload}]'
+          echo 'one liner [$json_payload]'
           echo '##############################################'
         env:
           json_payload : ${{ inputs.json_payload }}
