@@ -11,9 +11,12 @@ on:
     inputs:
       json_payload1:
         description: debug one
+        type: string
+        required: false
         default: 'json1'
       json_payload:
         description: The "version" tag to deploy
+        type: string
         required: false
         default: |
                       {
