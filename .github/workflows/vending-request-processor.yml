@@ -9,10 +9,14 @@ on:
     #   - 'workload/build/**/*.yml'
   workflow_dispatch:
     inputs:
+      json_payload1:
+        description: debug one
+        default: 'json1'
       json_payload:
         description: The "version" tag to deploy
         required: false
-        default: '{
+        default: |
+                      {
                         "request_id": "auto-generated",
                         "global_id": "blink6",
                         "project_name": "my new blink6 project",
@@ -59,7 +63,7 @@ on:
                             ]
                           }
                         }
-                      }'
+                      }
 
 
 concurrency:
@@ -77,6 +81,19 @@ jobs:
     environment: 
       name: sbx
     steps:
+      - name: Display paload1
+        id: get-paload1
+        run: |
+          echo '##############################################'
+          echo 'echo payload /
+                [${{ inputs.json_payload1.body }}]
+                '
+          echo '##############################################'
+          echo 'using events [${{ github.event.inputs.json_payload1.body }}]'
+          echo '##############################################'
+          echo 'one liner [${{ inputs.json_payload1 }}]'
+          echo '##############################################'
+
       - name: Display paload
         id: get-paload
         run: |
@@ -87,7 +104,7 @@ jobs:
           echo '##############################################'
           echo 'using events [${{ github.event.inputs.json_payload.body }}]'
           echo '##############################################'
-          echo 'one liner [${{ inputs.json_payload.body }}]'
+          echo 'one liner [${{ inputs.json_payload }}]'
           echo '##############################################'
 
       - name: Get GitHub App User ID
