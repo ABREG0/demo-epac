@@ -1,11 +1,13 @@
 name: Run on PR
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
   
-    # branches:
-    #   - 'FEATURE/CREATE-SUB/*'
+  pull_request_target:
+    types:
+      - opened
+    branches:
+      - 'master'
+      - 'FEATURE/CREATE-SUB/*'
 
 jobs:
   run_if_vending:
