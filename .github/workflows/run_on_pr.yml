@@ -4,9 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
   
-    branches:
-      - 'FEATURE/CREATE-SUB/*'
-
+    # branches:
+    #   - 'FEATURE/CREATE-SUB/*'
 
 jobs:
   run_if_vending:
