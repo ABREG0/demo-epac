@@ -2,7 +2,7 @@
 ######### create branch, file, commit and PR
 
 name: vending-new-branch
-run-name: vending new branch
+run-name: vending-new-branch
 
 on:
   # pull_request: #https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#running-your-pull_request-workflow-based-on-the-head-or-base-branch-of-a-pull-request
