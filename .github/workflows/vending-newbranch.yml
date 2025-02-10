@@ -105,7 +105,7 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: query PR with PS
-        shell: pwd
+        shell: pwsh
         run: |
                 $pr = $(gh pr list --search "head:FEATURE/CREATE-SUB/") -split '\t'
                 $prInfo = @{
