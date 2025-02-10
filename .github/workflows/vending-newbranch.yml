@@ -46,7 +46,7 @@ jobs:
     runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     defaults:
       run:
-        working-directory: ${{ inputs.repo_name }}
+        working-directory: ${{ github.workspace }} # ${{ inputs.repo_name }}
     environment:
       name: ${{ inputs.environment_name }}
     steps:
@@ -55,7 +55,7 @@ jobs:
       
       - name: List of the GitHub Actions environment variables on Windows
         run: env
-      - name: Create new branch in Repository 1
+      - name: Create new branch in ${{ github.repository }}
         id: create-branch
         run: |
           echo 'repo path: [${{ github.workspace }}]'
@@ -64,35 +64,35 @@ jobs:
           echo "run ls"
           ls
           # cd repo1  # Navigate to the first repository's folder
-          branch_name="feature/update-$(date +%s)"
+          branch_name="FEATURE/CREATE-SUB/$(date +%s)"
           echo "New branch name: $branch_name"
           git checkout -b $branch_name
           git branch
           echo "branch_name = $branch_name"
           echo "branch_name=${branch_name}" >> $GITHUB_ENV  # Set output using the new method
 
-      - name: Make changes in Repository 1
+      - name: Make changes in  ${{ github.repository }}
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          echo "${{ inputs.terraform_directory }} This is a new change in Repository 1." >> newFile.txt
+          echo "${{ github.ref_name }} This is a new change in  ${{ github.repository }}." >> newFile.txt
           ls
           git add *
 
-      - name: Commit changes in Repository 1
+      - name: Commit changes in  ${{ github.repository }}
         run: |
           # cd repo1  # Navigate to the first repository's folder
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "Automated changes by GitHub Actions in Repository 1"
+          git commit -m "FEATURE/CREATE-SUB/GLOBAL_ID in  ${{ github.ref_name }}"
 
-      - name: Push branch to remote in Repository 1
+      - name: Push branch to remote in  ${{ github.repository }}
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          git push --set-upstream origin '${{ env.branch_name }}'
-          git push origin '${{ env.branch_name }}'
+          git push --set-upstream origin '${{ github.ref_name }}'
+          git push origin '${{ github.ref_name }}'
 
       - name: create pull request
-        run: gh pr create -B master -H ${{ env.branch_name }} --title 'Merge ${{ env.branch_name }} into base_branch' --body 'Created by Github action'
+        run: gh pr create -B master -H ${{ github.ref_name }} --title 'Merge ${{ github.ref_name }} into base_branch' --body 'Created by Github action'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -104,7 +104,7 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
-      - name: Query PR Information for Repository 1
+      - name: Query PR Information for  ${{ github.repository }}
         id: query-pr
         run: |
           pr_number=${{ steps.create-pr.outputs.pull-request-number }}
@@ -129,7 +129,14 @@ jobs:
 
       - name: Use PR Information
         run: |
-          echo "PR ID: ${{ steps.query-pr.outputs.pr_id }}"
-          echo "PR Title: ${{ steps.query-pr.outputs.pr_title }}"
-          echo "PR Description: ${{ steps.query-pr.outputs.pr_body }}"
-          echo "PR Comments: ${{ steps.query-pr.outputs.pr_comments }}"
+          echo "PR ID: ${{ env.pr_id }}"
+          echo "PR Title: ${{ env.pr_title }}"
+          echo "PR Description: ${{ env.pr_body }}"
+          echo "PR Comments: ${{ env.pr_comments }}"
+
+          # - name: Use PR Information
+          # run: |
+          #   echo "PR ID: ${{ steps.query-pr.outputs.pr_id }}"
+          #   echo "PR Title: ${{ steps.query-pr.outputs.pr_title }}"
+          #   echo "PR Description: ${{ steps.query-pr.outputs.pr_body }}"
+          #   echo "PR Comments: ${{ steps.query-pr.outputs.pr_comments }}"
