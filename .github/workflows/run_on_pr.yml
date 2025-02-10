@@ -1,4 +1,5 @@
 name: Run on PR
+run-name: run-on-pr
 
 on:
   push:    
