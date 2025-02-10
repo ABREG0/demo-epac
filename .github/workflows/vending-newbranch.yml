@@ -88,12 +88,11 @@ jobs:
 
       - name: Push branch to remote in  ${{ github.repository }}
         run: |
-          # cd repo1  # Navigate to the first repository's folder
           git push --set-upstream origin '${{ env.branch_name }}'
           git push origin '${{ env.branch_name }}'
 
       - name: create pull request
-        run: gh pr create -B master -H ${{ env.branch_name }} --title 'vending ${{ github.ref_name }} into master' --body 'Created by vending Github action for request [${{ env.branch_name }}]'
+        run: gh pr create -B master -H ${{ env.branch_name }} --title 'vending ${{ env.branch_name }} into master' --body 'Created by vending Github action for request [${{ env.branch_name }}]'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
