@@ -112,7 +112,7 @@ jobs:
                   pr_id = $pr[0]
                   pr_title = $pr[1]
                   pr_branch = $pr[2]
-                  global_id = @($pr[2] -split '/' | select $_[2])
+                  global_id = ($pr[2] -split '/')[2]
                 }
 
       - name: Query PR Information for  ${{ github.repository }}
