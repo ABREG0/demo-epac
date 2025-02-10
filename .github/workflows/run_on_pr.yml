@@ -1,13 +1,11 @@
 name: Run on PR
 
 on:
-  
-  pull_request_target:
-    types:
-      - opened
-    branches:
+  push:    
+    branches:      
       - 'master'
-      - 'FEATURE/CREATE-SUB/*'
+    # paths:
+    #   - 'workload/build/**/*.yml'
 
 jobs:
   run_if_vending:
