@@ -1,4 +1,6 @@
 
+######### create branch, file, commit and PR
+
 name: vending-new-branch
 run-name: vending new branch
 
@@ -50,8 +52,9 @@ jobs:
     environment:
       name: ${{ inputs.environment_name }}
     steps:
-
-######### create branch, file, commit and PR
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       
       - name: List of the GitHub Actions environment variables on Windows
         run: env
