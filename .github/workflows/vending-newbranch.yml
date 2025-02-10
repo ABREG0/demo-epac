@@ -104,9 +104,21 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
+      - name: query PR with PS
+        shell: pwd
+        run: |
+                $pr = $(gh pr list --search "head:FEATURE/CREATE-SUB/") -split '\t'
+                $prInfo = @{
+                  pr_id = $pr[0]
+                  pr_title = $pr[1]
+                  pr_branch = $pr[2]
+                  global_id = @($pr[2] -split '/' | select $_[2])
+                }
+
       - name: Query PR Information for  ${{ github.repository }}
         id: query-pr
         run: |
+          gh pr list --search "head:FEATURE/CREATE-SUB/"
           pr_number=${{ steps.create-pr.outputs.pull-request-number }}
           pr_info=$(gh pr view $pr_number --json number,title,body,comments)
           echo "PR Info: $pr_info"
