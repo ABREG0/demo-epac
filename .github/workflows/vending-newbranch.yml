@@ -114,6 +114,7 @@ jobs:
                   pr_branch = $pr[2]
                   global_id = ($pr[2] -split '/')[2]
                 }
+                write-output $prInfo
 
       - name: Query PR Information for  ${{ github.repository }}
         id: query-pr
