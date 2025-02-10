@@ -76,26 +76,24 @@ jobs:
 
       - name: Make changes in  ${{ github.repository }}
         run: |
-          # cd repo1  # Navigate to the first repository's folder
-          echo "${{ github.ref_name }} This is a new change in  ${{ github.repository }}." >> newFile.txt
+          echo "${{ env.branch_name }} This is a new change in  ${{ github.repository }}." >> newFile.txt
           ls
           git add *
 
       - name: Commit changes in  ${{ github.repository }}
         run: |
-          # cd repo1  # Navigate to the first repository's folder
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "FEATURE/CREATE-SUB/GLOBAL_ID in  ${{ github.ref_name }}"
+          git commit -m "processing request [${{ env.branch_name }}] branch FEATURE/CREATE-SUB/${{ env.branch_name }}"
 
       - name: Push branch to remote in  ${{ github.repository }}
         run: |
           # cd repo1  # Navigate to the first repository's folder
-          git push --set-upstream origin '${{ github.ref_name }}'
-          git push origin '${{ github.ref_name }}'
+          git push --set-upstream origin '${{ env.branch_name }}'
+          git push origin '${{ env.branch_name }}'
 
       - name: create pull request
-        run: gh pr create -B master -H ${{ github.ref_name }} --title 'Merge ${{ github.ref_name }} into base_branch' --body 'Created by Github action'
+        run: gh pr create -B master -H ${{ env.branch_name }} --title 'vending ${{ github.ref_name }} into master' --body 'Created by vending Github action for request [${{ env.branch_name }}]'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
