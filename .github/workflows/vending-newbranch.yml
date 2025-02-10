@@ -1,0 +1,135 @@
+
+name: vending-new-branch
+run-name: vending new branch
+
+on:
+  # pull_request: #https://docs.github.com/en/enterprise-cloud@latest/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#running-your-pull_request-workflow-based-on-the-head-or-base-branch-of-a-pull-request
+  #   types:
+  #     - opened
+  #     - reopened
+  push:
+    branches:
+      - 'FEATURE/CREATE-SUB/**'
+    # paths:
+    #   - 'workload/build/**/*.yml'
+  # workflow_call:
+  workflow_dispatch: 
+    inputs:
+      repo_name:
+        required: false
+        type: string
+        default: "mmy_repo"
+      branch_name:
+        required: false
+        type: string
+        default: "1.6.2"
+      pr_title:
+        required: false
+        type: string
+        default: ""
+      pr_description:
+        required: false
+        type: string
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+      environment_name:
+        required: false
+        type: string
+        default: "sbx"
+
+jobs:
+  new_branch:
+    # if: startsWith(github.head_ref, 'FEATURE/VENDING/**')
+    name: Run terraform fmt -check -recursive
+    runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.repo_name }}
+    environment:
+      name: ${{ inputs.environment_name }}
+    steps:
+
+######### create branch, file, commit and PR
+      
+      - name: List of the GitHub Actions environment variables on Windows
+        run: env
+      - name: Create new branch in Repository 1
+        id: create-branch
+        run: |
+          echo 'repo path: [${{ github.workspace }}]'
+          echo "current location "
+          pwd
+          echo "run ls"
+          ls
+          # cd repo1  # Navigate to the first repository's folder
+          branch_name="feature/update-$(date +%s)"
+          echo "New branch name: $branch_name"
+          git checkout -b $branch_name
+          git branch
+          echo "branch_name = $branch_name"
+          echo "branch_name=${branch_name}" >> $GITHUB_ENV  # Set output using the new method
+
+      - name: Make changes in Repository 1
+        run: |
+          # cd repo1  # Navigate to the first repository's folder
+          echo "${{ inputs.terraform_directory }} This is a new change in Repository 1." >> newFile.txt
+          ls
+          git add *
+
+      - name: Commit changes in Repository 1
+        run: |
+          # cd repo1  # Navigate to the first repository's folder
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Automated changes by GitHub Actions in Repository 1"
+
+      - name: Push branch to remote in Repository 1
+        run: |
+          # cd repo1  # Navigate to the first repository's folder
+          git push --set-upstream origin '${{ env.branch_name }}'
+          git push origin '${{ env.branch_name }}'
+
+      - name: create pull request
+        run: gh pr create -B master -H ${{ env.branch_name }} --title 'Merge ${{ env.branch_name }} into base_branch' --body 'Created by Github action'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update && sudo apt-get install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Query PR Information for Repository 1
+        id: query-pr
+        run: |
+          pr_number=${{ steps.create-pr.outputs.pull-request-number }}
+          pr_info=$(gh pr view $pr_number --json number,title,body,comments)
+          echo "PR Info: $pr_info"
+
+          pr_id=$(echo "$pr_info" | jq -r '.number')
+          pr_title=$(echo "$pr_info" | jq -r '.title')
+          pr_body=$(echo "$pr_info" | jq -r '.body')
+          pr_comments=$(echo "$pr_info" | jq -r '.comments')
+
+          echo "PR ID: $pr_id"
+          echo "PR Title: $pr_title"
+          echo "PR Description: $pr_body"
+          echo "PR Comments: $pr_comments"
+
+          # Set outputs using the new method
+          echo "pr_id=$pr_id" >> $GITHUB_ENV
+          echo "pr_title=$pr_title" >> $GITHUB_ENV
+          echo "pr_body=$pr_body" >> $GITHUB_ENV
+          echo "pr_comments=$pr_comments" >> $GITHUB_ENV
+
+      - name: Use PR Information
+        run: |
+          echo "PR ID: ${{ steps.query-pr.outputs.pr_id }}"
+          echo "PR Title: ${{ steps.query-pr.outputs.pr_title }}"
+          echo "PR Description: ${{ steps.query-pr.outputs.pr_body }}"
+          echo "PR Comments: ${{ steps.query-pr.outputs.pr_comments }}"
