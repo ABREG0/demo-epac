@@ -44,7 +44,7 @@ on:
 jobs:
   new_branch:
     # if: startsWith(github.head_ref, 'FEATURE/VENDING/**')
-    name: Run terraform fmt -check -recursive
+    name: new branch job
     runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
     defaults:
       run:

@@ -10,7 +10,7 @@ on:
 
 jobs:
   run_if_vending:
-    if: contains(github.head_ref, 'FEATURE/CREATE-SUB/')
+    if: contains(github.event.head_commit, 'FEATURE/CREATE-SUB/')
 
     runs-on: ubuntu-latest
     steps:
