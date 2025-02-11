@@ -799,6 +799,8 @@ jobs:
         env:
           all_deployments_json: ${{ env.all_deployments_json }}
         run: |
+
+          echo "All deployments JSON: ${all_deployments_json}"
           deployments_run_order_2_apply=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( .run_order == 2 and ( .run_plan_only == null or .run_plan_only != true ) ) ]')
           echo "deployments_run_order_2_apply = ${deployments_run_order_2_apply}"
           echo "deployments_run_order_2_apply={\"deployments\":${deployments_run_order_2_apply}}" >> $GITHUB_ENV
