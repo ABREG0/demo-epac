@@ -1,3 +1,4 @@
+# Use certificates to authenticate
 
 Yes, you can configure your Terraform workflow to use the `source = github.com/org/repo` option directly without explicitly cloning the repository in the workflow. Terraform natively supports fetching modules from GitHub, including private repositories, as long as it has the necessary authentication.
 
