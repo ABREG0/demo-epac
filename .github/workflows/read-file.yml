@@ -171,7 +171,6 @@ jobs:
       - name: Display environment name
         run: |
           echo "environment name ${{ inputs.environment_name }}"
-          eecho "${{ fromJSON(needs.read_optfile.outputs.deployments_all) }}"
 
       - name: Validate `cloud_provider` input
         run: |

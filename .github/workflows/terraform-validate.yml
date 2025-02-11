@@ -72,6 +72,7 @@ jobs:
       - name: Display environment name
         run: |
           echo "environment name ${{ inputs.environment_name }}"
+          echo "all deployments / ${{ fromJSON(needs.read_optfile.outputs.deployments_all) }}"
 
       - if: ${{ inputs.ca_bundle_file_path != '' }}
         name: Install CA bundle
