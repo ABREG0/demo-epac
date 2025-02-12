@@ -7,6 +7,6 @@ resource "azurerm_site_recovery_replication_policy" "this" {
   recovery_vault_name                                  = var.site_recovery_policy.recovery_vault_name
   recovery_point_retention_in_minutes                  = var.site_recovery_policy.recovery_point_retention_in_minutes
   application_consistent_snapshot_frequency_in_minutes = var.site_recovery_policy.application_consistent_snapshot_frequency_in_minutes
-  
-  depends_on          = [time_sleep.wait_pre]
+
+  depends_on = [time_sleep.wait_pre]
 }

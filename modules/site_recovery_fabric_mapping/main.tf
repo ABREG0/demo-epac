@@ -15,6 +15,6 @@ resource "azurerm_site_recovery_protection_container_mapping" "this" {
     delete = "60m"
     read   = "10m"
   }
-  
-  depends_on          = [time_sleep.wait_pre]
+
+  depends_on = [time_sleep.wait_pre]
 }

@@ -13,8 +13,8 @@ resource "azurerm_site_recovery_protection_container" "this" {
     delete = "60m"
     read   = "10m"
   }
-  
-  depends_on          = [time_sleep.wait_pre]
+
+  depends_on = [time_sleep.wait_pre]
 }
 resource "time_sleep" "wait" {
   create_duration = try(var.site_recovery_fabric_container.sleep_timer, "60s")
