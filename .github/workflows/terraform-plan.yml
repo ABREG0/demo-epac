@@ -320,6 +320,16 @@ jobs:
             -input=false \
             -out=${{ env.plan_name }}
 
+      - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}-destroy
+        run: |
+          terraform plan \
+            ${shared_tfvar_files} \
+            ${shared_tfvar_values} \
+            ${{ steps.parse_tfvars.outputs.tfvar_files }} \
+            ${{ steps.parse_tfvars.outputs.tfvar_values }} \
+            -input=false \
+            -out="${{ env.plan_name }}-destroy"
+
       - name: Authenticate Azure CLI using OIDC
         uses: Azure/login@v2
         if: ${{ env.cloud_provider == 'azure' && !inputs.run_plan_only && env.ARM_CLIENT_SECRET == '' }}
@@ -350,4 +360,27 @@ jobs:
               --name ${{ env.plan_name }}
 
             echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}"... completed.'
+          fi
+      - name: Store plan destroy
+        if: ${{ !inputs.run_plan_only }}
+        run: |
+          if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
+            echo "NOT supported"
+          else # Azure
+            echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}-destroy"...'
+
+            # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+            if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
+              az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
+              az account set --subscription ${{ inputs.remote_state_azure_subscription_id }}
+            fi
+
+            az storage blob upload\
+              --auth-mode login \
+              --file "${{ env.plan_name }}-destroy" \
+              --account-name ${remote_state_azure_storage_account_name} \
+              --container-name ${remote_state_azure_plan_container_name} \
+              --name ${{ env.plan_name }}-destroy
+
+            echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}-destroy"... completed.'
           fi
