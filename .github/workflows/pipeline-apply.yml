@@ -158,3 +158,35 @@ jobs:
       terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
       terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
     secrets: inherit
+
+  destroy:
+    name: Destroy ${{ matrix.deployments.name }}
+    needs: [read_optfile]
+    uses: ./.github/workflows/terraform-destroy.yml
+    strategy:
+      fail-fast: false # Ensure that all Terraform commands execute to completion
+      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_apply) }}
+    with:
+      azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      branch_ref: ${{ needs.read_optfile.outputs.branch_ref }}
+      ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      environment_name: ${{ inputs.environment_name }}
+      job_name: ${{ matrix.deployments.name }}
+      ref: ${{ inputs.ref }}
+      remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
+      remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
+      remote_state_azure_storage_account_name: ${{ needs.read_optfile.outputs.remote_state_azure_storage_account_name }}
+      remote_state_azure_subscription_id: ${{ needs.read_optfile.outputs.remote_state_azure_subscription_id }}
+      remote_state_key: ${{ matrix.deployments.remote_state_key }}
+      runner: ${{ matrix.deployments.runner }}
+      shared_tfvar_files: ${{ needs.read_optfile.outputs.shared_tfvar_files }}
+      shared_tfvar_values: ${{ needs.read_optfile.outputs.shared_tfvar_values }}
+      terraform_directory: ${{ matrix.deployments.path }}
+      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      tfvars: ${{ toJSON(matrix.deployments.tfvars) }}
+    secrets: inherit
