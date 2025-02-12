@@ -193,7 +193,7 @@ jobs:
         run: |
           version=$(az version | jq -r '."azure-cli"')
           echo "version = ${version}"
-          echo "version=${version}" >> $GITHUB_ENV
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Upgrade/Downgrade Azure CLI
         if: ${{ env.cloud_provider == 'azure' && inputs.azcli_version != steps.installed_azcli.outputs.version && inputs.azcli_version != 'latest' }}
