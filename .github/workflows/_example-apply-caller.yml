@@ -1,5 +1,5 @@
 name: sbx Apply to Example
-run-name: Apply ${{ inputs.version }} to Example
+run-name: e2etesting
 
 on:
   push:    
@@ -33,7 +33,7 @@ jobs:
       environment_name: sbx # <NDP_or_PRO>
       optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
       optfile_runner: ubuntu-latest # ubuntu-latest 
-      ref: workflows # ${{ inputs.version }} # <place branch or tag name containing your released code>
+      ref: e2etesting # ${{ inputs.version }} # <place branch or tag name containing your released code>
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
