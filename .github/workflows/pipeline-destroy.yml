@@ -37,7 +37,7 @@ on:
       CA_BUNDLE:
         required: false
       GH_TOKEN:
-        required: true
+        required: false
       APP_PRIVATE_KEY:
         required: true
 
