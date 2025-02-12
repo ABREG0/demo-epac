@@ -510,11 +510,10 @@ jobs:
           echo '################################################################################'
           echo "All deployments JSON: ${deployments_run_order_1_all}"
           echo '################################################################################'
-      - name: Build
+
+      - name: all deployments plan
         shell: pwsh
         run: |
-                ls
-                pwd
                 cd examples
                 $exampleFolders = Get-ChildItem -Directory
 
@@ -547,6 +546,34 @@ jobs:
           deployments_run_order_1_apply=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( ( ( .run_order == 1 ) or ( .run_order == "1" ) or ( .run_order == null ) ) and ( .run_plan_only == null or .run_plan_only != true ) ) ]')
           echo "deployments_run_order_1_apply = ${deployments_run_order_1_apply}"
           echo "deployments_run_order_1_apply={\"deployments\":${deployments_run_order_1_apply}}" >> $GITHUB_ENV
+
+      - name: deployments_run_order_1_apply
+        shell: pwsh
+        run: |
+                cd examples
+                $exampleFolders = Get-ChildItem -Directory
+
+                $deploymentMatrix = @()
+
+                foreach ($folder in $exampleFolders) {
+                    
+                    <# $folder is the current item #>
+                    write-host "`n################################################`n"
+                    write-host "Running example $($folder.FullName)" -ForegroundColor green  -BackgroundColor Blue
+
+                    $deployment = @{
+                    name= "$($folder.name)"
+                    path= "example/$($folder.name)"
+                    remote_state_key= "$($folder.name).tfstate"
+                    runner= "ubuntu-latest"
+                    run_plan_only= "false"
+                    }
+                    $deploymentMatrix += $deployment
+                    
+                }
+                $deploy = $deploymentMatrix | convertto-json
+                $deploy
+                echo "deployments_run_order_1_apply=$($deploymentMatrix)" >> $Env:GITHUB_ENV
 
       - name: Read all deployments with `run_order` set to 2.
         if: ${{ steps.read_deployments_max_run_order.outputs.max_run_order > 1 }}
