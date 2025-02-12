@@ -4,7 +4,7 @@ run-name: Apply ${{ inputs.version }} to Example
 on:
   push:    
     branches:      
-      - 'workflows'
+      - 'e2etesting'
   workflow_dispatch:
     inputs:
       version:
