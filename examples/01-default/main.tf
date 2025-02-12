@@ -19,7 +19,7 @@ module "naming" {
 }
 
 resource "azurerm_resource_group" "this" {
-  location = local.test_regions[random_integer.region_index.result]
+  location = "rg-${local.vault_name}"
   name     = module.naming.resource_group.name_unique
 }
 

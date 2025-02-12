@@ -20,16 +20,16 @@ module "naming" {
 
 resource "azurerm_resource_group" "this" {
   location = local.test_regions[random_integer.region_index.result]
-  name     = module.naming.resource_group.name_unique
+  name     = "rg-${local.vault_name}"
 }
 
 resource "azurerm_resource_group" "primary" {
   location = "westus3"
-  name     = "${module.naming.resource_group.name_unique}-wus3"
+  name     = "rg-${local.vault_name}-wus3"
 }
 resource "azurerm_resource_group" "secondary" {
   location = "Central US"
-  name     = "${module.naming.resource_group.name_unique}-cus"
+  name     = "rg-${local.vault_name}-cus"
 }
 locals {
   test_regions = ["eastus", "eastus2", "westus2"]
