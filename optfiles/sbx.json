@@ -35,9 +35,9 @@
         "run_plan_only": false
       },
       {
-        "name": "examples/04-vault-backup-policies",
-        "path": "examples/examples/04-vault-backup-policies",
-        "remote_state_key": "examples/04-vault-backup-policies.tfstate",
+        "name": "04-vault-backup-policies",
+        "path": "examples/04-vault-backup-policies",
+        "remote_state_key": "04-vault-backup-policies.tfstate",
         "runner": "ubuntu-latest",
         "run_plan_only": false
       },
