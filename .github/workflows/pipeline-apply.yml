@@ -161,7 +161,7 @@ jobs:
 
   destroy:
     name: Destroy ${{ matrix.deployments.name }}
-    needs: [read_optfile]
+    needs: [plan, read_optfile, apply]
     uses: ./.github/workflows/terraform-destroy.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
