@@ -1,7 +1,6 @@
 
-data "azurerm_subscription" "This" {
-  subscription_id = "c5c1228d-b650-4f0a-97ea-1f8cfdc417c5"
-}
+data "azurerm_subscription" "This" {}
+
 # This ensures we have unique CAF compliant names for our resources.
 # This allows us to randomize the region for the resource group.
 resource "random_integer" "region_index" {
@@ -48,9 +47,7 @@ resource "azurerm_resource_group" "secondary_cus" {
   location = "centralus"
   name     = "rg-vm-secondary_cus-005"
 }
-# output "network" {
-#   value = "${data.azurerm_subscription.This.id}/resourceGroups/${azurerm_resource_group.primary_wus1.name}/providers/Microsoft.Network/virtualNetworks/vnet-westus"
-# }
+
 locals {
   test_regions = ["eastus", "eastus2", "westus3"] #  "westu2",
   vault_name   = "${module.naming.recovery_services_vault.slug}-${module.azure_region.location_short}-005"
