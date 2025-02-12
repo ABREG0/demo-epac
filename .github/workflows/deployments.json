@@ -1,0 +1,9 @@
+[
+    {
+    "name":"sbx_epac",
+    "path":"loops/azapi_call",
+    "remote_state_key":"ohemr-panic-sbx.tfstate",
+    "runner":"ubuntu-latest",
+    "run_plan_only":false
+    }
+]
