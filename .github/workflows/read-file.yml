@@ -510,6 +510,32 @@ jobs:
           echo '################################################################################'
           echo "All deployments JSON: ${deployments_run_order_1_all}"
           echo '################################################################################'
+      - name: Build
+        shell: pwsh
+        run: |
+                $exampleFolders = Get-ChildItem -path ./examples -Directory
+
+                $deploymentMatrix = @()
+
+                foreach ($folder in $exampleFolders) {
+                    
+                    <# $folder is the current item #>
+                    write-host "`n################################################`n"
+                    write-host "Running example $($folder.FullName)" -ForegroundColor green  -BackgroundColor Blue
+
+                    $deployment = @{
+                    name= "$($folder.name)"
+                    path= "example/$($folder.name)"
+                    remote_state_key= "$($folder.name).tfstate"
+                    runner= "ubuntu-latest"
+                    run_plan_only= "false"
+                    }
+                    $deploymentMatrix += $deployment
+                    
+                }
+                $deploy = $deploymentMatrix | convertto-json
+                $deploy
+                echo "deployments_run_order_1_all=$deploy" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Read all deployments with `run_order` set to 1 *and* `run_plan_only` not set to true.
         env:

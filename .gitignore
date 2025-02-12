@@ -1,10 +1,3 @@
-Output/
-site/
-Scripts/**
-def1/**
-.old/get-azRoleAssignments.ps1
-.old/roles.txt
-.old/roles2.txt
 # Local .terraform directories
 **/.terraform/*
 
@@ -42,14 +35,34 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
-*.md.tmp
-*tfplan*
-.DS_Store
+avmmakefile
 README-generated.md
 avm.tflint.hcl
-avm.tflint.merged.hcl
 avm.tflint_example.hcl
+*tfplan*
+
+# ignore vs code configurations
+**/.vscode/*
+*.md.tmp
+.DS_Store
+avm.tflint.merged.hcl
 avm.tflint_example.merged.hcl
+
+examples/01-default/01-default
+examples/01-default/01-default-destroy
+examples/02-customer-managed-key/02-customer-managed-key
+examples/02-customer-managed-key/02-customer-managed-key-destroy
+examples/03-private-endpoints/03-private-endpoints
+.avm-module-testing.ps1
+examples/01-default/01-default
+examples/03-private-endpoints/03-private-endpoints
+examples/02-customer-managed-key/02-customer-managed-key
 avm.tflint_module.hcl
 avm.tflint_module.merged.hcl
-avmmakefile
+examples/test-TFexamples.ps1
+examples/test-TFexamples.ps1
+Untitled-1.md
+Untitled-2.sh
+Untitled-3.sql
+Untitled-4.ps1
+Untitled-5.yaml
