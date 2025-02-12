@@ -538,7 +538,7 @@ jobs:
                 }
                 $deploy = $deploymentMatrix | convertto-json
                 $deploy
-                $deploy | Out-File -FilePath $GITHUB_ENV -Encoding utf8 -Append
+                Add-Content -Path $env:GITHUB_ENV -Value "deployments_run_order_1_all=$($deploy)"
 
       - name: Read all deployments with `run_order` set to 1 *and* `run_plan_only` not set to true.
         env:
