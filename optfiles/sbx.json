@@ -21,9 +21,30 @@
     },
     "deployments": [
       {
-        "name": "sbx_epac",
-        "path": "loops/azapi_call",
-        "remote_state_key": "ohemr-panic-sbx.tfstate",
+        "name": "01-default",
+        "path": "examples/01-default",
+        "remote_state_key": "01-default.tfstate",
+        "runner": "ubuntu-latest",
+        "run_plan_only": false
+      },
+      {
+        "name": "02-customer-managed-key",
+        "path": "examples/02-customer-managed-key",
+        "remote_state_key": "02-customer-managed-key.tfstate",
+        "runner": "ubuntu-latest",
+        "run_plan_only": false
+      },
+      {
+        "name": "examples/04-vault-backup-policies",
+        "path": "examples/examples/04-vault-backup-policies",
+        "remote_state_key": "examples/04-vault-backup-policies.tfstate",
+        "runner": "ubuntu-latest",
+        "run_plan_only": false
+      },
+      {
+        "name": "03-private-endpoints",
+        "path": "examples/03-private-endpoints",
+        "remote_state_key": "03-private-endpoints.tfstate",
         "runner": "ubuntu-latest",
         "run_plan_only": false
       }
