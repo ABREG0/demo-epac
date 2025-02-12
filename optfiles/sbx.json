@@ -28,9 +28,9 @@
         "run_plan_only": false
       },
       {
-        "name": "02-customer-managed-key",
-        "path": "examples/02-customer-managed-key",
-        "remote_state_key": "02-customer-managed-key.tfstate",
+        "name": "05-customer-managed-key",
+        "path": "examples/05-customer-managed-key",
+        "remote_state_key": "05-customer-managed-key.tfstate",
         "runner": "ubuntu-latest",
         "run_plan_only": false
       },

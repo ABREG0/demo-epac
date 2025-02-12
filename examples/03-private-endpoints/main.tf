@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "this" {
 
 locals {
   test_regions = ["eastus", "eastus2", "westus3"] #  "westu2",
-  vault_name   = "${module.naming.recovery_services_vault.slug}-${module.azure_region.location_short}-app1-003"
+  vault_name   = "${module.naming.recovery_services_vault.slug}-${module.azure_region.location_short}-03"
 }
 
 module "regions" {
