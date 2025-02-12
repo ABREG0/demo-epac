@@ -513,7 +513,10 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-                $exampleFolders = Get-ChildItem -path ./examples -Directory
+                ls
+                pwd
+                cd examples
+                $exampleFolders = Get-ChildItem -Directory
 
                 $deploymentMatrix = @()
 
