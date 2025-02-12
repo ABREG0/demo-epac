@@ -175,9 +175,7 @@ jobs:
       - name: Set backend config key
         run: |
           if [ -z "${remote_state_key}" ]; then
-            if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
-              remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
-            else # Azure
+            if [[ "${cloud_provider}" == 'azure' ]]; then # SWA
               remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
             fi
           fi
