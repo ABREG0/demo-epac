@@ -28,13 +28,6 @@
         "run_plan_only": false
       },
       {
-        "name": "05-protected-back-fs-vm",
-        "path": "examples/05-protected-back-fs-vm",
-        "remote_state_key": "05-protected-back-fs-vm.tfstate",
-        "runner": "ubuntu-latest",
-        "run_plan_only": false
-      },
-      {
         "name": "04-vault-backup-policies",
         "path": "examples/04-vault-backup-policies",
         "remote_state_key": "04-vault-backup-policies.tfstate",
