@@ -67,32 +67,6 @@ on:
         type: string
         default: ""
 
-      remote_state_swa_assume_role_role_arn:
-        required: false
-        type: string
-      remote_state_swa_assume_role_role_session_name:
-        required: false
-        type: string
-        default: "GitHubActions"
-      remote_state_swa_bucket:
-        required: false
-        type: string
-      remote_state_swa_dynamodb_table:
-        required: false
-        type: string
-      remote_state_swa_encrypt:
-        required: false
-        type: boolean
-        default: true
-      remote_state_swa_kms_key_id:
-        required: false
-        type: string
-      remote_state_swa_region:
-        required: false
-        type: string
-      remote_state_swa_state_folder:
-        required: false
-        type: string
       remote_state_azure_resource_group_name:
         required: false
         type: string
@@ -115,6 +89,8 @@ on:
       CA_BUNDLE:
         required: false
       GH_TOKEN:
+        required: false
+      APP_PRIVATE_KEY:
         required: true
 
 permissions:
