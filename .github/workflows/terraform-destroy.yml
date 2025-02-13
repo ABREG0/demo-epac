@@ -178,7 +178,7 @@ jobs:
             if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
               remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
             else # Azure
-              remote_state_key="${environment_name}-${job_name}.tfplan.tfstate"
+              remote_state_key="${{ inputs.environment_name }}-${job_name}.tfstate"
             fi
           fi
           echo "remote_state_key = $remote_state_key"

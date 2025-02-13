@@ -207,7 +207,7 @@ jobs:
             echo "NOT supported"
             exit 1
           else # Azure
-            plan_name="${environment_name}-${job_name}.tfplan"
+            plan_name="${{ inputs.environment_name }}-${job_name}.tfplan"
           fi
           echo "plan_name = $plan_name"
           echo "plan_name=${plan_name}" >> $GITHUB_ENV
@@ -219,7 +219,7 @@ jobs:
               echo "NOT supported"
               exit 1
             else # Azure
-              remote_state_key="${environment_name}-${job_name}.tfstate"
+              remote_state_key="${{ inputs.environment_name }}-${job_name}.tfstate"
             fi
           fi
           echo "remote_state_key = $remote_state_key"
