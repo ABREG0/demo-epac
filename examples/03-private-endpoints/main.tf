@@ -102,7 +102,7 @@ module "recovery_services_vault" {
 resource "azurerm_virtual_network" "vnet" {
   address_space       = ["192.168.0.0/16"]
   location            = azurerm_resource_group.this.location
-  name                = module.naming.virtual_network.name_unique
+  name                = "vnet-${azurerm_resource_group.this.location}"
   resource_group_name = azurerm_resource_group.this.name
 }
 
@@ -115,7 +115,7 @@ resource "azurerm_subnet" "private" {
 
 resource "azurerm_network_security_group" "nsg" {
   location            = azurerm_resource_group.this.location
-  name                = module.naming.network_security_group.name_unique
+  name                = "nsg-${azurerm_resource_group.this.location}"
   resource_group_name = azurerm_resource_group.this.name
 }
 
@@ -168,7 +168,7 @@ data "azurerm_client_config" "current" {}
 
 resource "azurerm_user_assigned_identity" "this_identity" {
   location            = azurerm_resource_group.this.location
-  name                = module.naming.user_assigned_identity.name_unique
+  name                = "uai-${azurerm_resource_group.this.location}"
   resource_group_name = azurerm_resource_group.this.name
 }
 
