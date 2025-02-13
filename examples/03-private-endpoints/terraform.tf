@@ -10,5 +10,8 @@ terraform {
       version = ">= 3.5.0"
     }
   }
-  backend "remote" {}
+  backend "azurerm" {
+    use_azuread_auth = true
+
+  }
 }

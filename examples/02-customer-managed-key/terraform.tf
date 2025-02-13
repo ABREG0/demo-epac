@@ -11,5 +11,8 @@ terraform {
     }
   }
 
-  backend "remote" {}
+  backend "azurerm" {
+    use_azuread_auth = true
+
+  }
 }
