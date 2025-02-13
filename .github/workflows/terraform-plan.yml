@@ -358,7 +358,8 @@ jobs:
               --file "${{ env.plan_name }}" \
               --account-name ${remote_state_azure_storage_account_name} \
               --container-name ${remote_state_azure_plan_container_name} \
-              --name ${{ env.plan_name }}
+              --name ${{ env.plan_name }} \
+              --overwrite
             
 
             az storage blob upload\
@@ -366,7 +367,8 @@ jobs:
               --file "destroy-${{ env.plan_name }}" \
               --account-name ${remote_state_azure_storage_account_name} \
               --container-name ${remote_state_azure_plan_container_name} \
-              --name destroy-${{ env.plan_name }}
+              --name destroy-${{ env.plan_name }} \
+              --overwrite
 
             echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}"... completed.'
           fi
