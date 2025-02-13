@@ -319,10 +319,10 @@ jobs:
           echo "audit_log = ${audit_log}"
           echo "audit_log=${audit_log}" >> $GITHUB_ENV
 
-      - name: Delete stored plans
-        run: |
-          if [[ "${cloud_provider}" != 'azure' ]]; then
-            echo "NOT supported"
-          else
-            az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.plan_name }}
-          fi
+      # - name: Delete stored plans
+      #   run: |
+      #     if [[ "${cloud_provider}" != 'azure' ]]; then
+      #       echo "NOT supported"
+      #     else
+      #       az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.plan_name }}
+      #     fi
