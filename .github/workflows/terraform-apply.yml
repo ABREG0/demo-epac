@@ -273,7 +273,8 @@ jobs:
               -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
               -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
               -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
-              -backend-config=key=${{ env.remote_state_key }}
+              -backend-config=key=${{ env.remote_state_key }} \
+              -backend-config=use_oidc = "true"
           fi
 
       - name: Run terraform apply

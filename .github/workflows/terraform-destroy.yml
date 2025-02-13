@@ -238,9 +238,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          if [[ "${cloud_provider}" != 'azure' ]]; then
-
-          elseif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
+          if [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
@@ -259,7 +257,8 @@ jobs:
               -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
               -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
               -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
-              -backend-config=key=${{ env.remote_state_key }}
+              -backend-config=key=${{ env.remote_state_key }} \
+              -backend-config=use_oidc = "true"
           fi
 
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
