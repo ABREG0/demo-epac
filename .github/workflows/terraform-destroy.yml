@@ -257,8 +257,7 @@ jobs:
               -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
               -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
               -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
-              -backend-config=key=${{ env.remote_state_key }} \
-              -backend-config=use_oidc = "true"
+              -backend-config=key=${{ env.remote_state_key }}
           fi
 
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
