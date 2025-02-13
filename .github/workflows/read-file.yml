@@ -210,7 +210,7 @@ jobs:
                     "deployments": [
                       {
                         "name": "sbx_name",
-                        "path": "loops/azapi_call", //location for terraform files
+                        "path": "folder/tfFolderName", //location for terraform files
                         "remote_state_key": "sbx.tfstate",
                         "runner": "ubuntu-latest", //hosted or self-hosted
                         "run_plan_only": false
@@ -537,6 +537,7 @@ jobs:
       #           }
       #           $deploy = $deploymentMatrix | convertto-json
       #           $deploy
+                  # echo "deployments_run_order_1_all=$($deploymentMatrix)"
       #           echo "deployments_run_order_1_all=$($deploymentMatrix)" >> $Env:GITHUB_ENV
 
       - name: Read all deployments with `run_order` set to 1 *and* `run_plan_only` not set to true.
@@ -573,6 +574,7 @@ jobs:
       #           }
       #           $deploy = $deploymentMatrix | convertto-json
       #           $deploy
+                  # echo "deployments_run_order_1_apply=$($deploymentMatrix)"
       #           echo "deployments_run_order_1_apply=$($deploymentMatrix)" >> $Env:GITHUB_ENV
 
       - name: Read all deployments with `run_order` set to 2.

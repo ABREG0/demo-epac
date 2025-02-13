@@ -138,8 +138,8 @@ jobs:
 
       - name: Validate `cloud_provider` input
         run: |
-          if [[ "${cloud_provider}" != "swa" ]] && [[ "${cloud_provider}" != "azure" ]]; then
-            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values are `swa` and `azure`.'
+          if [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
             exit 1
           fi
 
@@ -178,7 +178,7 @@ jobs:
             if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
               remote_state_key="${remote_state_swa_state_folder}/${remote_state_swa_state_folder}-${branch_ref}-${job_name}.tfstate"
             else # Azure
-              remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
+              remote_state_key="${environment_name}-${job_name}.tfplan.tfstate"
             fi
           fi
           echo "remote_state_key = $remote_state_key"
@@ -238,26 +238,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          if [[ "${cloud_provider}" == 'swa' ]]; then # SWA
-            backend_optional_config=''
+          if [[ "${cloud_provider}" != 'azure' ]]; then
 
-            if [[ "${remote_state_swa_dynamodb_table}" != '' ]]; then
-              backend_optional_config='-backend-config=dynamodb_table=${{ env.remote_state_swa_dynamodb_table }} '
-            fi
-
-            if [[ "${remote_state_swa_kms_key_id}" != '' ]]; then
-              backend_optional_config+='-backend-config=kms_key_id=${{ env.remote_state_swa_kms_key_id }} '
-            fi
-
-            echo "backend_optional_config = ${backend_optional_config}"
-
-            terraform init \
-              -input=false ${backend_optional_config}\
-              -backend-config=bucket=${{ env.remote_state_swa_bucket }} \
-              -backend-config=encrypt=${{ env.remote_state_swa_encrypt }} \
-              -backend-config=region=${{ env.remote_state_swa_region }} \
-              -backend-config=key=${{ env.remote_state_key }}
-          elif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
+          elseif [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \

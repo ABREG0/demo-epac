@@ -213,7 +213,7 @@ jobs:
             echo "NOT supported"
             exit 1
           else # Azure
-            plan_name="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}-${{ github.run_id }}-${{ github.run_attempt }}.tfplan"
+            plan_name="${environment_name}-${job_name}.tfplan"
           fi
           echo "plan_name = $plan_name"
           echo "plan_name=${plan_name}" >> $GITHUB_ENV
@@ -225,7 +225,7 @@ jobs:
               echo "NOT supported"
               exit 1
             else # Azure
-              remote_state_key="${remote_state_azure_state_container_name}-${branch_ref}-${job_name}.tfstate"
+              remote_state_key="${environment_name}-${job_name}.tfstate"
             fi
           fi
           echo "remote_state_key = $remote_state_key"
@@ -320,7 +320,7 @@ jobs:
             -input=false \
             -out=${{ env.plan_name }}
 
-      - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}-destroy
+      - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=destroy-${{ env.plan_name }}
         run: |
           terraform plan \
             ${shared_tfvar_files} \
@@ -328,7 +328,7 @@ jobs:
             ${{ steps.parse_tfvars.outputs.tfvar_files }} \
             ${{ steps.parse_tfvars.outputs.tfvar_values }} \
             -input=false \
-            -out="${{ env.plan_name }}-destroy"
+            -out="-destroy-${{ env.plan_name }}"
 
       - name: Authenticate Azure CLI using OIDC
         uses: Azure/login@v2
@@ -367,7 +367,7 @@ jobs:
           if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
             echo "NOT supported"
           else # Azure
-            echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}-destroy"...'
+            echo 'Uploading destroy plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "destroy-${{ env.plan_name }}"...'
 
             # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
             if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
@@ -377,10 +377,10 @@ jobs:
 
             az storage blob upload\
               --auth-mode login \
-              --file "${{ env.plan_name }}-destroy" \
+              --file "destroy-${{ env.plan_name }}" \
               --account-name ${remote_state_azure_storage_account_name} \
               --container-name ${remote_state_azure_plan_container_name} \
-              --name ${{ env.plan_name }}-destroy
+              --name destroy-${{ env.plan_name }}
 
-            echo 'Uploading plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "${{ env.plan_name }}-destroy"... completed.'
+            echo 'Uploading destroy plan file to "${{ env.remote_state_azure_plan_container_name }}" Storage Container as "destroy-${{ env.plan_name }}"... completed.'
           fi
