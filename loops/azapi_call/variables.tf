@@ -1,3 +1,4 @@
+
 variable "hub_connection" {
   type = map(object({
     location  = string
