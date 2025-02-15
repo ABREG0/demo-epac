@@ -4,7 +4,7 @@ run-name: e2etesting
 on:
   push:    
     branches:      
-      - 'e2etesting'
+      - 'e2etesting1'
   workflow_dispatch:
     inputs:
       version:
