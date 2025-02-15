@@ -22,17 +22,21 @@ permissions:
   pull-requests: write
 
 jobs:
-  vars:
+  preConfig:
     runs-on: ubuntu-latest
     outputs:
-      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }} # you must have this variables in your org, repo or environment
-      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }} # you must have this variables in your org, repo or environment
+      AZURE_CLIENT_ID: ${{ steps.preConfigStep.outputs.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ steps.preConfigStep.outputs.AZURE_TENANT_ID }}
     steps:
-      - run: echo "Exposing env ${AZURE_CLIENT_ID}"
+      - name: preConfig inputs passed to the reusable workflow
+        id: preConfigStep
+        run: |
+          echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID" >> $GITHUB_OUTPUT
+          echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> $GITHUB_OUTPUT
 
   deploy:
     name: Apply ${{ inputs.version }} to sbx
-    needs: [vars]
+    needs: [preConfig]
     uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
     with:
       cloud_provider: azure
