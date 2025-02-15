@@ -12,9 +12,6 @@ on:
         required: false
         default: sbx
 
-env:
-  AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
-  AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -26,12 +23,12 @@ permissions:
 
 jobs:
   vars:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     outputs:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }} # you must have this variables in your org, repo or environment
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }} # you must have this variables in your org, repo or environment
     steps:
-      - run: echo "Exposing env vars"
+      - run: echo "Exposing env $AZURE_CLIENT_ID"
 
   deploy:
     name: Apply ${{ inputs.version }} to sbx
