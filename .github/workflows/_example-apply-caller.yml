@@ -24,6 +24,7 @@ permissions:
 jobs:
   preConfig:
     runs-on: ubuntu-latest
+    environment: sbx
     outputs:
       AZURE_CLIENT_ID: ${{ steps.preConfigStep.outputs.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ steps.preConfigStep.outputs.AZURE_TENANT_ID }}
@@ -31,7 +32,7 @@ jobs:
       - name: preConfig inputs passed to the reusable workflow
         id: preConfigStep
         run: |
-          echo "[${{ env.AZURE_TENANT_ID }}] - [${AZURE_TENANT_ID}]"
+          echo "[$AZURE_TENANT_ID] - [$AZURE_TENANT_ID]"
           echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID*" >> $GITHUB_OUTPUT
           echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> $GITHUB_OUTPUT
         env:
