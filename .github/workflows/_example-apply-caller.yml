@@ -28,15 +28,15 @@ jobs:
       AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }} # you must have this variables in your org, repo or environment
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }} # you must have this variables in your org, repo or environment
     steps:
-      - run: echo "Exposing env $AZURE_CLIENT_ID"
+      - run: echo "Exposing env ${AZURE_CLIENT_ID}"
 
   deploy:
     name: Apply ${{ inputs.version }} to sbx
     uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
     with:
       cloud_provider: azure
-      azure_client_id: ${{ needs.vars.outputs.AZURE_CLIENT_ID }} # ghe-npd-action1
-      azure_tenant_id: ${{ needs.vars.outputs.AZURE_TENANT_ID }}
+      azure_client_id: '${{ needs.vars.outputs.AZURE_CLIENT_ID }}' # ghe-npd-action1
+      azure_tenant_id: '${{ needs.vars.outputs.AZURE_TENANT_ID }}'
       environment_name: sbx # <NDP_or_PRO>
       optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
       optfile_runner: ubuntu-latest # ubuntu-latest 
