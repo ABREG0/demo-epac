@@ -31,6 +31,7 @@ jobs:
       - name: preConfig inputs passed to the reusable workflow
         id: preConfigStep
         run: |
+          echo $AZURE_CLIENT_ID
           echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID" >> $GITHUB_OUTPUT
           echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> $GITHUB_OUTPUT
 
