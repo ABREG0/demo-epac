@@ -32,6 +32,7 @@ jobs:
 
   deploy:
     name: Apply ${{ inputs.version }} to sbx
+    needs: [vars]
     uses: ./.github/workflows/pipeline-apply.yml # my-internal/azure-workflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
     with:
       cloud_provider: azure
