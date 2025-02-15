@@ -11,9 +11,7 @@ on:
         description: The "version" tag to deploy
         required: false
         default: sbx
-env: 
-  AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
-  AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -33,9 +31,12 @@ jobs:
       - name: preConfig inputs passed to the reusable workflow
         id: preConfigStep
         run: |
-          echo "[$AZURE_CLIENT_ID] - [$AZURE_TENANT_ID]"
+          echo "[${{ vars.AZURE_TENANT_ID }}] - [$AZURE_TENANT_ID]"
           echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID*" >> $GITHUB_OUTPUT
           echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> $GITHUB_OUTPUT
+        env:
+          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
 
   deploy:
     name: Apply ${{ inputs.version }} to sbx
