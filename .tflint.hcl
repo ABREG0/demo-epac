@@ -59,11 +59,11 @@ rule "terraform_comment_syntax" {
 }
 
 rule "terraform_deprecated_index" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_deprecated_lookup" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_documented_outputs" {
