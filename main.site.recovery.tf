@@ -1,16 +1,19 @@
 # tflint-ignore: terraform_unused_declarations
 locals {
+  # tflint-ignore: terraform_unused_declarations
   policies = {
 
     # for top_key, top_value in var.site_recovery_fabric_mapping.policies:
     # top_key => top_value
     # if var.site_recovery_fabric_mapping == null
   }
+  # tflint-ignore: terraform_unused_declarations
   fabrics = {
     # for top_key, top_value in var.site_recovery_fabric_mapping.fabrics:
     # top_key => top_value
     # if var.site_recovery_fabric_mapping.fabrics != null
   }
+  # tflint-ignore: terraform_unused_declarations
   network_mapping = {
     # for top_key, top_value in var.site_recovery_fabric_mapping.network_mapping:
     # top_key => top_value
