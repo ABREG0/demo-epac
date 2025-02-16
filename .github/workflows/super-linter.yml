@@ -1,15 +1,15 @@
 ---
-    name: Lint
+    name: super lint
     
     on: # yamllint disable-line rule:truthy
       push: 
         branches:
-          - 'master'
-          - re2etesting
+        #   - 'master'
+          - e2etesting
       pull_request: 
         branches:
           - 'master'
-          - re2etesting
+          - e2etesting
     
     permissions:
         id-token: write
