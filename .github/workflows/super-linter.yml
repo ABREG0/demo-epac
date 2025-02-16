@@ -44,6 +44,20 @@
           - name: Super-linter
             uses: super-linter/super-linter@v7.2.1 # x-release-please-version
             env:
+              VALIDATE_ALL_CODEBASE: true
+              VALIDATE_CHECKOV: true 
+              VALIDATE_TERRAFORM_FMT: true
+              VALIDATE_TERRAFORM_TERRASCAN : true
+              VALIDATE_TERRAFORM_TFLINT : true
+              VALIDATE_YAML: true
+              VALIDATE_POWERSHELL : true
+              VALIDATE_MARKDOWN : true
+              VALIDATE_JSONC : true
+              VALIDATE_JSON : true
+              #   VALIDATE_JAVASCRIPT_ES: true
+              #   VALIDATE_PYTHON_BLACK: true
+              #   VALIDATE_HTML: true
+              #   VALIDATE_BASH : true
               # To report GitHub Actions status checks
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             #   TERRAFORM_TFLINT_CONFIG_FILE: 
