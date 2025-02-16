@@ -1,7 +1,7 @@
 
 output "azurerm_resource_group" {
   value = { for kk, kv in azurerm_resource_group.this :
-    "${kv.name}" => {
+    kv.name => {
       "name" = kv.name
       "id"   = kv.id
     }
@@ -23,7 +23,7 @@ output "subnets" {
           id   = v2.resource_id
         }
       ]
-    ]) : "${kv.name}" => kv...
+    ]) : kv.name => kv...
   }
 }
 
@@ -53,7 +53,7 @@ output "subnets_object" {
           "id"   = val.resource_id
         }
       ]
-    ]) : "${kv.name}" => kv...
+    ]) : kv.name => kv...
   }
 }
 output "vnet_object" {
@@ -64,6 +64,6 @@ output "vnet_object" {
         "addressSpace" = v2.resource.body.properties.addressSpace
         "peering"      = v2.peerings
       }
-    ] : "${kv.name}" => kv
+    ] : kv.name => kv
   }
 }

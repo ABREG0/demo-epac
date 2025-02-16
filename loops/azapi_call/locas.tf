@@ -1,13 +1,13 @@
 locals {
 
   nsg_id = { for kk, kv in azurerm_network_security_group.this :
-    "${kv.name}" => {
+    kv.name => {
       "name" = kv.name
       "id"   = kv.id
     }
   }
   rt_id = { for kk, kv in azurerm_route_table.this :
-    "${kv.name}" => {
+    kv.name => {
       "name" = kv.name
       "id"   = kv.id
     }
