@@ -39,15 +39,20 @@ ALGvKXPLwggdNA86RIQc9tc3z/uJrBGSA2n6UkJbV1gFZDETjHzVtgDqqEQwap7D
 #   enabled = true
 # }
 
+# disable for `locals.version.tf.json for now
+# rule "terraform_unused_declarations" {
+#   enabled = false
+# }
+
+rule "terraform_deprecated_interpolation" {
+  enabled = false
+}
+
 rule "terraform_comment_syntax" {
   enabled = true
 }
 
 rule "terraform_deprecated_index" {
-  enabled = true
-}
-
-rule "terraform_deprecated_interpolation" {
   enabled = true
 }
 
@@ -86,11 +91,6 @@ rule "terraform_standard_module_structure" {
 rule "terraform_typed_variables" {
   enabled = true
 }
-
-# disable for `locals.version.tf.json for now
-# rule "terraform_unused_declarations" {
-#   enabled = false
-# }
 
 rule "terraform_unused_required_providers" {
   enabled = true
