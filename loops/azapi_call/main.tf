@@ -138,6 +138,7 @@ resource "random_integer" "region_index" {
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
+    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/naming/azurerm"
   version = "~> 0.3"
 }
