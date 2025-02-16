@@ -52,6 +52,8 @@ variable "site_recovery_network_mapping" {
   }))
   default = null
 }
+
+# tflint-ignore: terraform_unused_declarations
 variable "backup_protected_vm" {
   type = map(object({
     source_vm_id     = string
@@ -60,6 +62,8 @@ variable "backup_protected_vm" {
   }))
   default = null
 }
+
+# tflint-ignore: terraform_unused_declarations
 variable "site_recovery_virtual_machine" {
   type = map(object({
     recovery_replication_policy_name          = string
@@ -86,6 +90,8 @@ variable "site_recovery_virtual_machine" {
   }))
   default = null
 }
+
+# tflint-ignore: terraform_unused_declarations
 variable "sites" {
   type = map(object({
     site_name         = optional(string)

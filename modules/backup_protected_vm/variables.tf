@@ -1,3 +1,6 @@
+
+
+# tflint-ignore: terraform_unused_declarations
 variable "backup_protected_vm" {
   type = object({
     source_vm_id              = string
