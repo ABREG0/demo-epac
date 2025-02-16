@@ -194,6 +194,7 @@ locals {
     # if res_k == "virtual_networks"
     }
   ]
+# tflint-ignore: terraform_unused_declarations
   top_key = { for rgK, rgV in {
     for res_k, res_v in var.hub_connection :
     res_k => res_k

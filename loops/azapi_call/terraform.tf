@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.5"
     }
+    time = {
+      source  = "hashicorp/time"
+      version = "~> 0.8" # where X.Y is the current major version and minor version
+    }
   }
 
   backend "azurerm" {
