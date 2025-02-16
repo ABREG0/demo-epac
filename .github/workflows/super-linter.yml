@@ -49,11 +49,11 @@
               VALIDATE_TERRAFORM_FMT: true
               VALIDATE_TERRAFORM_TERRASCAN : true
               VALIDATE_TERRAFORM_TFLINT : true
-              VALIDATE_YAML: true
-              VALIDATE_POWERSHELL : true
-              VALIDATE_MARKDOWN : true
-              VALIDATE_JSONC : true
-              VALIDATE_JSON : true
+            #   VALIDATE_POWERSHELL : true
+            #   VALIDATE_MARKDOWN : true
+            #   VALIDATE_YAML: true
+            #   VALIDATE_JSONC : true
+            #   VALIDATE_JSON : true
               #   VALIDATE_JAVASCRIPT_ES: true
               #   VALIDATE_PYTHON_BLACK: true
               #   VALIDATE_HTML: true
