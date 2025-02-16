@@ -41,12 +41,13 @@ ALGvKXPLwggdNA86RIQc9tc3z/uJrBGSA2n6UkJbV1gFZDETjHzVtgDqqEQwap7D
 
 # disable for `locals.version.tf.json for now
 # disable for `main.tf for now
-# disable for `locals.tf for now
+# disable for `locals.*.tf for now
 # disable for `variables.tf for now
 rule "terraform_unused_declarations" {
   enabled = false
 }
 
+# disable for `main.tf for now
 rule "terraform_deprecated_interpolation" {
   enabled = false
 }
