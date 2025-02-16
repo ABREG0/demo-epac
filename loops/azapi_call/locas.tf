@@ -1,17 +1,19 @@
 locals {
-
+# tflint-ignore: terraform_unused_declarations
   nsg_id = { for kk, kv in azurerm_network_security_group.this :
     kv.name => {
       "name" = kv.name
       "id"   = kv.id
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   rt_id = { for kk, kv in azurerm_route_table.this :
     kv.name => {
       "name" = kv.name
       "id"   = kv.id
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   vnet_object = flatten([
     for net_key, net_v in var.hub_connection : [
       for snet_k, snet_v in net_v.resources.virtual_networks : {
@@ -26,6 +28,7 @@ locals {
     ]
 
   ])
+  # tflint-ignore: terraform_unused_declarations
   creating_nested_objects_vnets2 = flatten([
     for top_key, top_value in var.hub_connection :
     [
@@ -40,7 +43,7 @@ locals {
       }
     ]
   ])
-
+# tflint-ignore: terraform_unused_declarations
   creating_nested_objects_rt2 = flatten([
     for top_key, top_value in var.hub_connection :
     [
@@ -54,7 +57,7 @@ locals {
       }
     ]
   ])
-
+# tflint-ignore: terraform_unused_declarations
   creating_nested_objects_nsg2 = flatten([
     for top_key, top_value in var.hub_connection :
     [
@@ -68,6 +71,7 @@ locals {
       }
     ]
   ])
+  # tflint-ignore: terraform_unused_declarations
   resource_groups = [
     for top_key, top_value in var.hub_connection :
     {
@@ -80,6 +84,7 @@ locals {
     # if resource.west_fw_shared_wus2 &&
     # contains(["connectivity", "ddos", "dns"], resource.west_fw_shared_wus2)
   ]
+  # tflint-ignore: terraform_unused_declarations
   resource_groups2 = {
     for top_key, top_value in var.hub_connection :
     "RGs" => {
@@ -93,6 +98,7 @@ locals {
     # contains(["connectivity", "ddos", "dns"], resource.west_fw_shared_wus2)
   }
   # object variable to list
+  # tflint-ignore: terraform_unused_declarations
   flats = { for top_key, top_value in [
     for index_key, kv in var.hub_connection : [
       for rk, rv in kv.resources : {
@@ -103,7 +109,7 @@ locals {
     ]
     ] : "${top_key}" => top_value
   }
-
+# tflint-ignore: terraform_unused_declarations
   creating_nested_objects_resources = {
     for top_key, top_value in var.hub_connection :
     top_key => {
@@ -115,6 +121,7 @@ locals {
       }
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   creating_nested_objects-00 = {
     for top_key, top_value in var.hub_connection :
     top_key => {
@@ -124,6 +131,7 @@ locals {
       "all_resources"     = top_value.resources
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   creating_nested_objects_vnets = {
     for top_key, top_value in var.hub_connection :
     top_key => {
@@ -133,6 +141,7 @@ locals {
       "vnets"             = top_value.resources.virtual_networks
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   creating_nested_objects_nsg = {
     for top_key, top_value in var.hub_connection :
     top_key => {
@@ -143,6 +152,7 @@ locals {
       "nsg"    = top_value.resources.network_security_groups
     }
   }
+  # tflint-ignore: terraform_unused_declarations
   creating_nested_objects_rt = {
     for top_key, top_value in var.hub_connection :
     top_key => {
