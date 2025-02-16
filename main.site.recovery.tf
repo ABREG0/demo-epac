@@ -7,7 +7,7 @@ locals {
     # top_key => top_value
     # if var.site_recovery_fabric_mapping == null
   }
-  
+
   # tflint-ignore: terraform_unused_declarations
   fabrics = {
     # for top_key, top_value in var.site_recovery_fabric_mapping.fabrics:
@@ -21,16 +21,16 @@ locals {
     # top_key => top_value
     # if var.site_recovery_fabric_mapping.network_mapping != null
   }
-  
+
   # tflint-ignore: terraform_unused_declarations
   create_policies = merge(try(var.site_recovery_policies, null), try(var.site_recovery_fabric_mapping.policies, null))
-  
+
   # tflint-ignore: terraform_unused_declarations
-  create_fabrics  = merge(try(var.site_recovery_fabrics, {}), try(var.site_recovery_fabric_mapping.fabrics, {}))                 # local.fabrics)
-  
+  create_fabrics = merge(try(var.site_recovery_fabrics, {}), try(var.site_recovery_fabric_mapping.fabrics, {})) # local.fabrics)
+
   # tflint-ignore: terraform_unused_declarations
-  create_mapping  = merge(try(var.site_recovery_network_mapping, {}), try(var.site_recovery_fabric_mapping.network_mapping, {})) # local.network_mapping)
-  
+  create_mapping = merge(try(var.site_recovery_network_mapping, {}), try(var.site_recovery_fabric_mapping.network_mapping, {})) # local.network_mapping)
+
   # tflint-ignore: terraform_unused_declarations
   output_fabrics = { for top_key, top_value in merge(module.site_recovery_fabric, module.site_recovery_fabric_container) :
     top_key => top_value["resource"]

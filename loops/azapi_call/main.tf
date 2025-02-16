@@ -10,8 +10,9 @@ resource "azurerm_resource_group" "this" {
 
 module "vnets" {
   depends_on = [azurerm_resource_group.this, ]
-  for_each   = merge({ for kk, kv in local.vnet_object : kv.name => kv }) #local.creating_nested_objects_vnets2 # {for kk, kv in local.creating_nested_objects_vnets2 : kk => kv }
-  source     = "github.com/elsalvos-org/terraform-azurerm-avm-res-network-virtualnetwork?ref=v0.2.0"
+  for_each   = merge({ for kk, kv in local.vnet_object : kv.name => kv })                 #local.creating_nested_objects_vnets2 # {for kk, kv in local.creating_nested_objects_vnets2 : kk => kv }
+  source     = "github.com/elsalvos-org/terraform-azurerm-avm-res-network-virtualnetwork" #?ref=v0.2.0"
+  version    = "v0.2.0"
 
   name                = each.value.name
   location            = each.value.location
