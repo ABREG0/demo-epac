@@ -48,6 +48,8 @@ rule "terraform_unused_declarations" {
 }
 
 # disable for `main.tf for now
+# disable for `main.*.tf for now
+# disable for `outputs.tf for now
 rule "terraform_deprecated_interpolation" {
   enabled = false
 }
