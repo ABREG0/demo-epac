@@ -1,5 +1,6 @@
 module "this" {
 
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/avm-res-storage-storageaccount/azurerm"
   version = "0.2.6"
 
