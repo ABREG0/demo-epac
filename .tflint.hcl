@@ -88,9 +88,9 @@ rule "terraform_typed_variables" {
 }
 
 # disable for `locals.version.tf.json for now
-rule "terraform_unused_declarations" {
-  enabled = false
-}
+# rule "terraform_unused_declarations" {
+#   enabled = false
+# }
 
 rule "terraform_unused_required_providers" {
   enabled = true
