@@ -1,5 +1,5 @@
 resource "time_sleep" "wait_pre" {
-  create_duration = lookup(var.site_recovery_fabric.sleep_timer, "60s")
+  create_duration = var.site_recovery_fabric.sleep_timer["60s"]
 }
 resource "azurerm_backup_protected_vm" "this" {
   resource_group_name = var.backup_protected_vm.vault_resource_group_name

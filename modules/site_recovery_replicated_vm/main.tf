@@ -1,5 +1,5 @@
 resource "time_sleep" "wait_pre" {
-  create_duration = lookup(var.site_recovery_fabric.sleep_timer, "60s")
+  create_duration = var.site_recovery_fabric.sleep_timer["60s"]
 }
 resource "azurerm_site_recovery_replicated_vm" "this" {
   name                                      = var.replicated_virtual_machine.name

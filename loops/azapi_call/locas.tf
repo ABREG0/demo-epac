@@ -187,15 +187,16 @@ locals {
     */
   # subnets = { for subnet in var.hub_connection.ohemr-rg-core_fw-shared-wus2-002.resources.virtual_networks.subnets : subnet.name => subnet }
 
+# tflint-ignore: terraform_unused_declarations
   vnets = [for rgK, rgV in var.hub_connection : {
     for res_k, res_v in rgV.resources.virtual_networks : #{res_k = res_v} 
-    "${res_k}" => res_v
+    res_k => res_v
     # if res_k == "virtual_networks"
     }
   ]
   top_key = { for rgK, rgV in {
     for res_k, res_v in var.hub_connection :
-    res_k => "${res_k}"
+    res_k => res_k
     # if res_k == "virtual_networks"
     } : "topKey" => rgV...
   }
