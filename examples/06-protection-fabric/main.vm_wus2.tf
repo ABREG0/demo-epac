@@ -1,5 +1,5 @@
 
-
+# tflint-ignore: terraform_unused_declarations
 data "azurerm_managed_disk" "vm_wus2_osdisk" {
   ##Needed to use a data resource to retrieve the OS disk ID
   name                = azurerm_windows_virtual_machine.vm_wus2.os_disk[0].name
