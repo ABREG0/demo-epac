@@ -47,7 +47,7 @@
               VALIDATE_ALL_CODEBASE: true
               VALIDATE_TERRAFORM_FMT: true
               VALIDATE_TERRAFORM_TFLINT : true
-            #   VALIDATE_CHECKOV: true 
+              VALIDATE_CHECKOV: true 
             #   VALIDATE_TERRAFORM_TERRASCAN : true
             #   VALIDATE_POWERSHELL : true
             #   VALIDATE_MARKDOWN : true
