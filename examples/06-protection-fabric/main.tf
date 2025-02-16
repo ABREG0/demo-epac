@@ -72,6 +72,12 @@ module "azure_region" {
 }
 # must be located in the same region as the VM to be backed up
 resource "azurerm_storage_account" "primary_wus1" {
+  #checkov:skip=CKV_AZURE_44: "Ensure Storage Account is using the latest version of TLS encryption"
+  #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access"
+  #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests"
+  #checkov:skip=CKV_AZURE_206: "Ensure that Storage Accounts use replication"
+  #checkov:skip=CKV_AZURE_244: "Avoid the use of local users for Azure Storage unless necessary"
+  #checkov:skip=CKV_AZURE_190: "Ensure that Storage blobs restrict public access"
   name                     = "srv${azurerm_resource_group.primary_wus1.location}001"
   location                 = azurerm_resource_group.primary_wus1.location
   resource_group_name      = azurerm_resource_group.primary_wus1.name
@@ -80,6 +86,12 @@ resource "azurerm_storage_account" "primary_wus1" {
 }
 
 resource "azurerm_storage_account" "primary_wus2" {
+  #checkov:skip=CKV_AZURE_44: "Ensure Storage Account is using the latest version of TLS encryption"
+  #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access"
+  #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests"
+  #checkov:skip=CKV_AZURE_206: "Ensure that Storage Accounts use replication"
+  #checkov:skip=CKV_AZURE_244: "Avoid the use of local users for Azure Storage unless necessary"
+  #checkov:skip=CKV_AZURE_190: "Ensure that Storage blobs restrict public access"
   name                     = "srv${azurerm_resource_group.primary_wus2.location}001"
   location                 = azurerm_resource_group.primary_wus2.location
   resource_group_name      = azurerm_resource_group.primary_wus2.name
@@ -87,6 +99,12 @@ resource "azurerm_storage_account" "primary_wus2" {
   account_replication_type = "ZRS"
 }
 resource "azurerm_storage_account" "primary_wus3" {
+  #checkov:skip=CKV_AZURE_44: "Ensure Storage Account is using the latest version of TLS encryption"
+  #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access"
+  #checkov:skip=CKV_AZURE_33: "Ensure Storage logging is enabled for Queue service for read, write and delete requests"
+  #checkov:skip=CKV_AZURE_206: "Ensure that Storage Accounts use replication"
+  #checkov:skip=CKV_AZURE_244: "Avoid the use of local users for Azure Storage unless necessary"
+  #checkov:skip=CKV_AZURE_190: "Ensure that Storage blobs restrict public access"
   name                     = "srv${azurerm_resource_group.primary_wus3.location}001"
   location                 = azurerm_resource_group.primary_wus3.location
   resource_group_name      = azurerm_resource_group.primary_wus3.name

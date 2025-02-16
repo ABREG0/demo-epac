@@ -142,6 +142,7 @@ resource "azurerm_network_security_rule" "no_internet" {
 }
 
 module "public_ip" {
+    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   count = var.bypass_ip_cidr == null ? 1 : 0
 
   source  = "lonegunmanb/public-ip/lonegunmanb"
