@@ -40,7 +40,7 @@ output "associate" {
         rt_id   = azurerm_route_table.this[snet_v.rt_key].id
       } if snet_v.rt_key != null || snet_v.nsg_key != null
     ]
-    ]) : "${top_value.snet}" => top_value
+    ]) : top_value.snet => top_value
   }
 }
 
