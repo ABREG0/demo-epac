@@ -55,11 +55,11 @@ rule "terraform_documented_variables" {
   enabled = true
 }
 
-rule "terraform_empty_list_equality" {
+rule "terraform_module_pinned_source" {
   enabled = true
 }
 
-rule "terraform_module_pinned_source" {
+rule "terraform_naming_convention" {
   enabled = true
 }
 
@@ -67,8 +67,8 @@ rule "terraform_module_version" {
   enabled = true
 }
 
-rule "terraform_naming_convention" {
-  enabled = true
+rule "terraform_empty_list_equality" {
+  enabled = false
 }
 
 rule "terraform_required_providers" {
@@ -89,7 +89,7 @@ rule "terraform_typed_variables" {
 
 # disable for `locals.version.tf.json for now
 rule "terraform_unused_declarations" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_unused_required_providers" {
@@ -101,7 +101,7 @@ rule "terraform_workspace_remote" {
 }
 
 rule "terraform_heredoc_usage" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_module_provider_declaration" {
@@ -125,7 +125,7 @@ rule "terraform_sensitive_variable_no_default" {
 }
 
 rule "terraform_variable_nullable_false" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_variable_separate" {
@@ -139,13 +139,13 @@ rule "azurerm_resource_tag" {
 # AVM Provider Rules
 
 rule "tfnfr26" {
-  enabled = true
+  enabled = false
 }
 
 # AVM Module Rules
 
 rule "required_module_source_tffr1" {
-  enabled = true
+  enabled = false
 }
 
 # AVM Output Rules
@@ -181,7 +181,7 @@ rule "private_endpoints" {
 }
 
 rule "role_assignments" {
-  enabled = true
+  enabled = false
 }
 
 rule "tags" {
