@@ -31,6 +31,14 @@ ALGvKXPLwggdNA86RIQc9tc3z/uJrBGSA2n6UkJbV1gFZDETjHzVtgDqqEQwap7D
     KEY
 }
 
+# rule "terraform_required_providers" {
+#   enabled = true
+# }
+
+# rule "terraform_required_version" {
+#   enabled = true
+# }
+
 rule "terraform_comment_syntax" {
   enabled = true
 }
@@ -69,14 +77,6 @@ rule "terraform_module_version" {
 
 rule "terraform_empty_list_equality" {
   enabled = false
-}
-
-rule "terraform_required_providers" {
-  enabled = true
-}
-
-rule "terraform_required_version" {
-  enabled = true
 }
 
 rule "terraform_standard_module_structure" {
