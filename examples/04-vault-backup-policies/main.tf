@@ -38,11 +38,13 @@ locals {
 }
 
 module "regions" {
+    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/regions/azurerm"
   version = "0.5.2" # change this to your desired version, https://www.terraform.io/language/expressions/version-constraints
 }
 
 module "azure_region" {
+    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "claranet/regions/azurerm"
   version = "7.1.1"
 
