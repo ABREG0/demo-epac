@@ -102,12 +102,12 @@ locals {
   flats = { for top_key, top_value in [
     for index_key, kv in var.hub_connection : [
       for rk, rv in kv.resources : {
-        "${rk}"             = rv
+       rk            = rv
         resource_group_name = index_key
         location            = kv.location
       }
     ]
-    ] : "${top_key}" => top_value
+    ] : top_key => top_value
   }
 # tflint-ignore: terraform_unused_declarations
   creating_nested_objects_resources = {
@@ -117,7 +117,7 @@ locals {
         resource_group_name = top_key
         location            = top_value.location
         tags                = top_value.tags
-        "${k}"              = v
+       k             = v
       }
     }
   }

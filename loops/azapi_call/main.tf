@@ -78,7 +78,7 @@ resource "azurerm_subnet_route_table_association" "this" {
         rt_id   = azurerm_route_table.this[snet_v.rt_key].id
       } if snet_v.rt_key != null || snet_v.nsg_key != null
     ]
-    ]) : "${top_key}" => top_value
+    ]) : top_key => top_value
   }
   subnet_id      = each.value.snet_id
   route_table_id = each.value.rt_id
@@ -113,7 +113,7 @@ resource "azurerm_subnet_network_security_group_association" "this" {
         nsg_id  = azurerm_network_security_group.this[snet_v.nsg_key].id
       } if snet_v.rt_key != null || snet_v.nsg_key != null
     ]
-    ]) : "${top_key}" => top_value
+    ]) : top_key => top_value
   }
   subnet_id                 = each.value.snet_id
   network_security_group_id = each.value.nsg_id
