@@ -1,5 +1,4 @@
 ---
-
 metadata:
   name: "Ensure storage for critical data are encrypted with Customer Managed Key"
   id: "CKV2_AZURE_1"
@@ -23,6 +22,8 @@ definition:
       operator:  exists
       cond_type: attribute
       attribute: customer_managed_key.key_vault_key_id
+
+---
 
 metadata:
   id: "CKV2_AZURE_47"
