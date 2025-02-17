@@ -1,4 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
+
+[![Super-Linter](https://github.com/ABREG0/demo-epac/blob/e2etesting/.github/workflows/super-linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 # terraform-azurerm-avm-recoveryservices-vault
 
 This terraform module is designed to deploy Azure Recovery Services Vault. It has support to create private link private endpoints to make the resource privately accessible via customer's private virtual networks and use a customer managed encryption key.
