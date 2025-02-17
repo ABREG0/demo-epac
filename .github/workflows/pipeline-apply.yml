@@ -50,7 +50,15 @@ on:
         required: false
       APP_PRIVATE_KEY:
         required: true
-# run
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   read_optfile:
     name: Read optfile

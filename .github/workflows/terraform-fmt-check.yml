@@ -27,7 +27,13 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
+permissions:
+  id-token: write
+  contents: read
 jobs:
   terraform:
     name: Run terraform fmt -check -recursive
