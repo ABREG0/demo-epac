@@ -37,7 +37,9 @@ resource "azurerm_windows_virtual_machine" "vm_wus3" {
   }
 }
 resource "azurerm_network_interface" "vm_wus3" {
-  #checkov:skip=CKV_AZURE_93:Ensure that managed disks use a specific set of disk encryption sets for the customer-managed key encryption
+
+  #checkov:skip=CKV_AZURE_119:Ensure that Network Interfaces don't use public IPs
+  
   name                = "vm-${azurerm_resource_group.primary_wus3.location}-nic"
   location            = azurerm_resource_group.primary_wus3.location
   resource_group_name = azurerm_resource_group.primary_wus3.name

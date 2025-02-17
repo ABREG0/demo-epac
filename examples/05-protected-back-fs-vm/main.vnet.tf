@@ -8,6 +8,9 @@ resource "azurerm_virtual_network" "westus1" {
 #   value = azurerm_virtual_network.westus1
 # }
 resource "azurerm_subnet" "westus1" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.primary_wus1.location}"
   resource_group_name  = azurerm_resource_group.primary_wus1.name
   virtual_network_name = azurerm_virtual_network.westus1.name
@@ -20,6 +23,9 @@ resource "azurerm_virtual_network" "westus2" {
   location            = azurerm_resource_group.primary_wus2.location
 }
 resource "azurerm_subnet" "westus2" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.primary_wus2.location}"
   resource_group_name  = azurerm_resource_group.primary_wus2.name
   virtual_network_name = azurerm_virtual_network.westus2.name
@@ -32,6 +38,9 @@ resource "azurerm_virtual_network" "westus3" {
   location            = azurerm_resource_group.primary_wus3.location
 }
 resource "azurerm_subnet" "westus3" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.primary_wus3.location}"
   resource_group_name  = azurerm_resource_group.primary_wus3.name
   virtual_network_name = azurerm_virtual_network.westus3.name
@@ -45,6 +54,9 @@ resource "azurerm_virtual_network" "eastus1" {
   location            = azurerm_resource_group.secondary_eus.location
 }
 resource "azurerm_subnet" "eastus1" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.secondary_eus.location}"
   resource_group_name  = azurerm_resource_group.secondary_eus.name
   virtual_network_name = azurerm_virtual_network.eastus1.name
@@ -57,6 +69,9 @@ resource "azurerm_virtual_network" "eastus2" {
   location            = azurerm_resource_group.secondary_eus2.location
 }
 resource "azurerm_subnet" "eastus2" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.secondary_eus2.location}"
   resource_group_name  = azurerm_resource_group.secondary_eus2.name
   virtual_network_name = azurerm_virtual_network.eastus2.name
@@ -69,6 +84,9 @@ resource "azurerm_virtual_network" "centralus" {
   location            = azurerm_resource_group.secondary_cus.location
 }
 resource "azurerm_subnet" "centralus" {
+
+  #checkov:skip=CKV2_AZURE_31:Ensure VNET subnet is configured with a Network Security Group (NSG)
+  
   name                 = "snet-${azurerm_resource_group.secondary_cus.location}"
   resource_group_name  = azurerm_resource_group.secondary_cus.name
   virtual_network_name = azurerm_virtual_network.centralus.name

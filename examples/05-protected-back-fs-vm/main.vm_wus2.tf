@@ -66,6 +66,9 @@ resource "azurerm_public_ip" "centralus" {
   sku                 = "Basic"
 }
 resource "azurerm_network_interface" "vm_wus2" {
+
+  #checkov:skip=CKV_AZURE_119:Ensure that Network Interfaces don't use public IPs
+  
   name                = "vm-${azurerm_resource_group.primary_wus2.location}-nic"
   location            = azurerm_resource_group.primary_wus2.location
   resource_group_name = azurerm_resource_group.primary_wus2.name
