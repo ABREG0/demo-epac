@@ -37,7 +37,6 @@ resource "azurerm_windows_virtual_machine" "vm_wus3" {
   }
 }
 resource "azurerm_network_interface" "vm_wus3" {
-  #checkov:skip=CKV_AZURE_93:Ensure that managed disks use a specific set of disk encryption sets for the customer-managed key encryption
   name                = "vm-${azurerm_resource_group.primary_wus3.location}-nic"
   location            = azurerm_resource_group.primary_wus3.location
   resource_group_name = azurerm_resource_group.primary_wus3.name
@@ -51,6 +50,7 @@ resource "azurerm_network_interface" "vm_wus3" {
 }
 
 resource "azurerm_managed_disk" "vm_wus3" {
+  #checkov:skip=CKV_AZURE_93:Ensure that managed disks use a specific set of disk encryption sets for the customer-managed key encryption
   name                 = "data-${azurerm_resource_group.primary_wus3.location}-disk"
   location             = azurerm_resource_group.primary_wus3.location
   resource_group_name  = azurerm_resource_group.primary_wus3.name
