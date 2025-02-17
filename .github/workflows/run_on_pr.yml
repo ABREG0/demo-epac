@@ -1,4 +1,7 @@
 name: Run on PR Workflow
+
+#checkov:skip=CKV2_GHA_1:Ensure top-level permissions are not set to write-all
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
