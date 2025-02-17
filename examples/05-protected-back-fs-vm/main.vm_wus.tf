@@ -8,7 +8,6 @@ data "azurerm_managed_disk" "vm_wus1_osdisk" {
 resource "azurerm_windows_virtual_machine" "vm_wus1" {
   #checkov:skip=CKV_AZURE_50:Ensure Virtual Machine Extensions are not Installed
   #checkov:skip=CKV_AZURE_151:Ensure Windows VM enables encryption
-  #checkov:skip=CKV_AZURE_93: "Ensure that managed disks use a specific set of disk encryption sets for the customer-managed key encryption
   name                  = "vm-${azurerm_resource_group.primary_wus1.location}-005"
   location              = azurerm_resource_group.primary_wus1.location
   resource_group_name   = azurerm_resource_group.primary_wus1.name
@@ -37,6 +36,7 @@ resource "azurerm_windows_virtual_machine" "vm_wus1" {
   }
 }
 resource "azurerm_managed_disk" "vm_wus1" {
+  #checkov:skip=CKV_AZURE_93: "Ensure that managed disks use a specific set of disk encryption sets for the customer-managed key encryption
   name                 = "data-${azurerm_resource_group.primary_wus1.location}-disk1"
   location             = azurerm_resource_group.primary_wus1.location
   resource_group_name  = azurerm_resource_group.primary_wus1.name
