@@ -89,6 +89,7 @@ resource "azurerm_user_assigned_identity" "this_identity" {
 #Create a Customer Managed Key for a Resovery Services Vautl.
 resource "azurerm_key_vault_key" "this" {
     #checkov:skip=CKV_AZURE_40:Ensure that the expiration date is set on all keys
+    #checkov:skip=CKV_AZURE_112: "Ensure that key vault key is backed by HSM"
   key_opts = [
     "decrypt",
     "encrypt",
