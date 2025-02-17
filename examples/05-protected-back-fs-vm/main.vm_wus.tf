@@ -67,7 +67,7 @@ resource "azurerm_public_ip" "eastus1" {
 resource "azurerm_network_interface" "vm_wus1" {
 
   #checkov:skip=CKV_AZURE_119:Ensure that Network Interfaces don't use public IPs
-  
+
   name                = "vm-${azurerm_resource_group.primary_wus1.location}-nic"
   location            = azurerm_resource_group.primary_wus1.location
   resource_group_name = azurerm_resource_group.primary_wus1.name

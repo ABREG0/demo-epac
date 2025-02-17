@@ -14,7 +14,7 @@ resource "random_string" "this" {
 }
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/naming/azurerm"
   version = "0.4.0"
 }
@@ -30,13 +30,13 @@ locals {
 }
 
 module "regions" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/regions/azurerm"
   version = "0.5.2" # change this to your desired version, https://www.terraform.io/language/expressions/version-constraints
 }
 
 module "azure_region" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "claranet/regions/azurerm"
   version = "7.1.1"
 
@@ -142,7 +142,7 @@ resource "azurerm_network_security_rule" "no_internet" {
 }
 
 module "public_ip" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   count = var.bypass_ip_cidr == null ? 1 : 0
 
   source  = "lonegunmanb/public-ip/lonegunmanb"

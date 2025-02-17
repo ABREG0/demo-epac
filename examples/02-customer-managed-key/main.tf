@@ -14,7 +14,7 @@ resource "random_string" "this" {
 }
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/naming/azurerm"
   version = "0.4.0"
 }
@@ -30,13 +30,13 @@ locals {
 }
 
 module "regions" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "Azure/regions/azurerm"
   version = "0.5.2" # change this to your desired version, https://www.terraform.io/language/expressions/version-constraints
 }
 
 module "azure_region" {
-    #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
+  #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
   source  = "claranet/regions/azurerm"
   version = "7.1.1"
 
@@ -88,8 +88,8 @@ resource "azurerm_user_assigned_identity" "this_identity" {
 
 #Create a Customer Managed Key for a Resovery Services Vautl.
 resource "azurerm_key_vault_key" "this" {
-    #checkov:skip=CKV_AZURE_40:Ensure that the expiration date is set on all keys
-    #checkov:skip=CKV_AZURE_112: "Ensure that key vault key is backed by HSM"
+  #checkov:skip=CKV_AZURE_40:Ensure that the expiration date is set on all keys
+  #checkov:skip=CKV_AZURE_112: "Ensure that key vault key is backed by HSM"
   key_opts = [
     "decrypt",
     "encrypt",
@@ -109,7 +109,7 @@ resource "azurerm_key_vault_key" "this" {
 #create a keyvault for storing the credential with RBAC for the deployment user
 module "avm_res_keyvault_vault" {
   #checkov:skip=CKV_TF_1:Ensure Terraform module sources use a commit hash
-    #checkov:skip=CKV_AZURE_112:Ensure that key vault key is backed by HSM
+  #checkov:skip=CKV_AZURE_112:Ensure that key vault key is backed by HSM
   source              = "Azure/avm-res-keyvault-vault/azurerm"
   version             = "0.5.1"
   tenant_id           = data.azurerm_client_config.current.tenant_id
