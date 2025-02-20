@@ -2,7 +2,7 @@
 {
     "terraform_version": "1.9.2",
     "branch_ref_override": "e2etesting",
-    "destroy_enabled": true,
+    "destroy_enabled": false,
     "uses_component_version_tag_value": false,
     "remote_state": {
       "azure": {
