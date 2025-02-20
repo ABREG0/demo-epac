@@ -51,18 +51,14 @@ on:
       APP_PRIVATE_KEY:
         required: true
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  read_optfile:
+  topfile_read:
     name: Read optfile
-    uses: ./.github/workflows/read-file.yml
+    uses: ./.github/workflows/file-reader.yml
     with:
       azure_client_id: ${{ inputs.azure_client_id }}
       azure_tenant_id: ${{ inputs.azure_tenant_id }}
@@ -75,128 +71,129 @@ jobs:
 
   tf_fmt_check:
     name: Check Terraform formatting
-    needs: [read_optfile]
+    needs: [topfile_read]
     uses: ./.github/workflows/terraform-fmt-check.yml
     with:
       ref: ${{ inputs.ref }}
       runner: ${{ inputs.terraform_fmt_check_runner }}
       terraform_directory: ${{ inputs.terraform_directory }}
-      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
 
   validate:
     name: Validate ${{ matrix.deployments.name }}
-    needs: [tf_fmt_check, read_optfile]
+    needs: [tf_fmt_check, topfile_read]
     uses: ./.github/workflows/terraform-validate.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
-      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_all) }}
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.deployments_all) }}
     with:
       ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
       job_name: ${{ matrix.deployments.name }}
       ref: ${{ inputs.ref }}
       runner: ${{ inputs.validate_runner }}
       terraform_directory: ${{ matrix.deployments.path }}
-      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
-      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
       environment_name: ${{ inputs.environment_name }}
     secrets: inherit
 
   plan:
     name: Plan ${{ matrix.deployments.name }}
-    needs: [validate, read_optfile]
+    needs: [validate, topfile_read]
     uses: ./.github/workflows/terraform-plan.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
-      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_all) }}
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.dro_1) }}
     with:
-      azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
+      azcli_version: ${{ needs.topfile_read.outputs.azcli_version }}
       azure_client_id: ${{ inputs.azure_client_id }}
       azure_tenant_id: ${{ inputs.azure_tenant_id }}
-      branch_ref: ${{ needs.read_optfile.outputs.branch_ref }}
+      branch_ref: ${{ needs.topfile_read.outputs.branch_ref }}
       ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
       cloud_provider: ${{ inputs.cloud_provider }}
       job_name: ${{ matrix.deployments.name }}
       environment_name: ${{ inputs.environment_name }}
       ref: ${{ inputs.ref }}
-      remote_state_azure_plan_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_plan_container_name }}
-      remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
-      remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
-      remote_state_azure_storage_account_name: ${{ needs.read_optfile.outputs.remote_state_azure_storage_account_name }}
-      remote_state_azure_subscription_id: ${{ needs.read_optfile.outputs.remote_state_azure_subscription_id }}
+      state_az_container_name: ${{ needs.topfile_read.outputs.state_az_container_name }}
+      state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
+      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       run_plan_only: ${{ github.event_name == 'pull_request' }} # Never cache the plan for pull requests
       runner: ${{ matrix.deployments.runner }}
-      shared_tfvar_files: ${{ needs.read_optfile.outputs.shared_tfvar_files }}
-      shared_tfvar_values: ${{ needs.read_optfile.outputs.shared_tfvar_values }}
+      shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}
+      shared_tfvar_values: ${{ needs.topfile_read.outputs.shared_tfvar_values }}
       terraform_directory: ${{ matrix.deployments.path }}
-      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
-      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
       tfvars: ${{ toJSON(matrix.deployments.tfvars) }}
     secrets: inherit
 
   apply:
     name: Apply ${{ matrix.deployments.name }}
     # if: ${{ github.event_name != 'pull_request' }}
-    needs: [plan, read_optfile]
+    needs: [plan, topfile_read]
     uses: ./.github/workflows/terraform-apply.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
-      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_apply) }}
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.dro_1apply) }}
     with:
-      request_id: ${{ needs.read_optfile.outputs.request_id }}
-      azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
+      request_id: ${{ needs.topfile_read.outputs.request_id }}
+      azcli_version: ${{ needs.topfile_read.outputs.azcli_version }}
       azure_client_id: ${{ inputs.azure_client_id }}
       azure_tenant_id: ${{ inputs.azure_tenant_id }}
-      branch_ref: ${{ needs.read_optfile.outputs.branch_ref }}
+      branch_ref: ${{ needs.topfile_read.outputs.branch_ref }}
       ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
       cloud_provider: ${{ inputs.cloud_provider }}
       environment_name: ${{ inputs.environment_name }}
       job_name: ${{ matrix.deployments.name }}
       ref: ${{ inputs.ref }}
-      remote_state_azure_plan_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_plan_container_name }}
-      remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
-      remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
-      remote_state_azure_storage_account_name: ${{ needs.read_optfile.outputs.remote_state_azure_storage_account_name }}
-      remote_state_azure_subscription_id: ${{ needs.read_optfile.outputs.remote_state_azure_subscription_id }}
+      state_az_container_name: ${{ needs.topfile_read.outputs.state_az_container_name }}
+      state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
+      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       terraform_directory: ${{ matrix.deployments.path }}
-      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
-      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
     secrets: inherit
 
   destroy:
     name: Destroy ${{ matrix.deployments.name }}
-    needs: [plan, read_optfile, apply]
+    if: ${{ needs.topfile_read.outputs.destroy_enabled == true }}
+    needs: [plan, topfile_read, apply]
     uses: ./.github/workflows/terraform-destroy.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
-      matrix: ${{ fromJSON(needs.read_optfile.outputs.deployments_run_order_1_apply) }}
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.dro_1apply) }}
     with:
-      azcli_version: ${{ needs.read_optfile.outputs.azcli_version }}
+      azcli_version: ${{ needs.topfile_read.outputs.azcli_version }}
       azure_client_id: ${{ inputs.azure_client_id }}
       azure_tenant_id: ${{ inputs.azure_tenant_id }}
-      branch_ref: ${{ needs.read_optfile.outputs.branch_ref }}
+      branch_ref: ${{ needs.topfile_read.outputs.branch_ref }}
       ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
       cloud_provider: ${{ inputs.cloud_provider }}
       environment_name: ${{ inputs.environment_name }}
       job_name: ${{ matrix.deployments.name }}
       ref: ${{ inputs.ref }}
-      remote_state_azure_resource_group_name: ${{ needs.read_optfile.outputs.remote_state_azure_resource_group_name }}
-      remote_state_azure_state_container_name: ${{ needs.read_optfile.outputs.remote_state_azure_state_container_name }}
-      remote_state_azure_storage_account_name: ${{ needs.read_optfile.outputs.remote_state_azure_storage_account_name }}
-      remote_state_azure_subscription_id: ${{ needs.read_optfile.outputs.remote_state_azure_subscription_id }}
+      state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
+      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
-      shared_tfvar_files: ${{ needs.read_optfile.outputs.shared_tfvar_files }}
-      shared_tfvar_values: ${{ needs.read_optfile.outputs.shared_tfvar_values }}
+      shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}
+      shared_tfvar_values: ${{ needs.topfile_read.outputs.shared_tfvar_values }}
       terraform_directory: ${{ matrix.deployments.path }}
-      terraform_logging: ${{ needs.read_optfile.outputs.terraform_logging }}
-      terraform_provider_network_mirror: ${{ needs.read_optfile.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.read_optfile.outputs.terraform_version }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
       tfvars: ${{ toJSON(matrix.deployments.tfvars) }}
     secrets: inherit

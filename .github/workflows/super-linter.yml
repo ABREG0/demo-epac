@@ -5,11 +5,11 @@
       push: 
         branches:
         #   - 'master'
-          - e2etesting
+          - e2etesting1
       pull_request: 
         branches:
           - 'master'
-          - e2etesting
+          - e2etesting1
     
     permissions:
         id-token: write

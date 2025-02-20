@@ -2,7 +2,7 @@
 {
     "terraform_version": "1.9.2",
     "branch_ref_override": "e2etesting",
-    "destroy_enabled": true,
+    "destroy_enabled": false,
     "uses_component_version_tag_value": false,
     "remote_state": {
       "azure": {
@@ -13,11 +13,6 @@
         "storage_account_location": "westus2",
         "subscription_id": "ee5d2fa3-deed-4b33-bc7c-b5fbe997bc65"
       }
-    },
-    "tfvars": {
-      "files": [
-        "tfvars/sbx.tfvars"
-      ]
     },
     "deployments": [
       {
@@ -41,6 +36,5 @@
         "runner": "ubuntu-latest",
         "run_plan_only": false
       }
-    ],
-    "terraform_provider_network_mirror": ""
+    ]
   }
