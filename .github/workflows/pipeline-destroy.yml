@@ -40,9 +40,6 @@ on:
         required: false
       APP_PRIVATE_KEY:
         required: true
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
 
 permissions:
   id-token: write
