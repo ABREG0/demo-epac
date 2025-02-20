@@ -69,16 +69,16 @@ on:
         type: string
         default: ""
 
-      remote_state_azure_resource_group_name:
+      state_az_rg_name:
         required: false
         type: string
-      remote_state_azure_state_container_name:
+      tfstate_az_container_name:
         required: false
         type: string
-      remote_state_azure_storage_account_name:
+      state_az_storage_name:
         required: false
         type: string
-      remote_state_azure_subscription_id:
+      az_subscription_id:
         required: false
         type: string
       remote_state_key:
@@ -109,7 +109,7 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.remote_state_azure_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
@@ -127,9 +127,9 @@ jobs:
       shared_tfvar_values: ${{ inputs.shared_tfvar_values }}
       tfvars: ${{ inputs.tfvars }}
 
-      remote_state_azure_resource_group_name: ${{ inputs.remote_state_azure_resource_group_name }}
-      remote_state_azure_state_container_name: ${{ inputs.remote_state_azure_state_container_name }}
-      remote_state_azure_storage_account_name: ${{ inputs.remote_state_azure_storage_account_name }}
+      state_az_rg_name: ${{ inputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ inputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ inputs.state_az_storage_name }}
       remote_state_key: ${{ inputs.remote_state_key }}
     environment:
       name: ${{ inputs.environment_name }}
@@ -247,18 +247,18 @@ jobs:
               -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=client_secret=${{ env.ARM_CLIENT_SECRET }} \
-              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
-              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
-              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
+              -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
+              -backend-config=container_name=${{ env.tfstate_az_container_name }} \
               -backend-config=key=${{ env.remote_state_key }}
           else # Azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
               -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
-              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
-              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
-              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
+              -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
+              -backend-config=container_name=${{ env.tfstate_az_container_name }} \
               -backend-config=key=${{ env.remote_state_key }}
           fi
 

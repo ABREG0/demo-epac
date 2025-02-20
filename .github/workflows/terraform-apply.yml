@@ -59,19 +59,19 @@ on:
         type: string
         default: ubuntu-latest
 
-      remote_state_azure_plan_container_name:
+      state_az_container_name:
         required: false
         type: string
-      remote_state_azure_resource_group_name:
+      state_az_rg_name:
         required: false
         type: string
-      remote_state_azure_state_container_name:
+      tfstate_az_container_name:
         required: false
         type: string
-      remote_state_azure_storage_account_name:
+      state_az_storage_name:
         required: false
         type: string
-      remote_state_azure_subscription_id:
+      az_subscription_id:
         required: false
         type: string
       remote_state_key:
@@ -106,7 +106,7 @@ jobs:
     env:
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.remote_state_azure_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
@@ -124,10 +124,10 @@ jobs:
       plan_name: ''
       runner: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner }}
 
-      remote_state_azure_plan_container_name: ${{ inputs.remote_state_azure_plan_container_name }}
-      remote_state_azure_resource_group_name: ${{ inputs.remote_state_azure_resource_group_name }}
-      remote_state_azure_state_container_name: ${{ inputs.remote_state_azure_state_container_name }}
-      remote_state_azure_storage_account_name: ${{ inputs.remote_state_azure_storage_account_name }}
+      state_az_container_name: ${{ inputs.state_az_container_name }}
+      state_az_rg_name: ${{ inputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ inputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ inputs.state_az_storage_name }}
       remote_state_key: ${{ inputs.remote_state_key }}
     environment:
       name: ${{ inputs.environment_name }}-Apply  
@@ -230,7 +230,7 @@ jobs:
         uses: Azure/login@v2
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}
-          subscription-id: ${{ inputs.remote_state_azure_subscription_id }}
+          subscription-id: ${{ inputs.az_subscription_id }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
 
       - name: Retrieve plan
@@ -238,14 +238,14 @@ jobs:
           if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
             echo "NOT supported"
           else # Azure
-            echo 'Retrieving "${{ env.plan_name }}" plan file from "${{ env.remote_state_azure_plan_container_name }}" Storage Container...'
+            echo 'Retrieving "${{ env.plan_name }}" plan file from "${{ env.state_az_container_name }}" Storage Container...'
             # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
             if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
               az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
             fi
 
             az account set --subscription ${ARM_SUBSCRIPTION_ID}
-            az storage blob download --auth-mode login --file "${{ env.plan_name }}" --account-name ${remote_state_azure_storage_account_name} --container-name ${remote_state_azure_plan_container_name} --name ${{ env.plan_name }}
+            az storage blob download --auth-mode login --file "${{ env.plan_name }}" --account-name ${state_az_storage_name} --container-name ${state_az_container_name} --name ${{ env.plan_name }}
           fi
 
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
@@ -259,18 +259,18 @@ jobs:
               -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=client_secret=${{ env.ARM_CLIENT_SECRET }} \
-              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
-              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
-              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
+              -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
+              -backend-config=container_name=${{ env.tfstate_az_container_name }} \
               -backend-config=key=${{ env.remote_state_key }}
           else # Azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
               -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
-              -backend-config=resource_group_name=${{ env.remote_state_azure_resource_group_name }} \
-              -backend-config=storage_account_name=${{ env.remote_state_azure_storage_account_name }} \
-              -backend-config=container_name=${{ env.remote_state_azure_state_container_name }} \
+              -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
+              -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
+              -backend-config=container_name=${{ env.tfstate_az_container_name }} \
               -backend-config=key=${{ env.remote_state_key }}
           fi
 
@@ -322,5 +322,5 @@ jobs:
       #     if [[ "${cloud_provider}" != 'azure' ]]; then
       #       echo "NOT supported"
       #     else
-      #       az storage blob delete-batch --auth-mode login --account-name ${{ env.remote_state_azure_storage_account_name }} --source ${{ env.remote_state_azure_plan_container_name }} --pattern ${{ env.plan_name }}
+      #       az storage blob delete-batch --auth-mode login --account-name ${{ env.state_az_storage_name }} --source ${{ env.state_az_container_name }} --pattern ${{ env.plan_name }}
       #     fi
