@@ -1,0 +1,556 @@
+name: Read optfile
+
+on:
+  workflow_call:
+    inputs:
+      azure_client_id:
+        required: false
+        type: string
+      azure_tenant_id:
+        required: false
+        type: string
+      cloud_provider:
+        required: true
+        type: string
+      environment_name:
+        required: false
+        type: string
+      file_path:
+        required: true
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
+
+    secrets:
+      AZ_CLIENT_SECRET:
+        required: false
+
+    outputs:
+      request_id:
+        value: ${{ jobs.topfile_read.outputs.request_id }}
+      azcli_version:
+        value: ${{ jobs.topfile_read.outputs.azcli_version }}
+      branch_ref:
+        value: ${{ jobs.topfile_read.outputs.branch_ref }}
+      deployments_all:
+        value: ${{ jobs.topfile_read.outputs.all_deployments_json }}
+      dro_1:
+        value: ${{ jobs.topfile_read.outputs.dro_1 }}
+      dro_1apply:
+        value: ${{ jobs.topfile_read.outputs.dro_1apply }}
+      dro_2:
+        value: ${{ jobs.topfile_read.outputs.dro_2 }}
+      dro_2apply:
+        value: ${{ jobs.topfile_read.outputs.dro_2apply }}
+      destroy_enabled:
+        value: ${{ jobs.topfile_read.outputs.destroy_enabled }}
+      destroy_pause_in_seconds:
+        value: ${{ jobs.topfile_read.outputs.destroy_pause_in_seconds }}
+      push_git_tag:
+        value: ${{ jobs.topfile_read.outputs.push_git_tag }}
+      state_az_container_name:
+        value: ${{ jobs.topfile_read.outputs.state_az_container_name }}
+      state_az_rg_name:
+        value: ${{ jobs.topfile_read.outputs.state_az_rg_name }}
+      tfstate_az_container_name:
+        value: ${{ jobs.topfile_read.outputs.tfstate_az_container_name }}
+      state_az_storage_name:
+        value: ${{ jobs.topfile_read.outputs.state_az_storage_name }}
+      az_subscription_id:
+        value: ${{ jobs.topfile_read.outputs.az_subscription_id }}
+      shared_tfvar_files:
+        value: ${{ jobs.topfile_read.outputs.tfvar_files }}
+      shared_tfvar_values:
+        value: ${{ jobs.topfile_read.outputs.tfvar_values }}
+      tag_version_major:
+        value: ${{ jobs.topfile_read.outputs.tag_version_major }}
+      tag_version_minor:
+        value: ${{ jobs.topfile_read.outputs.tag_version_minor }}
+      tag_version_prefix:
+        value: ${{ jobs.topfile_read.outputs.tag_version_prefix }}
+      tag_version_suffix:
+        value: ${{ jobs.topfile_read.outputs.tag_version_suffix }}
+      terraform_logging:
+        value: ${{ jobs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror:
+        value: ${{ jobs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version:
+        value: ${{ jobs.topfile_read.outputs.terraform_version }}
+      # target_subscription_id: 
+      #   value: ${{ jobs.topfile_read.outputs.target_subscription_id }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  topfile_read:
+    name: Read optfile
+    runs-on: ${{ inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}
+    continue-on-error: false
+    env:
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      file_is_json: ${{ endsWith(inputs.file_path, '.json') }}
+      file_path: ${{ inputs.file_path }}
+      AZ_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
+
+      # Remote State
+      state_az_container_name: tbd
+      state_az_rg_name: tbd
+      tfstate_az_container_name: tbd
+      state_az_storage_name: tbd
+      az_subscription_id: tbd
+
+      all_deployments_json: tbd
+      dro_1: tbd
+      dro_1apply: tbd
+      dro_2: n/a
+      dro_2apply: n/a
+
+      # Misc
+      request_id: tbd
+      azcli_version: tbd
+      branch_ref: tbd
+      destroy_enabled: tbd
+      destroy_pause_in_seconds: tbd
+      push_git_tag: tbd
+      tag_version_major: tbd
+      tag_version_minor: tbd
+      tag_version_prefix: tbd
+      tag_version_suffix: tbd
+      terraform_logging: tbd
+      terraform_provider_network_mirror: tbd
+      terraform_version: tbd
+      tfvar_files: tbd
+      tfvar_values: tbd
+    environment:
+      name: ${{ inputs.environment_name }}
+    outputs:
+      # Deployments
+      all_deployments_json: ${{ env.all_deployments_json }}
+      dro_1: ${{ env.dro_1 }}
+      dro_1apply: ${{ env.dro_1apply }}
+      dro_2: ${{ env.dro_2 }}
+      dro_2apply: ${{ env.dro_2apply }}
+
+      # Remote State
+      state_az_container_name: ${{ env.state_az_container_name }}
+      state_az_rg_name: ${{ env.state_az_rg_name }}
+      tfstate_az_container_name: ${{ env.tfstate_az_container_name }}
+      state_az_storage_name: ${{ env.state_az_storage_name }}
+      az_subscription_id: ${{ env.az_subscription_id }}
+
+      # Misc
+      request_id: ${{ env.request_id }}
+      azcli_version: ${{ env.azcli_version }}
+      branch_ref: ${{ env.branch_ref }}
+      destroy_enabled: ${{ env.destroy_enabled }}
+      destroy_pause_in_seconds: ${{ env.destroy_pause_in_seconds }}
+      push_git_tag: ${{ env.push_git_tag }}
+      tag_version_major: ${{ env.tag_version_major }}
+      tag_version_minor: ${{ env.tag_version_minor }}
+      tag_version_prefix: ${{ env.tag_version_prefix }}
+      tag_version_suffix: ${{ env.tag_version_suffix }}
+      terraform_logging: ${{ env.terraform_logging }}
+      terraform_provider_network_mirror: ${{ env.terraform_provider_network_mirror }}
+      terraform_version: ${{ env.terraform_version }}
+      tfvar_files: ${{ env.tfvar_files }}
+      tfvar_values: ${{ env.tfvar_values }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Display environment name
+        run: |
+          echo "environment name ${{ inputs.environment_name }}"
+
+      - name: Validate `cloud_provider` input
+        run: |
+          if [[ "${cloud_provider}" != "azure" ]]; then
+            echo 'The specified `cloud_provider` value is invalid: `${{ inputs.cloud_provider }}`. Acceptable values is `azure`.'
+            exit 1
+          fi
+
+      - name: "Verify configuration file exists: ${{ inputs.file_path }}"
+        run: |
+          if [[ -e ${{ inputs.file_path }} ]]; then
+            exit 0
+          else
+            echo "A configuration file was not found at the specified path: ${{ inputs.file_path }}"
+            echo 'Details on how to configure this file can be found at '
+            echo '
+                {
+                    "destroy_enabled": true,
+                    "uses_component_version_tag_value": false,
+                    "remote_state": {
+                      "azure": { //storage account backend state information
+                        "plan_container_name": "",
+                        "resource_group_name": "",
+                        "state_container_name": "",
+                        "storage_account_name": "",
+                        "storage_account_location": "",
+                        "subscription_id": "xxxxxxxxxxxxxx"
+                      }
+                    },
+                    "tfvars": {
+                      "files": [
+                        "tfvars/sbx.tfvars"
+                      ]
+                    },
+                    "deployments": [
+                      {
+                        "name": "sbx_name",
+                        "path": "folder/tfFolderName", //location for terraform files
+                        "remote_state_key": "sbx.tfstate",
+                        "runner": "ubuntu-latest", //hosted or self-hosted
+                        "run_plan_only": false
+                      }
+                    ]
+                  }
+            '
+            exit 1
+          fi
+
+      - name: JSON - Read `terraform_version` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          terraform_version=$(cat ${file_path} | jq -r .terraform_version)
+
+          if [[ "${terraform_version}" == 'null' ]]; then
+            terraform_version="1.6.2"
+          fi
+
+          echo "terraform_version = ${terraform_version}"
+          echo "terraform_version=${terraform_version}" >> $GITHUB_ENV
+
+      - name: JSON - Read `terraform_logging` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          terraform_logging=$(cat ${file_path} | jq -r .terraform_logging)
+
+          if [[ "${terraform_logging}" == 'null' ]]; then
+            terraform_logging="off"
+          fi
+
+          echo "terraform_logging = ${terraform_logging}"
+          echo "terraform_logging=${terraform_logging}" >> $GITHUB_ENV
+
+      - name: JSON - Read `terraform_provider_network_mirror` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          terraform_provider_network_mirror=$(cat ${file_path} | jq -r .terraform_provider_network_mirror)
+
+          if [[ "${terraform_provider_network_mirror}" == 'null' ]]; then
+            terraform_provider_network_mirror=${terraform_provider_network_mirror} #'https://registry.terraform.io'
+            # "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/" #set terraform private provider repo
+          fi
+
+          echo "terraform_provider_network_mirror = ${terraform_provider_network_mirror}"
+          echo "terraform_provider_network_mirror=${terraform_provider_network_mirror}" >> $GITHUB_ENV
+
+      - name: JSON - Read `azcli_version` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          azcli_version=$(cat ${file_path} | jq -r .azcli_version)
+
+          if [[ "${azcli_version}" == 'null' ]]; then
+            azcli_version=$(az version | jq -r '."azure-cli"')
+          fi
+
+          azcli_installed_version=$(az version | jq -r '."azure-cli"')
+          echo "azcli_installed_version = ${azcli_installed_version}"
+          echo "azcli_installed_version=${azcli_installed_version}" >> $GITHUB_ENV
+
+          echo "azcli_version = ${azcli_version}"
+          echo "azcli_version=${azcli_version}" >> $GITHUB_ENV
+
+      - name: JSON - Read `destroy`-related values
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          destroy_enabled=$(cat ${file_path} | jq -r .destroy_enabled)
+
+          if [[ "${destroy_enabled}" == 'null' ]]; then
+            destroy_enabled=true
+          fi
+
+          echo "destroy_enabled=${destroy_enabled}" >> $GITHUB_ENV
+
+          destroy_pause_in_seconds=$(cat ${file_path} | jq -r .destroy_pause_in_seconds)
+
+          if [[ "${destroy_pause_in_seconds}" == 'null' ]]; then
+            destroy_pause_in_seconds="30"
+          fi
+
+          echo "destroy_pause_in_seconds=${destroy_pause_in_seconds}" >> $GITHUB_ENV
+
+      - name: JSON - Read `remote_state` object
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          if [[ "${cloud_provider}" == 'azure' ]]; then
+            remote_state_azure=$(cat ${file_path} | jq .remote_state.azure)
+            state_az_container_name=$(echo $remote_state_azure | jq -r .plan_container_name)
+            state_az_rg_name=$(echo $remote_state_azure | jq -r .resource_group_name)
+            tfstate_az_container_name=$(echo $remote_state_azure | jq -r .state_container_name)
+            remote_state_azure_storage_account_location=$(echo $remote_state_azure | jq -r .storage_account_location)
+            state_az_storage_name=$(echo $remote_state_azure | jq -r .storage_account_name)
+            az_subscription_id=$(echo $remote_state_azure | jq -r .subscription_id)
+          fi
+
+          echo "state_az_container_name = ${state_az_container_name}"
+          echo "state_az_container_name=${state_az_container_name}" >> $GITHUB_ENV
+
+          echo "state_az_rg_name = ${state_az_rg_name}"
+          echo "state_az_rg_name=${state_az_rg_name}" >> $GITHUB_ENV
+
+          echo "tfstate_az_container_name = ${tfstate_az_container_name}"
+          echo "tfstate_az_container_name=${tfstate_az_container_name}" >> $GITHUB_ENV
+
+          echo "remote_state_azure_storage_account_location = ${remote_state_azure_storage_account_location}"
+          echo "remote_state_azure_storage_account_location=${remote_state_azure_storage_account_location}" >> $GITHUB_ENV
+
+          echo "state_az_storage_name = ${state_az_storage_name}"
+          echo "state_az_storage_name=${state_az_storage_name}" >> $GITHUB_ENV
+
+          echo "az_subscription_id = ${az_subscription_id}"
+          echo "az_subscription_id=${az_subscription_id}" >> $GITHUB_ENV
+
+      - name: JSON - Read `tag_version` object
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          tag_version=$(cat ${file_path} | jq .tag_version)
+
+          tag_version_prefix=$(echo $tag_version | jq -r .prefix)
+          if [[ "${tag_version_prefix}" == 'null' ]]; then
+            tag_version_prefix='v'
+          fi
+          echo "tag_version_prefix=${tag_version_prefix}" >> $GITHUB_ENV
+
+          tag_version_major=$(echo $tag_version | jq -r .major)
+          if [[ "${tag_version_major}" == 'null' ]]; then
+            tag_version_major=''
+          fi
+          echo "tag_version_major=${tag_version_major}" >> $GITHUB_ENV
+
+          tag_version_minor=$(echo $tag_version | jq -r .minor)
+          if [[ "${tag_version_minor}" == 'null' ]]; then
+            tag_version_minor=''
+          fi
+          echo "tag_version_minor=${tag_version_minor}" >> $GITHUB_ENV
+
+          tag_version_suffix=$(echo $tag_version | jq -r .suffix)
+          if [[ "${tag_version_suffix}" == 'null' ]]; then
+            tag_version_suffix=''
+          fi
+          echo "tag_version_suffix=${tag_version_suffix}" >> $GITHUB_ENV
+
+      - name: JSON - Read `push_git_tag` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          push_git_tag=$(cat ${file_path} | jq -r .push_git_tag)
+
+          if [[ "${push_git_tag}" == 'null' ]]; then
+            push_git_tag=true
+          fi
+
+          echo "push_git_tag = ${push_git_tag}"
+          echo "push_git_tag=${push_git_tag}" >> $GITHUB_ENV
+
+      - name: JSON - Read `branch_ref_override` value
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          branch_ref=$(cat ${file_path} | jq -r .branch_ref_override)
+
+          if [[ "${branch_ref}" == 'null' ]]; then
+            if [[ ${{ github.event_name }} == 'pull_request' ]]; then
+              branch_ref="pr-${{ github.event.number }}"
+            else
+              branch_ref="${GITHUB_REF#refs/heads/}"
+              branch_ref="${branch_ref#refs/tags/}"
+            fi
+          fi
+
+          echo "branch_ref = ${branch_ref}"
+          echo "branch_ref=${branch_ref}" >> $GITHUB_ENV
+
+      - name: JSON - Read `tfvars` object
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          tfvar_files=''
+          tfvar_files_json_string=$(cat ${file_path} | jq -c .tfvars.files)
+          echo "tfvar_files_json_string = ${tfvar_files_json_string}"
+          if [[ "${tfvar_files_json_string}" != 'null' ]]; then
+            tfvar_files_entries=$(jq -r '. | to_entries | .[] | .value' <<< "${tfvar_files_json_string}")
+            tfvar_files_array=($tfvar_files_entries)
+
+            for key in "${!tfvar_files_array[@]}"
+            do
+              tfvar_files="${tfvar_files} -var-file='${tfvar_files_array[$key]}'"
+            done
+          fi
+
+          tfvar_files="$(echo "${tfvar_files}" | xargs)"
+          echo "tfvar_files = '${tfvar_files}'"
+          echo "tfvar_files=${tfvar_files}" >> $GITHUB_ENV
+
+          tfvar_values=''
+          tfvar_namespace_found=0
+          tfvar_values_json_string=$(cat ${file_path} | jq -c .tfvars.values)
+          if [[ "${tfvar_values_json_string}" != 'null' ]]; then
+            tfvar_values_entries=$(jq -r '. | to_entries | .[] | .key + "=" + .value' <<< "${tfvar_values_json_string}")
+            tfvar_values_array=($tfvar_values_entries)
+
+            for key in "${!tfvar_values_array[@]}"
+            do
+              tfvar_values="${tfvar_values} -var='${tfvar_values_array[$key]}'"
+              if [[ "${tfvar_values_array[$key]}" == namespace=* ]]; then
+                tfvar_namespace_found=1
+              fi
+            done
+          fi
+
+          override_namespace_var_for_pull_requests=$(cat ${file_path} | jq -r .override_namespace_var_for_pull_requests)
+          if [[ "${override_namespace_var_for_pull_requests}" == 'null' ]]; then
+            override_namespace_var_for_pull_requests=false
+          fi
+
+          echo "override_namespace_var_for_pull_requests = ${override_namespace_var_for_pull_requests}"
+
+          # If not set in the optfile, set the `namespace` value for pull requests.
+          if [[ "${override_namespace_var_for_pull_requests}" == 'true' ]] && [[ ${tfvar_namespace_found} -ne 1 ]] && [[ ${{ github.event_name }} == 'pull_request' ]]; then
+            tfvar_values="${tfvar_values} -var='namespace=pr-${{ github.event.number }}'"
+          fi
+
+          # Read the "uses_component_version_tag_value" value
+          uses_component_version_tag_value=$(cat ${file_path} | jq -r .uses_component_version_tag_value)
+          if [[ "${uses_component_version_tag_value}" == 'null' ]]; then
+            uses_component_version_tag_value=false
+          fi
+
+          echo "uses_component_version_tag_value = ${uses_component_version_tag_value}"
+
+          # Set the "component_version_tag_value" value.
+          if [[ "${uses_component_version_tag_value}" == 'true' ]]; then
+            if [[ "${{ inputs.ref }}" != '' ]]; then
+              tfvar_values="${tfvar_values} -var='component_version_tag_value=${{ inputs.ref }}'"
+            else
+              echo "Ignoring 'uses_component_version_tag_value' setting because 'ref' value is not explicitly set"
+            fi
+          fi
+
+          tfvar_values="$(echo "${tfvar_values}" | xargs)"
+          echo "tfvar_values = '${tfvar_values}'"
+          echo "tfvar_values=${tfvar_values}" >> $GITHUB_ENV
+
+      - name: JSON - Read all deployments
+        if: ${{ env.file_is_json == 'true' }}
+        run: |
+          all_deployments_json=$(cat ${file_path} | jq -c .deployments)
+          echo "all_deployments_json = ${all_deployments_json}"
+          echo "all_deployments_json={\"deployments\":${all_deployments_json}}" >> $GITHUB_ENV
+
+      - name: Determine the max `run_order` value for all deployments
+        id: read_deployments_max_run_order # Important: Do NOT forget to set `id`!
+        env:
+          all_deployments_json: ${{ env.all_deployments_json }}
+        run: |
+          max_run_order=$(echo ${all_deployments_json} | jq -c '[ .deployments[].run_order ] | max')
+
+          if [[ "${max_run_order}" == 'null' ]]; then
+            max_run_order=1
+          fi
+
+          echo "max_run_order = ${max_run_order}"
+          echo "max_run_order=${max_run_order}" >> $GITHUB_OUTPUT
+
+      - name: Read all deployments with `run_order` set to 1.
+        env:
+          all_deployments_json: ${{ env.all_deployments_json }}
+        run: |
+          dro_1=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( ( .run_order == 1 ) or ( .run_order == "1" ) or ( .run_order == null ) ) ]')
+          echo "dro_1 = ${dro_1}"
+          echo "dro_1={\"deployments\":${dro_1}}" >> $GITHUB_ENV
+          echo '################################################################################'
+          echo "All deployments JSON: ${dro_1}"
+          echo '################################################################################'
+
+      - name: Read all deployments with `run_order` set to 1 *and* `run_plan_only` not set to true.
+        env:
+          all_deployments_json: ${{ env.all_deployments_json }}
+        run: |
+          dro_1apply=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( ( ( .run_order == 1 ) or ( .run_order == "1" ) or ( .run_order == null ) ) and ( .run_plan_only == null or .run_plan_only != true ) ) ]')
+          echo "dro_1apply = ${dro_1apply}"
+          echo "dro_1apply={\"deployments\":${dro_1apply}}" >> $GITHUB_ENV
+
+      - name: Read all deployments with `run_order` set to 2.
+        if: ${{ steps.read_deployments_max_run_order.outputs.max_run_order > 1 }}
+        env:
+          all_deployments_json: ${{ env.all_deployments_json }}
+        run: |
+          dro_2=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( .run_order == 2 ) ]')
+          echo "dro_2 = ${dro_2}"
+          echo "dro_2={\"deployments\":${dro_2}}" >> $GITHUB_ENV
+
+      - name: Read all deployments with `run_order` set to 2 *and* `run_plan_only` not set to true.
+        if: ${{ steps.read_deployments_max_run_order.outputs.max_run_order > 1 }}
+        env:
+          all_deployments_json: ${{ env.all_deployments_json }}
+        run: |
+          dro_2apply=$( echo "${all_deployments_json}" | jq -c '[ .deployments[] | select( .run_order == 2 and ( .run_plan_only == null or .run_plan_only != true ) ) ]')
+          echo "dro_2apply = ${dro_2apply}"
+          echo "dro_2apply={\"deployments\":${dro_2apply}}" >> $GITHUB_ENV
+
+      - name: Authenticate to Azure using OIDC
+        continue-on-error: false
+        uses: Azure/login@v2
+        if: ${{ env.cloud_provider == 'azure' && env.AZ_CLIENT_SECRET == '' }}
+        with:
+          client-id: ${{ env.azure_client_id }}
+          subscription-id: ${{ env.az_subscription_id }}
+          tenant-id: ${{ env.azure_tenant_id }}
+
+      - name: Azure - Validate Azure Storage Account and Containers
+        continue-on-error: false
+        if: ${{ env.cloud_provider == 'azure' }}
+        run: |
+          # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+          if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
+            az login --service-principal -u ${{ env.azure_client_id }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.azure_tenant_id }} --output none
+            az account set --subscription ${{ env.az_subscription_id }}
+          fi
+
+          echo "Verifying if the ${{ env.state_az_storage_name }} storage account exists..."
+          az storage account show --name ${{ env.state_az_storage_name }} --resource-group ${{ env.state_az_rg_name }} --query "id"
+          echo ""
+
+          echo "Verifying if the ${{ env.tfstate_az_container_name }} container exists..."
+          container_exists=$(az storage container exists --name ${{ env.tfstate_az_container_name }} --account-name ${{ env.state_az_storage_name }} --auth-mode login --query "exists")
+          if [[ "${container_exists}" == 'false' ]]; then
+            echo "The ${{ env.tfstate_az_container_name }} container does not exist. Creating..."
+            az storage container create --name ${{ env.tfstate_az_container_name }} --account-name ${{ env.state_az_storage_name }} --auth-mode login
+          else
+            echo "The ${{ env.tfstate_az_container_name }} container exists."
+          fi
+          echo ""
+
+          echo "Verifying if the ${{ env.state_az_container_name }} container exists..."
+          container_exists=$(az storage container exists --name ${{ env.state_az_container_name }} --account-name ${{ env.state_az_storage_name }} --auth-mode login --query "exists")
+          if [[ "${container_exists}" == 'false' ]]; then
+            echo "The ${{ env.state_az_container_name }} container does not exist. Creating..."
+            az storage container create --name ${{ env.state_az_container_name }} --account-name ${{ env.state_az_storage_name }} --auth-mode login
+          else
+            echo "The ${{ env.state_az_container_name }} container exists."
+          fi

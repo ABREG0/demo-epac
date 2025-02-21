@@ -1,0 +1,55 @@
+name: prd Apply to Example
+run-name: e2e module testing
+
+on:
+  push:    
+    branches:      
+      - 'e2e-testing'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The "version" tag to deploy
+        required: false
+        default: prd
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  preConfig:
+    runs-on: ghr-ent-eip-prd-wus2-01
+    environment: prd
+    outputs:
+      AZURE_CLIENT_ID: ${{ steps.preConfigStep.outputs.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ steps.preConfigStep.outputs.AZURE_TENANT_ID }}
+    steps:
+      - name: preConfig inputs passed to the reusable workflow
+        id: preConfigStep
+        run: |
+          echo "client [$AZURE_CLIENT_ID] - tenant [$AZURE_TENANT_ID]"
+          echo "AZURE_CLIENT_ID=$AZURE_CLIENT_ID" >> $GITHUB_OUTPUT
+          echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> $GITHUB_OUTPUT
+        env:
+          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.IH_AZ_TENANT_ID }}
+
+  deploy:
+    name: Apply ${{ inputs.version }} to prd
+    needs: [preConfig]
+    uses: Intermountain-Health/actions-gh-reusableworkflows/.github/workflows/pipeline-apply.yml@main # v2.0.0
+    with:
+      cloud_provider: azure
+      azure_client_id: ${{ needs.preConfig.outputs.AZURE_CLIENT_ID }} # STATIC  VALUES CAN BE ADDED HERE. if no access to variables is in place.
+      azure_tenant_id: ${{ needs.preConfig.outputs.AZURE_TENANT_ID }} # STATIC  VALUES CAN BE ADDED HERE. if no access to variables is in place.
+      environment_name: prd # <NDP_or_PRO>
+      optfile_path: examples/optfiles/prd.json # optfiles/_opt_file_example.yml
+      optfile_runner: ghr-ent-eip-prd-wus2-01 # ubuntu-latest
+      # target_subscription: 8d1a4c6c-02ce-4bb0-88f2-4c0804c59122 # ${{ secrets.IH_AZ_SUBSCRIPTION_ID }} # STATIC  VALUES CAN BE ADDED HERE. if no access to variables is in place.
+    secrets:
+      APP_PRIVATE_KEY: ${{ secrets.APP_TFAUTH_IH_001_PK }}

@@ -1,0 +1,23 @@
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Manual Release Workflow
+#
+# This is a manual GitHub Actions Workflow. It is designed to allow a user to create a release manually.
+#
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+name: Manual Release
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+    security-events: write
+    id-token: write
+
+jobs:
+
+    release:
+      uses: SelectHealth/az-tf-module-shared-actions/.github/workflows/release-module.yml@0.4.4
+      secrets: inherit

@@ -1,0 +1,95 @@
+name: pipeline-destroy
+
+on:
+  workflow_call:
+    inputs:
+      azure_client_id:
+        required: false
+        type: string
+      azure_tenant_id:
+        required: false
+        type: string
+      cloud_provider:
+        required: true
+        type: string
+      environment_name:
+        required: false
+        type: string
+      optfile_path:
+        required: true
+        type: string
+      optfile_runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+      ref:
+        required: false
+        type: string
+        default: ""
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
+
+    secrets:
+      AZ_CLIENT_SECRET:
+        required: false
+      CA_BUNDLE:
+        required: false
+      GH_TOKEN:
+        required: false
+      APP_PRIVATE_KEY:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  topfile_read:
+    name: Read optfile
+    uses: ./.github/workflows/file-reader.yml
+    with:
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      environment_name: ${{ inputs.environment_name }}
+      file_path: ${{ inputs.optfile_path }}
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.optfile_runner }}
+    secrets: inherit
+
+  destroy:
+    name: Destroy ${{ matrix.deployments.name }}
+    needs: [topfile_read]
+    uses: ./.github/workflows/terraform-destroy.yml
+    strategy:
+      fail-fast: false # Ensure that all Terraform commands execute to completion
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.dro_1apply) }}
+    with:
+      azcli_version: ${{ needs.topfile_read.outputs.azcli_version }}
+      azure_client_id: ${{ inputs.azure_client_id }}
+      azure_tenant_id: ${{ inputs.azure_tenant_id }}
+      branch_ref: ${{ needs.topfile_read.outputs.branch_ref }}
+      ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
+      cloud_provider: ${{ inputs.cloud_provider }}
+      environment_name: ${{ inputs.environment_name }}
+      job_name: ${{ matrix.deployments.name }}
+      ref: ${{ inputs.ref }}
+      state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
+      tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
+      state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
+      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      remote_state_key: ${{ matrix.deployments.remote_state_key }}
+      runner: ${{ matrix.deployments.runner }}
+      shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}
+      shared_tfvar_values: ${{ needs.topfile_read.outputs.shared_tfvar_values }}
+      terraform_directory: ${{ matrix.deployments.path }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
+      tfvars: ${{ toJSON(matrix.deployments.tfvars) }}
+    secrets: inherit

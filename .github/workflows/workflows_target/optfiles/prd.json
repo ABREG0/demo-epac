@@ -1,0 +1,42 @@
+
+{
+    "terraform_version": "1.9.2",
+    "destroy_enabled": true,
+    "uses_component_version_tag_value": false,
+    "remote_state": {
+      "azure": {
+        "plan_container_name": "tfm-az-subscriptionvending",
+        "resource_group_name": "rg-tfmodules-sbx-wus2-001",
+        "state_container_name": "tfm-az-subscriptionvending",
+        "storage_account_name": "satfmodulessbxwus2001",
+        "storage_account_location": "westus2",
+        "subscription_id": "8d1a4c6c-02ce-4bb0-88f2-4c0804c59122"
+      }
+    },
+    "deployments": [
+      {
+        "name": "01-default",
+        "path": "examples/01-default",
+        "remote_state_key": "01-default.tfstate",
+        "runner": "ghr-ent-eip-prd-wus2-01",
+        "run_plan_only": false,
+        "target_subscription_id": "8d1a4c6c-02ce-4bb0-88f2-4c0804c59122"
+      },
+      {
+        "name": "02-default-peering",
+        "path": "examples/02-default-peering",
+        "remote_state_key": "02-default-peering.tfstate",
+        "runner": "ghr-ent-eip-prd-wus2-01",
+        "run_plan_only": false,
+        "target_subscription_id": "8d1a4c6c-02ce-4bb0-88f2-4c0804c59122"
+      },
+      {
+        "name": "03-default-other",
+        "path": "examples/03-default-other",
+        "remote_state_key": "03-default-other.tfstate",
+        "runner": "ghr-ent-eip-prd-wus2-01",
+        "run_plan_only": false,
+        "target_subscription_id": "8d1a4c6c-02ce-4bb0-88f2-4c0804c59122"
+      }
+    ]
+  }
