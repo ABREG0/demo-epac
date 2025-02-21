@@ -281,7 +281,8 @@ jobs:
 
       - name: Run terraform apply
         run: |
-          az account set --subscription ${targe_subscription_id}
+          echo "env [${{ env.targe_subscription_id }}] - shell [${targe_subscription_id}]"
+          az account set --subscription ${{ env.targe_subscription_id }}
           terraform apply -input=false -auto-approve ${{ env.plan_name }}
 
       - if: ${{ inputs.environment_name != '' }}
@@ -323,11 +324,3 @@ jobs:
 
           echo "audit_log = ${audit_log}"
           echo "audit_log=${audit_log}" >> $GITHUB_ENV
-
-      # - name: Delete stored plans
-      #   run: |
-      #     if [[ "${cloud_provider}" != 'azure' ]]; then
-      #       echo "NOT supported"
-      #     else
-      #       az storage blob delete-batch --auth-mode login --account-name ${{ env.state_az_storage_name }} --source ${{ env.state_az_container_name }} --pattern ${{ env.plan_name }}
-      #     fi

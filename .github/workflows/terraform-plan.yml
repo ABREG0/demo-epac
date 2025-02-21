@@ -303,7 +303,8 @@ jobs:
 
       - name: Run terraform plan ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}
         run: |
-          az account set --subscription ${targe_subscription_id}
+          echo "env [${{ env.targe_subscription_id }}] - shell [${targe_subscription_id}]"
+          az account set --subscription ${{ env.targe_subscription_id }}
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
