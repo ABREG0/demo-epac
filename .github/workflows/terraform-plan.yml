@@ -277,7 +277,7 @@ jobs:
         if: ${{ env.cloud_provider == 'azure' && !inputs.run_plan_only && env.ARM_CLIENT_SECRET == '' }}
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}
-          subscription-id: ${{ env.TARGET_SUBSCRIPTION_ID }}
+          subscription-id: ${{ inputs.az_subscription_id }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
   
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
