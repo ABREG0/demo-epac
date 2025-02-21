@@ -24,6 +24,10 @@ on:
         required: false
         type: string
         default: "1.6.2"
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
       azcli_version:
         required: false
@@ -222,20 +226,6 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
-      # - name: Configure Terraform provider network mirror protocol
-      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-      #   run: |
-      #     cat <<EOF > .terraformrc
-      #       provider_installation {
-      #         direct {
-      #           exclude = ["registry.terraform.io/*/*"]
-      #         }
-      #         network_mirror {
-      #           url = "${{ inputs.terraform_provider_network_mirror }}"
-      #         }
-      #       }
-      #     EOF
-
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -264,6 +254,7 @@ jobs:
 
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
         run: |
+          az account set --subscription ${targe_subscription_id}
           terraform destroy \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \

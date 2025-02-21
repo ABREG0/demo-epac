@@ -30,6 +30,10 @@ on:
         required: false
         type: string
         default: "."
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
     secrets:
       AZ_CLIENT_SECRET:

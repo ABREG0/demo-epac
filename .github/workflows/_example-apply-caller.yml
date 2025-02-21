@@ -51,11 +51,12 @@ jobs:
       environment_name: sbx # <NDP_or_PRO>
       optfile_path: optfiles/sbx.json # optfiles/_opt_file_example.yml
       optfile_runner: ubuntu-latest # ubuntu-latest 
+      target_subscription_id : c5c1228d-b650-4f0a-97ea-1f8cfdc417c5
       # ref: e2etesting # ${{ inputs.version }} # <place branch or tag name containing your released code>
     secrets:
       APP_PRIVATE_KEY: ${{ secrets.TF_APP_PRIVATE_KEY }}
 
-  # destroy:
+  # destroy 
   #   name: Destroy ${{ inputs.version }} to sbx
   #   needs: [deploy, ]
   #   # # if: ${{ github.ref == 'refs/heads/workflows' && inputs.version != '' }}

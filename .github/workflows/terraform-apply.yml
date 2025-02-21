@@ -22,6 +22,10 @@ on:
         required: false
         type: string
         default: "1.6.2"
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
       request_id:
         required: false
@@ -104,6 +108,7 @@ jobs:
       run:
         working-directory: ${{ inputs.terraform_directory }}
     env:
+      target_subscription_id: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
@@ -275,7 +280,9 @@ jobs:
           fi
 
       - name: Run terraform apply
-        run: terraform apply -input=false -auto-approve ${{ env.plan_name }}
+        run: |
+          az account set --subscription ${targe_subscription_id}
+          terraform apply -input=false -auto-approve ${{ env.plan_name }}
 
       - if: ${{ inputs.environment_name != '' }}
         id: generate_audit_log

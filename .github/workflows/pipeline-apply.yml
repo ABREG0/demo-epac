@@ -40,6 +40,11 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
+      
 
     secrets:
       AZ_CLIENT_SECRET:
@@ -121,6 +126,7 @@ jobs:
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
       az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      target_subscription_id: ${{ matrix.deployments.targe_subscription_id }} # ${{ inputs.targe_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       run_plan_only: ${{ github.event_name == 'pull_request' }} # Never cache the plan for pull requests
       runner: ${{ matrix.deployments.runner }}

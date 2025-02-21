@@ -20,21 +20,24 @@
         "path": "examples/01-default",
         "remote_state_key": "01-default.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": false
+        "run_plan_only": false,
+        "target_subscription_id": "c5c1228d-b650-4f0a-97ea-1f8cfdc417c5"
       },
       {
         "name": "04-vault-backup-policies",
         "path": "examples/04-vault-backup-policies",
         "remote_state_key": "04-vault-backup-policies.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": false
+        "run_plan_only": false,
+        "target_subscription_id": "c5c1228d-b650-4f0a-97ea-1f8cfdc417c5"
       },
       {
         "name": "03-private-endpoints",
         "path": "examples/03-private-endpoints",
         "remote_state_key": "03-private-endpoints.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": false
+        "run_plan_only": false,
+        "target_subscription_id": "c5c1228d-b650-4f0a-97ea-1f8cfdc417c5"
       }
     ]
   }

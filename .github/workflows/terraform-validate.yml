@@ -41,6 +41,10 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
     secrets:
       CA_BUNDLE:
