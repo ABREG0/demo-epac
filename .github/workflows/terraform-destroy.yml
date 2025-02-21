@@ -111,6 +111,7 @@ jobs:
       run:
         working-directory: ${{ inputs.terraform_directory }}
     env:
+      TARGET_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
@@ -118,6 +119,7 @@ jobs:
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
       TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
@@ -230,6 +232,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          az account list
+          az account show
+          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           if [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \
@@ -254,8 +260,10 @@ jobs:
 
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
         run: |
-          echo "env [${{ env.targe_subscription_id }}] - shell [${targe_subscription_id}]"
-          az account set --subscription ${{ env.targe_subscription_id }}
+          az account list
+          az account show
+          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           terraform destroy \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
