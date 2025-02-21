@@ -276,6 +276,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          az account list
+          az account show
+          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           echo "backend-config=resource_group_name=[${{ env.state_az_rg_name }}] "
           if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
             echo "Not supported"
@@ -303,8 +307,10 @@ jobs:
 
       - name: Run terraform plan ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}
         run: |
+          az account list
+          az account show
           echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
-          az account set --subscription ${{ env.TARGET_SUBSCRIPTION_ID }}
+          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
@@ -315,8 +321,10 @@ jobs:
 
       - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=destroy-${{ env.plan_name }}
         run: |
+          az account list
+          az account show
           echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
-          az account set --subscription ${{ env.TARGET_SUBSCRIPTION_ID }}
+          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
