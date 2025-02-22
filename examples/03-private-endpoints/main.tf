@@ -47,60 +47,60 @@ locals {
   endpoints           = toset(["AzureBackup", "AzureSiteRecovery", ])
   endpoints_dns_zones = toset(["AzureBackup", "AzureSiteRecovery", "blob", "queue"])
 }
-module "recovery_services_vault" {
-  source = "../../"
+# module "recovery_services_vault" {
+#   source = "../../"
 
-  name                                           = local.vault_name
-  location                                       = azurerm_resource_group.this.location
-  resource_group_name                            = azurerm_resource_group.this.name
-  cross_region_restore_enabled                   = false
-  alerts_for_all_job_failures_enabled            = true
-  alerts_for_critical_operation_failures_enabled = true
-  classic_vmware_replication_enabled             = false
-  public_network_access_enabled                  = false
-  storage_mode_type                              = "GeoRedundant"
-  sku                                            = "RS0"
+#   name                                           = local.vault_name
+#   location                                       = azurerm_resource_group.this.location
+#   resource_group_name                            = azurerm_resource_group.this.name
+#   cross_region_restore_enabled                   = false
+#   alerts_for_all_job_failures_enabled            = true
+#   alerts_for_critical_operation_failures_enabled = true
+#   classic_vmware_replication_enabled             = false
+#   public_network_access_enabled                  = false
+#   storage_mode_type                              = "GeoRedundant"
+#   sku                                            = "RS0"
 
-  managed_identities = {
-    system_assigned            = true
-    user_assigned_resource_ids = [azurerm_user_assigned_identity.this_identity.id]
-  }
+#   managed_identities = {
+#     system_assigned            = true
+#     user_assigned_resource_ids = [azurerm_user_assigned_identity.this_identity.id]
+#   }
 
-  #create a private endpoint for each endpoint type
-  private_endpoints = {
-    for endpoint in local.endpoints :
-    endpoint => {
+#   #create a private endpoint for each endpoint type
+#   private_endpoints = {
+#     for endpoint in local.endpoints :
+#     endpoint => {
 
-      # the name must be set to avoid conflicting resources.
-      name                          = "pe-${endpoint}-${local.vault_name}"
-      subnet_resource_id            = azurerm_subnet.private.id
-      subresource_name              = endpoint
-      private_dns_zone_resource_ids = [azurerm_private_dns_zone.this[endpoint].id]
+#       # the name must be set to avoid conflicting resources.
+#       name                          = "pe-${endpoint}-${local.vault_name}"
+#       subnet_resource_id            = azurerm_subnet.private.id
+#       subresource_name              = endpoint
+#       private_dns_zone_resource_ids = [azurerm_private_dns_zone.this[endpoint].id]
 
-      # these are optional but illustrate making well-aligned service connection & NIC names.
-      private_service_connection_name = "psc-${endpoint}-${local.vault_name}"
-      network_interface_name          = "nic-pe-${endpoint}-${local.vault_name}"
-      inherit_tags                    = false
-      inherit_lock                    = false
+#       # these are optional but illustrate making well-aligned service connection & NIC names.
+#       private_service_connection_name = "psc-${endpoint}-${local.vault_name}"
+#       network_interface_name          = "nic-pe-${endpoint}-${local.vault_name}"
+#       inherit_tags                    = false
+#       inherit_lock                    = false
 
-      tags = {
-        env   = "Prod"
-        owner = "ABREG0 "
-        dept  = "IT"
-      }
+#       tags = {
+#         env   = "Prod"
+#         owner = "ABREG0 "
+#         dept  = "IT"
+#       }
 
-      role_assignments = {
-        role_assignment_1 = {
-          role_definition_id_or_name = data.azurerm_role_definition.this.id
-          principal_id               = data.azurerm_client_config.current.object_id
-        }
-      }
-    }
+#       role_assignments = {
+#         role_assignment_1 = {
+#           role_definition_id_or_name = data.azurerm_role_definition.this.id
+#           principal_id               = data.azurerm_client_config.current.object_id
+#         }
+#       }
+#     }
 
 
-  }
+#   }
 
-}
+# }
 
 resource "azurerm_virtual_network" "vnet" {
   address_space       = ["192.168.0.0/16"]
