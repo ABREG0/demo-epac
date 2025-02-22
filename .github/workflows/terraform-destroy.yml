@@ -114,7 +114,7 @@ jobs:
       TARGET_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.state_az_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
