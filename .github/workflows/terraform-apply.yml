@@ -257,7 +257,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          az account list
           az account show
           echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
@@ -275,7 +274,7 @@ jobs:
           else # Azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
-              -backend-config=subscription_id=${{ env.az_subscription_id }} \
+              -backend-config=subscription_id=${{ env.TARGET_SUBSCRIPTION_ID }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
               -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
@@ -285,7 +284,6 @@ jobs:
 
       - name: Run terraform apply
         run: |
-          az account list
           az account show
           echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
