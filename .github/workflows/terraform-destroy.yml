@@ -269,8 +269,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           az account show
-          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
-          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
+          echo "set target subscription id: env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
 
           if [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
@@ -297,8 +297,8 @@ jobs:
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
         run: |
           az account show
-          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
-          az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
+          echo "env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
           terraform destroy \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
