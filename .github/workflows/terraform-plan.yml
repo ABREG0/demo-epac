@@ -120,7 +120,7 @@ jobs:
       TARGET_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.state_az_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
@@ -299,7 +299,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           az account show
-          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           echo "backend-config=resource_group_name=[${{ env.state_az_rg_name }}] "
           if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
@@ -329,7 +329,7 @@ jobs:
       - name: Run terraform plan ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}
         run: |
           az account show
-          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           terraform plan \
             ${shared_tfvar_files} \
@@ -342,7 +342,7 @@ jobs:
       - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=destroy-${{ env.plan_name }}
         run: |
           az account show
-          echo "env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
           terraform plan \
             ${shared_tfvar_files} \
