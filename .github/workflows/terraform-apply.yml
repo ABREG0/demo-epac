@@ -117,7 +117,7 @@ jobs:
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-      TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      # TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
       request_id: ${{ inputs.request_id }}

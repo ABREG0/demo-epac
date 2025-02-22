@@ -40,7 +40,7 @@ module "azure_region" {
   source  = "claranet/regions/azurerm"
   version = "7.1.1"
 
-  azure_region = "westus3"
+  azure_region = local.test_regions[random_integer.region_index.result]
 }
 
 locals {
@@ -148,7 +148,7 @@ module "public_ip" {
   source  = "lonegunmanb/public-ip/lonegunmanb"
   version = "0.1.0"
 }
-
+/*
 resource "azurerm_private_dns_zone" "this" {
   for_each = local.endpoints_dns_zones
 
@@ -167,7 +167,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "private_links" {
   resource_group_name   = azurerm_resource_group.this.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }
-
+*/
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_user_assigned_identity" "this_identity" {
