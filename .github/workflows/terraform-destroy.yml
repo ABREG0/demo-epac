@@ -236,20 +236,20 @@ jobs:
           subscription-id: ${{ inputs.az_subscription_id }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
 
-      - name: Retrieve destroy plan
-        run: |
-          if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
-            echo "NOT supported"
-          else # Azure
-            echo 'Retrieving "destroy-${{ env.plan_name }}" plan file from "${{ env.state_az_container_name }}" Storage Container...'
-            # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
-            if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
-              az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
-            fi
+      # - name: Retrieve destroy plan
+      #   run: |
+      #     if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
+      #       echo "NOT supported"
+      #     else # Azure
+      #       echo 'Retrieving "destroy-${{ env.plan_name }}" plan file from "${{ env.state_az_container_name }}" Storage Container...'
+      #       # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+      #       if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
+      #         az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
+      #       fi
 
-            az account set --subscription ${ARM_SUBSCRIPTION_ID}
-            az storage blob download --auth-mode login --file "destroy-${{ env.plan_name }}" --account-name ${state_az_storage_name} --container-name ${state_az_container_name} --name destroy-${{ env.plan_name }}
-          fi
+      #       az account set --subscription ${ARM_SUBSCRIPTION_ID}
+      #       az storage blob download --auth-mode login --file "destroy-${{ env.plan_name }}" --account-name ${state_az_storage_name} --container-name ${state_az_container_name} --name destroy-${{ env.plan_name }}
+      #     fi
   
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
