@@ -148,8 +148,17 @@ jobs:
 
       - name: create terraformc
         run: |
-          cd ~
-          touch .terraformrc
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            cd ~
+            touch .terraformrc
+
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            echo "windows os"
+            echo "# terraform.rc " >> $env:APPDATA
+          else
+            echo "$RUNNER_OS not supported"
+              # exit 1
+          fi
   
       - name: Validate `cloud_provider` input
         run: |
