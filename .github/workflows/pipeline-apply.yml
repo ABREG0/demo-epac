@@ -163,6 +163,7 @@ jobs:
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
       az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      target_subscription_id: ${{ matrix.deployments.target_subscription_id }} # ${{ inputs.targe_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       terraform_directory: ${{ matrix.deployments.path }}
@@ -193,6 +194,7 @@ jobs:
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
       az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      target_subscription_id: ${{ matrix.deployments.target_subscription_id }} # ${{ inputs.targe_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}
