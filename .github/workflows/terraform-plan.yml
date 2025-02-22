@@ -332,7 +332,7 @@ jobs:
           az account show
           echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
-          
+
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
@@ -344,8 +344,9 @@ jobs:
       - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=destroy-${{ env.plan_name }}
         run: |
           az account show
-          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
+          
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
