@@ -228,6 +228,14 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
+      - name: Authenticate Azure CLI using OIDC
+        if: ${{ env.cloud_provider == 'azure' && env.ARM_CLIENT_SECRET == '' }}
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          subscription-id: ${{ inputs.az_subscription_id }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+  
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
