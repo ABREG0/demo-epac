@@ -174,7 +174,7 @@ jobs:
 
   destroy:
     name: Destroy ${{ matrix.deployments.name }}
-    if: ${{ needs.topfile_read.outputs.destroy_enabled == true }}
+    if: ${{ needs.topfile_read.outputs.destroy_enabled == 'true' }}
     needs: [plan, topfile_read, apply]
     uses: ./.github/workflows/terraform-destroy.yml
     strategy:
