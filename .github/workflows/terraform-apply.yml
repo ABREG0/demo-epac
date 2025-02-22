@@ -272,7 +272,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           az account show
-          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
 
           if [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
@@ -300,9 +300,9 @@ jobs:
       - name: Run terraform apply
         run: |
           az account show
-          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${inputs.target_subscription_id}]"
+          echo "set target subscription id: env [${{ env.TARGET_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
           az account set -s '${{ env.TARGET_SUBSCRIPTION_ID }}'
-          
+
           terraform apply -input=false -auto-approve ${{ env.plan_name }}
 
       - if: ${{ inputs.environment_name != '' }}
