@@ -146,6 +146,11 @@ jobs:
           ref: ${{ inputs.ref }}
           # path: repo1
 
+      - name: create terraformc
+        run: |
+          cd ~
+          touch .terraformrc
+  
       - name: Validate `cloud_provider` input
         run: |
           if [[ "${cloud_provider}" != "azure" ]]; then
