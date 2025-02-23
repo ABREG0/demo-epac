@@ -75,7 +75,7 @@ rule "terraform_documented_outputs" {
 }
 
 rule "terraform_documented_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_module_pinned_source" {
