@@ -72,17 +72,6 @@ jobs:
       terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
       terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
 
-  checkov:
-    name: Check Terraform formatting
-    needs: [tf_lint]
-    uses: ./.github/workflows/release-checkov.yml
-    with:
-      ref: ${{ inputs.ref }}
-      runner: ${{ inputs.terraform_fmt_check_runner }}
-      terraform_directory: ${{ inputs.terraform_directory }}
-      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
-      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
-  
   topfile_read:
     name: Read optfile
     needs: [tf_lint]
@@ -127,9 +116,28 @@ jobs:
       environment_name: ${{ inputs.environment_name }}
     secrets: inherit
 
+  checkov:
+    name: checkov terraform code scan
+    needs: [validate, topfile_read]
+    uses: ./.github/workflows/release-checkov.yml
+    strategy:
+      fail-fast: false # Ensure that all Terraform commands execute to completion
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.deployments_all) }}
+    with:
+      ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
+      job_name: ${{ matrix.deployments.name }}
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.validate_runner }}
+      terraform_directory: ${{ matrix.deployments.path }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
+      environment_name: ${{ inputs.environment_name }}
+    secrets: inherit
+  
   plan:
     name: Plan ${{ matrix.deployments.name }}
-    needs: [validate, topfile_read]
+    needs: [checkov, validate, topfile_read]
     uses: ./.github/workflows/terraform-plan.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion

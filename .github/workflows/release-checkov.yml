@@ -3,38 +3,75 @@ name: checkov code scan
 on:
   workflow_call:
     inputs:
-      terraform_directory:
-        required: false
-        type: string
-        default: "."
-      terraform_version:
-        required: false
-        type: string
-        default: "1.6.2"
-      terraform_provider_network_mirror:
-        required: false
-        type: string
-        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+        terraform_directory:
+            required: false
+            type: string
+            default: "."
+        terraform_logging:
+            required: false
+            type: string
+            default: "off"
+        terraform_provider_network_mirror:
+            required: false
+            type: string
+            default: "" #"https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+        terraform_version:
+            required: false
+            type: string
+            default: "1.6.2"
 
-      environment_name:
-        required: false
-        type: string
-      ref:
-        required: false
-        type: string
-        default: ""
-      runner:
-        required: false
-        type: string
-        default: ubuntu-latest
+        ca_bundle_file_path:
+            required: false
+            type: string
+            default: ""
+        environment_name:
+            required: false
+            type: string
+        job_name:
+            required: false
+            type: string
+            default: default
+        ref:
+            required: false
+            type: string
+            default: ""
+        runner:
+            required: false
+            type: string
+            default: ubuntu-latest
+        target_subscription_id:
+            required: false
+            type: string
+            default: ""
+
+    secrets:
+        CA_BUNDLE:
+            required: false
+        GH_TOKEN:
+            required: false
+        APP_PRIVATE_KEY:
+            required: true
+
+permissions:
+    id-token: write
+    contents: read
 
 jobs:
   tflint:
     name: Run terraform tflint
     runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_directory }}
+    env:
+      CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      TF_CLI_CONFIG_FILE: 'https://registry.terraform.io' #${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      TF_LOG: ${{ inputs.terraform_logging }}
+      ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
     environment:
       name: ${{ inputs.environment_name }}
-
     steps:
       - uses: actions/checkout@v4
         with:
