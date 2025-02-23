@@ -83,7 +83,7 @@ jobs:
             # This will add both a CLI output to the console and create a results.sarif file
             output_format: cli,sarif
             output_file_path: console,results.sarif
-            directory: .
+            directory: '${{ github.workspace}}/${{ inputs.terraform_directory }}'
             soft_fail: true
             download_external_modules: true
         
