@@ -98,6 +98,11 @@ jobs:
             directory: '${{ github.workspace}}/${{ inputs.terraform_directory }}'
             soft_fail: true
             download_external_modules: true
+
+      - name: Print SHA and ref
+        run: |
+            echo "SHA: ${{ github.sha }}"
+            echo "Ref: ${{ github.ref }}"
         
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3        
@@ -108,6 +113,7 @@ jobs:
           # Optional category for the results
           # Used to differentiate multiple results for one commit
           category: checkov-scan
+        continue-on-error: true
         env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -116,8 +122,3 @@ jobs:
         # when the previous one has failed. Security checks that do not pass will 'fail'.
         # An alternative is to add `continue-on-error: true` to the previous step
         # Or 'soft_fail: true' to checkov.
-        # if: success() || failure()
-        # with:
-        #     sarif_file: results.sarif
-        # env:
-        #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
