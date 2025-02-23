@@ -110,3 +110,5 @@ jobs:
         if: success() || failure()
         with:
             sarif_file: results.sarif
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
