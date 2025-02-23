@@ -8,6 +8,7 @@ variable "backup_protected_file_share" {
 
   }))
   default = null
+  description = "value"
 }
 variable "site_recovery_fabric_mapping" {
   type = map(object({
@@ -19,6 +20,7 @@ variable "site_recovery_fabric_mapping" {
     sleep_timer                               = optional(string, "60s")
   }))
   default = null
+  description = "value"
 }
 variable "site_recovery_fabrics" {
   type = map(object({
@@ -29,6 +31,7 @@ variable "site_recovery_fabrics" {
     sleep_timer    = optional(string, "60s")
   }))
   default = null
+  description = "value"
 }
 variable "site_recovery_policies" {
   type = map(object({
@@ -39,6 +42,7 @@ variable "site_recovery_policies" {
     sleep_timer                                          = optional(string, "60s")
   }))
   default = null
+  description = "value"
 }
 variable "site_recovery_network_mapping" {
   type = map(object({
@@ -51,6 +55,7 @@ variable "site_recovery_network_mapping" {
     sleep_timer                 = optional(string, "60s")
   }))
   default = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
@@ -61,6 +66,7 @@ variable "backup_protected_vm" {
     sleep_timer      = optional(string, "60s")
   }))
   default = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
@@ -100,6 +106,7 @@ variable "sites" {
     location          = string
   }))
   default = null
+  description = "value"
 }
 variable "location" {
   type        = string
