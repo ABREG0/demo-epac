@@ -118,7 +118,7 @@ jobs:
           # Optional category for the results
           # Used to differentiate multiple results for one commit
           category: checkov-scan
-        continue-on-error: true
+        # continue-on-error: true
         env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
