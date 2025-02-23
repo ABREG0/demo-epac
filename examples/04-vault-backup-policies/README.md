@@ -66,12 +66,6 @@ Source: Azure/naming/azurerm
 
 Version: 0.4.0
 
-### <a name="module_recovery_services_vault"></a> [recovery\_services\_vault](#module\_recovery\_services\_vault)
-
-Source: ../../
-
-Version:
-
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
 Source: Azure/regions/azurerm

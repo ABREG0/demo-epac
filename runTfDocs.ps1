@@ -1,4 +1,22 @@
 
+write-host "run `terraform fmt -recursive"
+terraform fmt -recursive
+
+    write-host "`nRunning tflint"
+    tflint --init
+    $tflintResult = @(tflint -f json) | convertfrom-json
+
+    write-output "$($tflintResult.issues)"
+
+    if ($null -ne $tflintResult.issues) {
+
+        write-host "TFlint found issues $($tflintResult.issues)" -ForegroundColor red
+        tflint -f sarif
+        write-error "Error with tflint rules" -ErrorAction Stop
+    }
+
+
+write-host "`nRunning terraform docs"
 $tfdocs = Get-ChildItem -path . -include .terraform-docs.yml -Recurse
 
 foreach ($tfdoc in $tfdocs) {

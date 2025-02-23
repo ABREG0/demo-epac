@@ -8,7 +8,7 @@ variable "backup_protected_file_share" {
 
   }))
   default     = null
-  # description = "value"
+  description = "value"
 }
 variable "site_recovery_fabric_mapping" {
   type = map(object({

@@ -41,8 +41,6 @@ The following requirements are needed by this module:
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.5.0)
 
-- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.8)
-
 ## Resources
 
 The following resources are used by this module:
@@ -129,7 +127,7 @@ Default: `null`
 
 ### <a name="input_backup_protected_vm"></a> [backup\_protected\_vm](#input\_backup\_protected\_vm)
 
-Description: tflint-ignore: terraform\_unused\_declarations
+Description: value
 
 Type:
 
@@ -503,7 +501,7 @@ Default: `{}`
 
 ### <a name="input_site_recovery_fabric_mapping"></a> [site\_recovery\_fabric\_mapping](#input\_site\_recovery\_fabric\_mapping)
 
-Description: n/a
+Description: value
 
 Type:
 
@@ -522,7 +520,7 @@ Default: `null`
 
 ### <a name="input_site_recovery_fabrics"></a> [site\_recovery\_fabrics](#input\_site\_recovery\_fabrics)
 
-Description: n/a
+Description: value
 
 Type:
 
@@ -540,7 +538,7 @@ Default: `null`
 
 ### <a name="input_site_recovery_network_mapping"></a> [site\_recovery\_network\_mapping](#input\_site\_recovery\_network\_mapping)
 
-Description: n/a
+Description: value
 
 Type:
 
@@ -560,7 +558,7 @@ Default: `null`
 
 ### <a name="input_site_recovery_policies"></a> [site\_recovery\_policies](#input\_site\_recovery\_policies)
 
-Description: n/a
+Description: value
 
 Type:
 
@@ -578,7 +576,7 @@ Default: `null`
 
 ### <a name="input_site_recovery_virtual_machine"></a> [site\_recovery\_virtual\_machine](#input\_site\_recovery\_virtual\_machine)
 
-Description: tflint-ignore: terraform\_unused\_declarations
+Description: value
 
 Type:
 
@@ -612,7 +610,7 @@ Default: `null`
 
 ### <a name="input_sites"></a> [sites](#input\_sites)
 
-Description: tflint-ignore: terraform\_unused\_declarations
+Description: value
 
 Type:
 
