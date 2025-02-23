@@ -68,13 +68,13 @@ jobs:
         run: tflint --version
 
       - name: Init TFLint
-        run: tflint --init --chdir= ${{ github.workspace}}/.tflin.hcl
+        run: tflint --init --chdir=${{ github.workspace}}
         env:
             # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Run TFLint
-        run: tflint -f compact
+        run: tflint -f sarif # [default|json|checkstyle|junit|compact|sarif]
       - run: echo ${{ steps.tflint.outputs.stdout }}
       - run: echo ${{ steps.tflint.outputs.stderr }}
       - run: echo ${{ steps.tflint.outputs.exitcode }}
