@@ -58,7 +58,7 @@ permissions:
 
 jobs:
   tflint:
-    name: Run terraform tflint
+    name: checkov code scan
     runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
     defaults:
       run:
