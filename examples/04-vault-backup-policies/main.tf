@@ -4,7 +4,7 @@
 # This allows us to randomize the region for the resource group.
 resource "random_integer" "region_index" {
   max = length(local.test_regions) - 1
-  min = 0
+  min = 1
 }
 # This allow use to randomize the name of resources
 resource "random_string" "this" {
@@ -48,7 +48,7 @@ module "azure_region" {
   source  = "claranet/regions/azurerm"
   version = "7.1.1"
 
-  azure_region = "westus3"
+  azure_region = local.test_regions[random_integer.region_index.result]
 }
 resource "azurerm_user_assigned_identity" "this_identity" {
   location            = azurerm_resource_group.this.location
