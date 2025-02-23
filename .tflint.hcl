@@ -125,10 +125,6 @@ rule "terraform_required_version_declaration" {
   enabled = true
 }
 
-rule "terraform_variable_separate" {
-  enabled = true
-}
-
 rule "azurerm_resource_tag" {
   enabled = true
 }
