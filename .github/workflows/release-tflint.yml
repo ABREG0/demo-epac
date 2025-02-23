@@ -31,12 +31,12 @@ on:
 jobs:
   tflint:
     name: Run terraform tflint
-    # runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
+    # runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest]
 
     # defaults:
     #   run:
