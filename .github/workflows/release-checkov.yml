@@ -54,7 +54,7 @@ on:
 
 permissions:
     security-events: write
-    pull-requests: read
+    pull-requests: write
     contents: write
     id-token: write
     statuses: write

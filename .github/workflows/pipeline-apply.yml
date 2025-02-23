@@ -57,8 +57,13 @@ on:
         required: true
 
 permissions:
+  security-events: write
+  pull-requests: write
+  contents: write
   id-token: write
-  contents: read
+  statuses: write
+  actions: read
+  pages: write
 
 jobs:
   tf_lint:
