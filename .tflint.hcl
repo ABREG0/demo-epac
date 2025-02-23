@@ -113,10 +113,6 @@ rule "terraform_module_provider_declaration" {
   enabled = true
 }
 
-rule "terraform_output_separate" {
-  enabled = true
-}
-
 rule "terraform_required_providers_declaration" {
   enabled = true
 }
