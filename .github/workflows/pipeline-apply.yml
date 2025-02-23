@@ -72,6 +72,17 @@ jobs:
       terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
       terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
 
+  checkov:
+    name: Check Terraform formatting
+    needs: [tf_lint]
+    uses: ./.github/workflows/release-checkov.yml
+    with:
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.terraform_fmt_check_runner }}
+      terraform_directory: ${{ inputs.terraform_directory }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
+  
   topfile_read:
     name: Read optfile
     needs: [tf_lint]

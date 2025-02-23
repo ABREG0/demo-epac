@@ -1,4 +1,4 @@
-name: Terraform deploy Log Analytics with TFLint checks
+name: Terraform TFLint checks
 
 on:
   workflow_call:

@@ -1,0 +1,63 @@
+name: checkov code scan
+
+on:
+  workflow_call:
+    inputs:
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      terraform_version:
+        required: false
+        type: string
+        default: "1.6.2"
+      terraform_provider_network_mirror:
+        required: false
+        type: string
+        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+
+      environment_name:
+        required: false
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+
+jobs:
+  tflint:
+    name: Run terraform tflint
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
+    environment:
+      name: ${{ inputs.environment_name }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@master
+        with:
+            # This will add both a CLI output to the console and create a results.sarif file
+            output_format: cli,sarif
+            output_file_path: console,results.sarif
+            directory: .
+            soft_fail: true
+            download_external_modules: true
+        
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        
+        # Results are generated only on a success or failure
+        # this is required since GitHub by default won't run the next step
+        # when the previous one has failed. Security checks that do not pass will 'fail'.
+        # An alternative is to add `continue-on-error: true` to the previous step
+        # Or 'soft_fail: true' to checkov.
+        if: success() || failure()
+        with:
+            sarif_file: results.sarif
