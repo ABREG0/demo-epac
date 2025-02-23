@@ -5,6 +5,7 @@ plugin "azurerm" {
     version = "0.27.0"
     source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
 }
+
 plugin "terraform" {
   enabled = true
   version = "0.10.0"
@@ -109,7 +110,18 @@ rule "terraform_heredoc_usage" {
   enabled = false
 }
 
+rule "terraform_module_provider_declaration" {
+  enabled = true
+}
+
+rule "terraform_output_separate" {
+  enabled = true
+}
+
 rule "terraform_required_providers_declaration" {
   enabled = true
 }
 
+rule "terraform_required_version_declaration" {
+  enabled = true
+}

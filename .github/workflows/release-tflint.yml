@@ -38,9 +38,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
-    defaults:
-      run:
-        working-directory: ${{ inputs.terraform_directory }}
+    # defaults:
+    #   run:
+    #     working-directory: ${{ inputs.terraform_directory }}
     environment:
       name: ${{ inputs.environment_name }}
     
