@@ -63,7 +63,7 @@ permissions:
 jobs:
   tf_lint:
     name: Check Terraform formatting
-    needs: [topfile_read]
+    # needs: [topfile_read]
     uses: ./.github/workflows/release-tflint.yml
     with:
       ref: ${{ inputs.ref }}
@@ -74,6 +74,7 @@ jobs:
 
   topfile_read:
     name: Read optfile
+    needs: [tf_lint]
     uses: ./.github/workflows/file-reader.yml
     with:
       azure_client_id: ${{ inputs.azure_client_id }}
