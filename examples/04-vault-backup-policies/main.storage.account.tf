@@ -9,7 +9,7 @@ module "this" {
   account_kind             = "StorageV2"
 
   location                      = azurerm_resource_group.primary.location
-  name                          = module.naming.storage_account.name_unique
+  name                          = "sa${module.naming.storage_account.name_unique}"
   resource_group_name           = azurerm_resource_group.primary.name
   https_traffic_only_enabled    = true
   min_tls_version               = "TLS1_2"
