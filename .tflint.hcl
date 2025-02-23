@@ -106,9 +106,9 @@ rule "terraform_workspace_remote" {
   enabled = true
 }
 
-rule "terraform_heredoc_usage" {
-  enabled = false
-}
+# rule "terraform_heredoc_usage" {
+#   enabled = false
+# }
 
 rule "terraform_module_provider_declaration" {
   enabled = true
