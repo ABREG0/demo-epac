@@ -33,9 +33,9 @@ enabled = false
 }
  
 # Disallow variable declarations without description.
-rule "terraform_documented_variables" {
-enabled = false
-}
+# rule "terraform_documented_variables" {
+# enabled = false
+# }
  
 # Disallow variable declarations without type.
 rule "terraform_typed_variables" {
