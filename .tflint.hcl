@@ -29,13 +29,13 @@ enabled = true
  
 # Disallow output declarations without description.
 rule "terraform_documented_outputs" {
-enabled = false
+enabled = true
 }
  
 # Disallow variable declarations without description.
-# rule "terraform_documented_variables" {
-# enabled = false
-# }
+rule "terraform_documented_variables" {
+enabled = true
+}
  
 # Disallow variable declarations without type.
 rule "terraform_typed_variables" {
@@ -55,7 +55,7 @@ rule "terraform_required_version" {
   enabled = true
 }
 rule "terraform_deprecated_interpolation" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_comment_syntax" {
@@ -63,11 +63,11 @@ rule "terraform_comment_syntax" {
 }
 
 rule "terraform_deprecated_index" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_deprecated_lookup" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_documented_outputs" {
@@ -79,7 +79,7 @@ rule "terraform_documented_variables" {
 }
 
 rule "terraform_module_pinned_source" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_naming_convention" {
