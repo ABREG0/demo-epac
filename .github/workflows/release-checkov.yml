@@ -53,8 +53,13 @@ on:
             required: true
 
 permissions:
+    security-events: write
+    pull-requests: read
+    contents: write
     id-token: write
-    contents: read
+    statuses: write
+    actions: read
+    pages: write
 
 jobs:
   tflint:
