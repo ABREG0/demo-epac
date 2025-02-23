@@ -95,6 +95,7 @@ variable "site_recovery_virtual_machine" {
     }))
   }))
   default = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
