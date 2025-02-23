@@ -113,6 +113,3 @@ rule "terraform_required_providers_declaration" {
   enabled = true
 }
 
-rule "terraform_required_version_declaration" {
-  enabled = true
-}
