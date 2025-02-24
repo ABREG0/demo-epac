@@ -31,10 +31,10 @@ module "this" {
   blob_properties = {
     versioning_enabled = true
     container_delete_retention_policy = {
-      days = 7
+      days = 30
     }
     delete_retention_policy = {
-      days = 7
+      days = 30
     }
   }
   network_rules = {
