@@ -1,7 +1,4 @@
 <!-- BEGIN_TF_DOCS -->
-
-[![Super-Linter](https://github.com/ABREG0/demo-epac/blob/e2etesting/.github/workflows/super-linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
-
 # terraform-azurerm-avm-recoveryservices-vault
 
 This terraform module is designed to deploy Azure Recovery Services Vault. It has support to create private link private endpoints to make the resource privately accessible via customer's private virtual networks and use a customer managed encryption key.
@@ -108,6 +105,41 @@ Description: (optional) Specify Setting for Monitoring 'Alerts for Critical Oper
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_backup_protected_file_share"></a> [backup\_protected\_file\_share](#input\_backup\_protected\_file\_share)
+
+Description: n/a
+
+Type:
+
+```hcl
+map(object({
+    source_storage_account_id = string
+    backup_policy_key         = string
+    source_file_share_name    = string
+    disable_registration      = optional(bool, false)
+    sleep_timer               = optional(string, "60s")
+
+  }))
+```
+
+Default: `null`
+
+### <a name="input_backup_protected_vm"></a> [backup\_protected\_vm](#input\_backup\_protected\_vm)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    source_vm_id     = string
+    backup_policy_id = string
+    sleep_timer      = optional(string, "60s")
+  }))
+```
+
+Default: `null`
 
 ### <a name="input_classic_vmware_replication_enabled"></a> [classic\_vmware\_replication\_enabled](#input\_classic\_vmware\_replication\_enabled)
 
@@ -467,6 +499,132 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_site_recovery_fabric_mapping"></a> [site\_recovery\_fabric\_mapping](#input\_site\_recovery\_fabric\_mapping)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    name                                      = string
+    recovery_source_fabric_name               = string
+    recovery_source_protection_container_name = string
+    recovery_targe_protection_container_name  = string
+    recovery_replication_policy_name          = string
+    sleep_timer                               = optional(string, "60s")
+  }))
+```
+
+Default: `null`
+
+### <a name="input_site_recovery_fabrics"></a> [site\_recovery\_fabrics](#input\_site\_recovery\_fabrics)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    site_name      = optional(string)
+    container_name = string
+    fabric_name    = string
+    location       = string
+    sleep_timer    = optional(string, "60s")
+  }))
+```
+
+Default: `null`
+
+### <a name="input_site_recovery_network_mapping"></a> [site\_recovery\_network\_mapping](#input\_site\_recovery\_network\_mapping)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    name                        = string
+    site_name                   = optional(string)
+    source_recovery_fabric_name = string
+    target_recovery_fabric_name = string
+    source_network_id           = string
+    target_network_id           = string
+    sleep_timer                 = optional(string, "60s")
+  }))
+```
+
+Default: `null`
+
+### <a name="input_site_recovery_policies"></a> [site\_recovery\_policies](#input\_site\_recovery\_policies)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    name                                                 = string
+    site_name                                            = optional(string)
+    recovery_point_retention_in_minutes                  = string
+    application_consistent_snapshot_frequency_in_minutes = string
+    sleep_timer                                          = optional(string, "60s")
+  }))
+```
+
+Default: `null`
+
+### <a name="input_site_recovery_virtual_machine"></a> [site\_recovery\_virtual\_machine](#input\_site\_recovery\_virtual\_machine)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    recovery_replication_policy_name          = string
+    source_recovery_fabric_name               = string
+    source_recovery_protection_container_name = string
+    target_resource_group_id                  = string
+    target_recovery_fabric_name               = string
+    target_recovery_protection_container_name = string
+    name                                      = string
+    site_name                                 = optional(string)
+    vm_id                                     = string
+    managed_disk = map(object({
+      disk_id                    = string
+      staging_storage_account_id = string
+      target_resource_group_id   = string
+      target_disk_type           = string
+      target_replica_disk_type   = string
+    }))
+    network_interface = map(object({
+      source_network_interface_id   = string
+      target_subnet_name            = string
+      recovery_public_ip_address_id = string
+    }))
+  }))
+```
+
+Default: `null`
+
+### <a name="input_sites"></a> [sites](#input\_sites)
+
+Description: value
+
+Type:
+
+```hcl
+map(object({
+    site_name         = optional(string)
+    key_fabric_source = string
+    key_fabric_target = string
+    location          = string
+  }))
+```
+
+Default: `null`
+
 ### <a name="input_soft_delete_enabled"></a> [soft\_delete\_enabled](#input\_soft\_delete\_enabled)
 
 Description: (optional) Specify Setting for Soft Delete. true (default), false
@@ -678,6 +836,12 @@ Description: resource Id output
 
 The following Modules are called:
 
+### <a name="module_backup_protected_file_share"></a> [backup\_protected\_file\_share](#module\_backup\_protected\_file\_share)
+
+Source: ./modules/backup_protected_file_share
+
+Version:
+
 ### <a name="module_recovery_services_vault_file_share_policy"></a> [recovery\_services\_vault\_file\_share\_policy](#module\_recovery\_services\_vault\_file\_share\_policy)
 
 Source: ./modules/file_share_policy
@@ -693,6 +857,36 @@ Version:
 ### <a name="module_recovery_workload_policy"></a> [recovery\_workload\_policy](#module\_recovery\_workload\_policy)
 
 Source: ./modules/workload_policy
+
+Version:
+
+### <a name="module_site_recovery_fabric"></a> [site\_recovery\_fabric](#module\_site\_recovery\_fabric)
+
+Source: ./modules/site_recovery_fabric
+
+Version:
+
+### <a name="module_site_recovery_fabric_container"></a> [site\_recovery\_fabric\_container](#module\_site\_recovery\_fabric\_container)
+
+Source: ./modules/site_recovery_fabric_container
+
+Version:
+
+### <a name="module_site_recovery_fabric_mapping"></a> [site\_recovery\_fabric\_mapping](#module\_site\_recovery\_fabric\_mapping)
+
+Source: ./modules/site_recovery_fabric_mapping
+
+Version:
+
+### <a name="module_site_recovery_network_mapping"></a> [site\_recovery\_network\_mapping](#module\_site\_recovery\_network\_mapping)
+
+Source: ./modules/site_recovery_network_mapping
+
+Version:
+
+### <a name="module_site_recovery_policies"></a> [site\_recovery\_policies](#module\_site\_recovery\_policies)
+
+Source: ./modules/site_recovery_policy
 
 Version:
 

@@ -9,12 +9,12 @@ module "this" {
   account_kind             = "StorageV2"
 
   location                      = azurerm_resource_group.primary.location
-  name                          = module.naming.storage_account.name_unique
+  name                          = "sa${module.naming.storage_account.name_unique}"
   resource_group_name           = azurerm_resource_group.primary.name
   https_traffic_only_enabled    = true
   min_tls_version               = "TLS1_2"
-  shared_access_key_enabled     = true
-  public_network_access_enabled = true
+  shared_access_key_enabled     = false
+  public_network_access_enabled = false
   managed_identities = {
     system_assigned            = true
     user_assigned_resource_ids = [azurerm_user_assigned_identity.this_identity.id]
@@ -30,9 +30,15 @@ module "this" {
   }
   blob_properties = {
     versioning_enabled = true
+    container_delete_retention_policy = {
+      days = 30
+    }
+    delete_retention_policy = {
+      days = 30
+    }
   }
   network_rules = {
-    bypass                     = ["AzureServices"]
+    bypass                     = ["Logging", "Metrics", "AzureServices"]
     default_action             = "Deny"
     ip_rules                   = [] # [try(module.public_ip[0].public_ip, var.bypass_ip_cidr)]
     virtual_network_subnet_ids = [] # toset([azurerm_subnet.private.id])

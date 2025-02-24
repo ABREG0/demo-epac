@@ -30,6 +30,10 @@ on:
         required: false
         type: string
         default: "."
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
     secrets:
       AZ_CLIENT_SECRET:
@@ -44,6 +48,7 @@ on:
 permissions:
   id-token: write
   contents: read
+
 jobs:
   topfile_read:
     name: Read optfile
@@ -78,7 +83,7 @@ jobs:
       state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
-      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      state_az_subscription_id: ${{ needs.topfile_read.outputs.state_az_subscription_id }}
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}

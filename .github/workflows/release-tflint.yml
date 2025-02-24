@@ -1,0 +1,90 @@
+name: Terraform TFLint checks
+
+on:
+  workflow_call:
+    inputs:
+      terraform_directory:
+        required: false
+        type: string
+        default: "."
+      terraform_version:
+        required: false
+        type: string
+        default: "1.6.2"
+      terraform_provider_network_mirror:
+        required: false
+        type: string
+        default: "https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+
+      environment_name:
+        required: false
+        type: string
+      ref:
+        required: false
+        type: string
+        default: ""
+      runner:
+        required: false
+        type: string
+        default: ubuntu-latest
+
+jobs:
+  tflint:
+    name: Run terraform tflint
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
+    # runs-on: ${{ matrix.os }}
+
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest]
+
+    # defaults:
+    #   run:
+    #     working-directory: ${{ inputs.terraform_directory }}
+    environment:
+      name: ${{ inputs.environment_name }}
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform_version }}
+      
+      - name: Cache plugin dir
+        uses: actions/cache@v4
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('.tflint.hcl') }}
+        
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.52.0
+    
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init --chdir=${{ github.workspace}}
+        env:
+            # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint
+        run: tflint -f sarif # [default|json|checkstyle|junit|compact|sarif]
+      - run: echo ${{ steps.tflint.outputs.stdout }}
+      - run: echo ${{ steps.tflint.outputs.stderr }}
+      - run: echo ${{ steps.tflint.outputs.exitcode }}
+
+    #   - name: Terraform Init
+    #     run: terraform init
+
+    #   - name: Terraform Plan
+    #     run: terraform plan   
+
+    #   - name: Terraform Apply
+    #     if: github.ref == 'refs/heads/main'
+    #     run: terraform apply -auto-approve

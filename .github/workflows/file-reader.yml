@@ -62,8 +62,8 @@ on:
         value: ${{ jobs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name:
         value: ${{ jobs.topfile_read.outputs.state_az_storage_name }}
-      az_subscription_id:
-        value: ${{ jobs.topfile_read.outputs.az_subscription_id }}
+      state_az_subscription_id:
+        value: ${{ jobs.topfile_read.outputs.state_az_subscription_id }}
       shared_tfvar_files:
         value: ${{ jobs.topfile_read.outputs.tfvar_files }}
       shared_tfvar_values:
@@ -105,7 +105,7 @@ jobs:
       state_az_rg_name: tbd
       tfstate_az_container_name: tbd
       state_az_storage_name: tbd
-      az_subscription_id: tbd
+      state_az_subscription_id: tbd
 
       all_deployments_json: tbd
       dro_1: tbd
@@ -144,7 +144,7 @@ jobs:
       state_az_rg_name: ${{ env.state_az_rg_name }}
       tfstate_az_container_name: ${{ env.tfstate_az_container_name }}
       state_az_storage_name: ${{ env.state_az_storage_name }}
-      az_subscription_id: ${{ env.az_subscription_id }}
+      state_az_subscription_id: ${{ env.state_az_subscription_id }}
 
       # Misc
       request_id: ${{ env.request_id }}
@@ -315,7 +315,7 @@ jobs:
             tfstate_az_container_name=$(echo $remote_state_azure | jq -r .state_container_name)
             remote_state_azure_storage_account_location=$(echo $remote_state_azure | jq -r .storage_account_location)
             state_az_storage_name=$(echo $remote_state_azure | jq -r .storage_account_name)
-            az_subscription_id=$(echo $remote_state_azure | jq -r .subscription_id)
+            state_az_subscription_id=$(echo $remote_state_azure | jq -r .subscription_id)
           fi
 
           echo "state_az_container_name = ${state_az_container_name}"
@@ -333,8 +333,8 @@ jobs:
           echo "state_az_storage_name = ${state_az_storage_name}"
           echo "state_az_storage_name=${state_az_storage_name}" >> $GITHUB_ENV
 
-          echo "az_subscription_id = ${az_subscription_id}"
-          echo "az_subscription_id=${az_subscription_id}" >> $GITHUB_ENV
+          echo "state_az_subscription_id = ${state_az_subscription_id}"
+          echo "state_az_subscription_id=${state_az_subscription_id}" >> $GITHUB_ENV
 
       - name: JSON - Read `tag_version` object
         if: ${{ env.file_is_json == 'true' }}
@@ -527,7 +527,7 @@ jobs:
         if: ${{ env.cloud_provider == 'azure' && env.AZ_CLIENT_SECRET == '' }}
         with:
           client-id: ${{ env.azure_client_id }}
-          subscription-id: ${{ env.az_subscription_id }}
+          subscription-id: ${{ env.state_az_subscription_id }}
           tenant-id: ${{ env.azure_tenant_id }}
 
       - name: Azure - Validate Azure Storage Account and Containers
@@ -537,7 +537,7 @@ jobs:
           # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
           if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
             az login --service-principal -u ${{ env.azure_client_id }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.azure_tenant_id }} --output none
-            az account set --subscription ${{ env.az_subscription_id }}
+            az account set --subscription ${{ env.state_az_subscription_id }}
           fi
 
           echo "Verifying if the ${{ env.state_az_storage_name }} storage account exists..."

@@ -1,4 +1,4 @@
-variable "subscription_id" {
-    type = string
-    description = "The Azure subscription ID"
-}
+# variable "subscription_id" {
+#   type        = string
+#   description = "The Azure subscription ID"
+# }

@@ -24,6 +24,10 @@ on:
         required: false
         type: string
         default: "1.6.2"
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
       azcli_version:
         required: false
@@ -78,7 +82,7 @@ on:
       state_az_storage_name:
         required: false
         type: string
-      az_subscription_id:
+      state_az_subscription_id:
         required: false
         type: string
       remote_state_key:
@@ -107,14 +111,16 @@ jobs:
       run:
         working-directory: ${{ inputs.terraform_directory }}
     env:
+      TARGET_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      # TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
       azcli_version: ${{ inputs.azcli_version }}
@@ -138,6 +144,19 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - name: create terraformc
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            cd ~
+            touch .terraformrc
+
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            echo "windows os"
+            echo "# terraform.rc " >> $env:APPDATA
+          else
+            echo "$RUNNER_OS not supported"
+              # exit 1
+          fi
       - name: Validate `cloud_provider` input
         run: |
           if [[ "${cloud_provider}" != "azure" ]]; then
@@ -222,29 +241,42 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
-      # - name: Configure Terraform provider network mirror protocol
-      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-      #   run: |
-      #     cat <<EOF > .terraformrc
-      #       provider_installation {
-      #         direct {
-      #           exclude = ["registry.terraform.io/*/*"]
-      #         }
-      #         network_mirror {
-      #           url = "${{ inputs.terraform_provider_network_mirror }}"
-      #         }
-      #       }
-      #     EOF
+      - name: Authenticate Azure CLI using OIDC
+        if: ${{ env.cloud_provider == 'azure' && env.ARM_CLIENT_SECRET == '' }}
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
 
+      # - name: Retrieve destroy plan
+      #   run: |
+      #     if [[ "${cloud_provider}" != 'azure' ]]; then # SWA
+      #       echo "NOT supported"
+      #     else # Azure
+      #       echo 'Retrieving "destroy-${{ env.plan_name }}" plan file from "${{ env.state_az_container_name }}" Storage Container...'
+      #       # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
+      #       if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
+      #         az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
+      #       fi
+
+      #       az account set --subscription ${ARM_SUBSCRIPTION_ID}
+      #       az storage blob download --auth-mode login --file "destroy-${{ env.plan_name }}" --account-name ${state_az_storage_name} --container-name ${state_az_container_name} --name destroy-${{ env.plan_name }}
+      #     fi
+  
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          az account show
+          echo "set target subscription id: env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
+
           if [[ "${cloud_provider}" == 'azure' && '${{ env.ARM_CLIENT_SECRET }}' != '' ]]; then # Azure w/ client secret
             terraform init \
               -input=false \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
-              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=subscription_id=${{ inputs.state_az_subscription_id }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=client_secret=${{ env.ARM_CLIENT_SECRET }} \
               -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
@@ -254,7 +286,7 @@ jobs:
           else # Azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
-              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=subscription_id=${{ inputs.state_az_subscription_id }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
               -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
@@ -264,6 +296,9 @@ jobs:
 
       - name: Run terraform destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -auto-approve
         run: |
+          az account show
+          echo "env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${TARGET_SUBSCRIPTION_ID}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
           terraform destroy \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \

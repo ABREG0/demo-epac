@@ -40,6 +40,11 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      # target_subscription_id:
+      #   required: false
+      #   type: string
+      #   default: ""
+      
 
     secrets:
       AZ_CLIENT_SECRET:
@@ -52,12 +57,29 @@ on:
         required: true
 
 permissions:
+  security-events: write
+  pull-requests: write
+  contents: write
   id-token: write
-  contents: read
+  statuses: write
+  actions: read
+  pages: write
 
 jobs:
+  tf_lint:
+    name: Check Terraform formatting
+    # needs: [topfile_read]
+    uses: ./.github/workflows/release-tflint.yml
+    with:
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.terraform_fmt_check_runner }}
+      terraform_directory: ${{ inputs.terraform_directory }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
+
   topfile_read:
     name: Read optfile
+    needs: [tf_lint]
     uses: ./.github/workflows/file-reader.yml
     with:
       azure_client_id: ${{ inputs.azure_client_id }}
@@ -99,9 +121,28 @@ jobs:
       environment_name: ${{ inputs.environment_name }}
     secrets: inherit
 
+  checkov:
+    name: checkov terraform code scan
+    needs: [validate, topfile_read]
+    uses: ./.github/workflows/release-checkov.yml
+    strategy:
+      fail-fast: false # Ensure that all Terraform commands execute to completion
+      matrix: ${{ fromJSON(needs.topfile_read.outputs.deployments_all) }}
+    with:
+      ca_bundle_file_path: ${{ matrix.deployments.ca_bundle_file_path }}
+      job_name: ${{ matrix.deployments.name }}
+      ref: ${{ inputs.ref }}
+      runner: ${{ inputs.validate_runner }}
+      terraform_directory: ${{ matrix.deployments.path }}
+      terraform_logging: ${{ needs.topfile_read.outputs.terraform_logging }}
+      terraform_provider_network_mirror: ${{ needs.topfile_read.outputs.terraform_provider_network_mirror }}
+      terraform_version: ${{ needs.topfile_read.outputs.terraform_version }}
+      environment_name: ${{ inputs.environment_name }}
+    secrets: inherit
+  
   plan:
     name: Plan ${{ matrix.deployments.name }}
-    needs: [validate, topfile_read]
+    needs: [checkov, validate, topfile_read]
     uses: ./.github/workflows/terraform-plan.yml
     strategy:
       fail-fast: false # Ensure that all Terraform commands execute to completion
@@ -120,7 +161,10 @@ jobs:
       state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
-      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      state_az_subscription_id: ${{ needs.topfile_read.outputs.state_az_subscription_id }}
+      
+      target_subscription_id: ${{ matrix.deployments.target_subscription_id != '' && matrix.deployments.target_subscription_id || needs.topfile_read.outputs.state_az_subscription_id }} #${{ matrix.deployments.target_subscription_id }} # 
+      
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       run_plan_only: ${{ github.event_name == 'pull_request' }} # Never cache the plan for pull requests
       runner: ${{ matrix.deployments.runner }}
@@ -156,7 +200,10 @@ jobs:
       state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
-      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      state_az_subscription_id: ${{ needs.topfile_read.outputs.state_az_subscription_id }}
+
+      target_subscription_id: ${{ matrix.deployments.target_subscription_id != '' && matrix.deployments.target_subscription_id || needs.topfile_read.outputs.state_az_subscription_id }} #${{ matrix.deployments.target_subscription_id }} # 
+      
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       terraform_directory: ${{ matrix.deployments.path }}
@@ -167,7 +214,7 @@ jobs:
 
   destroy:
     name: Destroy ${{ matrix.deployments.name }}
-    if: ${{ needs.topfile_read.outputs.destroy_enabled == true }}
+    if: ${{ needs.topfile_read.outputs.destroy_enabled == 'true' }}
     needs: [plan, topfile_read, apply]
     uses: ./.github/workflows/terraform-destroy.yml
     strategy:
@@ -186,7 +233,10 @@ jobs:
       state_az_rg_name: ${{ needs.topfile_read.outputs.state_az_rg_name }}
       tfstate_az_container_name: ${{ needs.topfile_read.outputs.tfstate_az_container_name }}
       state_az_storage_name: ${{ needs.topfile_read.outputs.state_az_storage_name }}
-      az_subscription_id: ${{ needs.topfile_read.outputs.az_subscription_id }}
+      state_az_subscription_id: ${{ needs.topfile_read.outputs.state_az_subscription_id }}
+
+      target_subscription_id: ${{ matrix.deployments.target_subscription_id != '' && matrix.deployments.target_subscription_id || needs.topfile_read.outputs.state_az_subscription_id }} #${{ matrix.deployments.target_subscription_id }} # 
+      
       remote_state_key: ${{ matrix.deployments.remote_state_key }}
       runner: ${{ matrix.deployments.runner }}
       shared_tfvar_files: ${{ needs.topfile_read.outputs.shared_tfvar_files }}

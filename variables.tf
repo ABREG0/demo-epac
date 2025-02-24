@@ -7,7 +7,8 @@ variable "backup_protected_file_share" {
     sleep_timer               = optional(string, "60s")
 
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 variable "site_recovery_fabric_mapping" {
   type = map(object({
@@ -18,7 +19,8 @@ variable "site_recovery_fabric_mapping" {
     recovery_replication_policy_name          = string
     sleep_timer                               = optional(string, "60s")
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 variable "site_recovery_fabrics" {
   type = map(object({
@@ -28,7 +30,8 @@ variable "site_recovery_fabrics" {
     location       = string
     sleep_timer    = optional(string, "60s")
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 variable "site_recovery_policies" {
   type = map(object({
@@ -38,7 +41,8 @@ variable "site_recovery_policies" {
     application_consistent_snapshot_frequency_in_minutes = string
     sleep_timer                                          = optional(string, "60s")
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 variable "site_recovery_network_mapping" {
   type = map(object({
@@ -50,7 +54,8 @@ variable "site_recovery_network_mapping" {
     target_network_id           = string
     sleep_timer                 = optional(string, "60s")
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
@@ -60,7 +65,8 @@ variable "backup_protected_vm" {
     backup_policy_id = string
     sleep_timer      = optional(string, "60s")
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
@@ -88,7 +94,8 @@ variable "site_recovery_virtual_machine" {
       recovery_public_ip_address_id = string
     }))
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 
 # tflint-ignore: terraform_unused_declarations
@@ -99,7 +106,8 @@ variable "sites" {
     key_fabric_target = string
     location          = string
   }))
-  default = null
+  default     = null
+  description = "value"
 }
 variable "location" {
   type        = string

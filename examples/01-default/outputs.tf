@@ -1,4 +1,4 @@
 output "revcovery" {
-  value = "Hello, World!"
+  value       = "Hello, World!"
   description = "value of the output"
 }

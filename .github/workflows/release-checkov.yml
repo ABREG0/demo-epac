@@ -1,0 +1,132 @@
+name: checkov code scan
+
+on:
+  workflow_call:
+    inputs:
+        terraform_directory:
+            required: false
+            type: string
+            default: "."
+        terraform_logging:
+            required: false
+            type: string
+            default: "off"
+        terraform_provider_network_mirror:
+            required: false
+            type: string
+            default: "" #"https://repo1.site.com/artifactory/api/terraform/terraform-virtual/providers/"
+        terraform_version:
+            required: false
+            type: string
+            default: "1.6.2"
+
+        ca_bundle_file_path:
+            required: false
+            type: string
+            default: ""
+        environment_name:
+            required: false
+            type: string
+        job_name:
+            required: false
+            type: string
+            default: default
+        ref:
+            required: false
+            type: string
+            default: ""
+        runner:
+            required: false
+            type: string
+            default: ubuntu-latest
+        target_subscription_id:
+            required: false
+            type: string
+            default: ""
+
+    secrets:
+        CA_BUNDLE:
+            required: false
+        GH_TOKEN:
+            required: false
+        APP_PRIVATE_KEY:
+            required: true
+
+permissions:
+    security-events: write
+    pull-requests: write
+    contents: write
+    id-token: write
+    statuses: write
+    actions: read
+    pages: write
+
+jobs:
+  tflint:
+    name: checkov code scan ${{ inputs.job_name }}
+    runs-on: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && 'ubuntu-latest' || inputs.runner != '' && inputs.runner || 'ubuntu-latest' }}    
+    defaults:
+      run:
+        working-directory: ${{ inputs.terraform_directory }}
+    env:
+      CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      TF_CLI_CONFIG_FILE: 'https://registry.terraform.io' #${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      TF_LOG: ${{ inputs.terraform_logging }}
+      ca_bundle_file_path: ${{ inputs.ca_bundle_file_path }}
+    environment:
+      name: ${{ inputs.environment_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Generate a token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+            app-id: ${{ vars.TF_APP_ID }}
+            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+            owner: ${{ vars.TF_OWNER_ORG_NAME }}
+
+      - run: |
+            git config --global url."https://oauth2:${{ steps.app-token.outputs.token }}@github.com".insteadOf https://github.com
+    
+
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@master
+        with:
+            # This will add both a CLI output to the console and create a results.sarif file
+            framework: terraform
+            output_format: cli,sarif
+            output_file_path: console,results.sarif
+            directory: '${{ github.workspace}}/${{ inputs.terraform_directory }}'
+            soft_fail: true
+            download_external_modules: true
+            # skip_check: CKV_AZURE_36,CKV_AZURE_44,CKV_AZURE_35,CKV_AZURE_244,CKV2_AZURE_38
+            quiet: true
+
+      - name: Print SHA and ref
+        run: |
+            echo "SHA: ${{ github.sha }}"
+            echo "Ref: ${{ github.ref }}"
+        
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3        
+        if: success() || failure()
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: results.sarif
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: checkov-scan
+        # continue-on-error: true
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+        # Results are generated only on a success or failure
+        # this is required since GitHub by default won't run the next step
+        # when the previous one has failed. Security checks that do not pass will 'fail'.
+        # An alternative is to add `continue-on-error: true` to the previous step
+        # Or 'soft_fail: true' to checkov.

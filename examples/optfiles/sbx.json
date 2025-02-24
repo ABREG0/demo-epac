@@ -2,7 +2,7 @@
 {
     "terraform_version": "1.9.2",
     "branch_ref_override": "e2etesting",
-    "destroy_enabled": false,
+    "destroy_enabled": true,
     "uses_component_version_tag_value": false,
     "remote_state": {
       "azure": {
@@ -20,14 +20,16 @@
         "path": "examples/01-default",
         "remote_state_key": "01-default.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": false
+        "run_plan_only": false,
+        "target_subscription_id": "ee5d2fa3-deed-4b33-bc7c-b5fbe997bc65"
       },
       {
         "name": "04-vault-backup-policies",
         "path": "examples/04-vault-backup-policies",
         "remote_state_key": "04-vault-backup-policies.tfstate",
         "runner": "ubuntu-latest",
-        "run_plan_only": false
+        "run_plan_only": false,
+        "target_subscription_id": "c5c1228d-b650-4f0a-97ea-1f8cfdc417c5"
       },
       {
         "name": "03-private-endpoints",

@@ -22,6 +22,10 @@ on:
         required: false
         type: string
         default: "1.6.2"
+      target_subscription_id:
+        required: false
+        type: string
+        default: ""
 
       azcli_version:
         required: false
@@ -84,7 +88,7 @@ on:
       state_az_storage_name:
         required: false
         type: string
-      az_subscription_id:
+      state_az_subscription_id:
         required: false
         type: string
       remote_state_key:
@@ -113,15 +117,16 @@ jobs:
       run:
         working-directory: ${{ inputs.terraform_directory }}
     env:
+      # TARGET_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_CLIENT_ID: ${{ inputs.azure_client_id }}
       ARM_CLIENT_SECRET: ${{ secrets.AZ_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ inputs.az_subscription_id }}
+      ARM_SUBSCRIPTION_ID: ${{ inputs.target_subscription_id }}
       ARM_TENANT_ID: ${{ inputs.azure_tenant_id }}
       ARM_USE_OIDC: ${{ secrets.AZ_CLIENT_SECRET == '' }}
       CA_BUNDLE: ${{ secrets.CA_BUNDLE }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-      TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
+      # TF_CLI_CONFIG_FILE: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') && '.terraformrc' || '' }}
       TF_LOG: ${{ inputs.terraform_logging }}
 
       azcli_version: ${{ inputs.azcli_version }}
@@ -146,6 +151,20 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
+
+      - name: create terraformc
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            cd ~
+            touch .terraformrc
+
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            echo "windows os"
+            echo "# terraform.rc " >> $env:APPDATA
+          else
+            echo "$RUNNER_OS not supported"
+              # exit 1
+          fi
 
       - name: Validate `cloud_provider` input
         run: |
@@ -267,24 +286,22 @@ jobs:
           echo "tfvar_values = '${tfvar_values}'"
           echo "tfvar_values=${tfvar_values}" >> $GITHUB_OUTPUT
 
-      # - name: Configure Terraform provider network mirror protocol
-      #   if: ${{ !startsWith(inputs.terraform_provider_network_mirror, 'https://registry.terraform.io') }}
-      #   run: |
-      #     cat <<EOF > .terraformrc
-      #       provider_installation {
-      #         direct {
-      #           exclude = ["registry.terraform.io/*/*"]
-      #         }
-      #         network_mirror {
-      #           url = "${{ inputs.terraform_provider_network_mirror }}"
-      #         }
-      #       }
-      #     EOF
-
+      - name: Authenticate Azure CLI using OIDC
+        uses: Azure/login@v2
+        if: ${{ env.cloud_provider == 'azure' && !inputs.run_plan_only && env.ARM_CLIENT_SECRET == '' }}
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+  
       - name: "Run terraform init with remote state :: ${{ env.remote_state_key }}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          az account show
+          echo "set target subscription id: env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
+
           echo "backend-config=resource_group_name=[${{ env.state_az_rg_name }}] "
           if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
             echo "Not supported"
@@ -292,7 +309,7 @@ jobs:
             terraform init \
               -input=false \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
-              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=subscription_id=${{ inputs.state_az_subscription_id }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=client_secret=${{ env.ARM_CLIENT_SECRET }} \
               -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
@@ -302,7 +319,7 @@ jobs:
           else # Azure w/ OIDC
             terraform init \
               -backend-config=tenant_id=${{ env.ARM_TENANT_ID }} \
-              -backend-config=subscription_id=${{ env.ARM_SUBSCRIPTION_ID }} \
+              -backend-config=subscription_id=${{ inputs.state_az_subscription_id }} \
               -backend-config=client_id=${{ env.ARM_CLIENT_ID }} \
               -backend-config=resource_group_name=${{ env.state_az_rg_name }} \
               -backend-config=storage_account_name=${{ env.state_az_storage_name }} \
@@ -312,6 +329,10 @@ jobs:
 
       - name: Run terraform plan ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=${{ env.plan_name }}
         run: |
+          az account show
+          echo "set target subscription id: env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
+
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
@@ -322,6 +343,10 @@ jobs:
 
       - name: Run terraform plan destroy ${{ inputs.shared_tfvar_files }} ${{ inputs.shared_tfvar_values }} ${{ steps.parse_tfvars.outputs.tfvar_files }} ${{ steps.parse_tfvars.outputs.tfvar_values }} -input=false -out=destroy-${{ env.plan_name }}
         run: |
+          az account show
+          echo "set target subscription id: env [${{ env.ARM_SUBSCRIPTION_ID }}] - shell [${{ inputs.target_subscription_id }}]"
+          az account set -s '${{ env.ARM_SUBSCRIPTION_ID }}'
+          
           terraform plan \
             ${shared_tfvar_files} \
             ${shared_tfvar_values} \
@@ -330,14 +355,6 @@ jobs:
             -input=false \
             -destroy \
             -out="destroy-${{ env.plan_name }}"
-
-      - name: Authenticate Azure CLI using OIDC
-        uses: Azure/login@v2
-        if: ${{ env.cloud_provider == 'azure' && !inputs.run_plan_only && env.ARM_CLIENT_SECRET == '' }}
-        with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          subscription-id: ${{ inputs.az_subscription_id }}
-          tenant-id: ${{ env.ARM_TENANT_ID }}
 
       - name: Store plan
         if: ${{ !inputs.run_plan_only }}
@@ -350,7 +367,7 @@ jobs:
             # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
             if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
               az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
-              az account set --subscription ${{ inputs.az_subscription_id }}
+              az account set --subscription ${{ inputs.state_az_subscription_id }}
             fi
 
             az storage blob upload\
@@ -372,26 +389,3 @@ jobs:
 
             echo 'Uploading plan file to "${{ env.state_az_container_name }}" Storage Container as "${{ env.plan_name }}"... completed.'
           fi
-      # - name: Store plan destroy
-      #   if: ${{ !inputs.run_plan_only }}
-      #   run: |
-      #     if [[ "${cloud_provider}" != 'azure' ]]; then # other provider
-      #       echo "NOT supported"
-      #     else # Azure
-      #       echo 'Uploading destroy plan file to "${{ env.state_az_container_name }}" Storage Container as "destroy-${{ env.plan_name }}"...'
-
-      #       # Using Azure/login@v2 for client secret causes the subscription ID to be flagged as a secret and omitted from output
-      #       if [[ "${{ secrets.AZ_CLIENT_SECRET }}" != "" ]]; then
-      #         az login --service-principal -u ${{ env.ARM_CLIENT_ID }} -p ${{ secrets.AZ_CLIENT_SECRET }} --tenant ${{ env.ARM_TENANT_ID }} --output none
-      #         az account set --subscription ${{ inputs.az_subscription_id }}
-      #       fi
-
-      #       az storage blob upload\
-      #         --auth-mode login \
-      #         --file "destroy-${{ env.plan_name }}" \
-      #         --account-name ${state_az_storage_name} \
-      #         --container-name ${state_az_container_name} \
-      #         --name destroy-${{ env.plan_name }}
-
-      #       echo 'Uploading destroy plan file to "${{ env.state_az_container_name }}" Storage Container as "destroy-${{ env.plan_name }}"... completed.'
-      #     fi
