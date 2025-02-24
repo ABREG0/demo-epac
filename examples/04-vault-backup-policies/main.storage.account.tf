@@ -14,7 +14,7 @@ module "this" {
   https_traffic_only_enabled    = true
   min_tls_version               = "TLS1_2"
   shared_access_key_enabled     = false
-  public_network_access_enabled = true
+  public_network_access_enabled = false
   managed_identities = {
     system_assigned            = true
     user_assigned_resource_ids = [azurerm_user_assigned_identity.this_identity.id]
@@ -30,10 +30,16 @@ module "this" {
   }
   blob_properties = {
     versioning_enabled = true
+    container_delete_retention_policy = {
+      days = 7
+    }
+    delete_retention_policy = {
+      days = 7
+    }
   }
   network_rules = {
-    bypass                     = ["AzureServices"]
-    default_action             = "Allow"
+    bypass                     = ["Logging", "Metrics", "AzureServices"]
+    default_action             = "Deny"
     ip_rules                   = [] # [try(module.public_ip[0].public_ip, var.bypass_ip_cidr)]
     virtual_network_subnet_ids = [] # toset([azurerm_subnet.private.id])
   }
