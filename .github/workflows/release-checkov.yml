@@ -98,12 +98,14 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
             # This will add both a CLI output to the console and create a results.sarif file
+            framework: terraform
             output_format: cli,sarif
             output_file_path: console,results.sarif
             directory: '${{ github.workspace}}/${{ inputs.terraform_directory }}'
             soft_fail: true
             download_external_modules: true
             # skip_check: CKV_AZURE_36,CKV_AZURE_44,CKV_AZURE_35,CKV_AZURE_244,CKV2_AZURE_38
+            quiet: true
 
       - name: Print SHA and ref
         run: |
