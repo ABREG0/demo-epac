@@ -45,8 +45,8 @@ avm.tflint_example.hcl
 **/.vscode/*
 *.md.tmp
 .DS_Store
-avm.tflint.merged.hcl
-avm.tflint_example.merged.hcl
+# avm.tflint.merged.hcl
+# avm.tflint_example.merged.hcl
 
 examples/01-default/01-default
 examples/01-default/01-default-destroy
@@ -59,8 +59,8 @@ examples/03-private-endpoints/03-private-endpoints
 examples/02-customer-managed-key/02-customer-managed-key
 avm.tflint_module.hcl
 avm.tflint_module.merged.hcl
-examples/test-TFexamples.ps1
-examples/test-TFexamples.ps1
+# examples/test-TFexamples.ps1
+# examples/test-TFexamples.ps1
 Untitled-1.md
 Untitled-2.sh
 Untitled-3.sql
